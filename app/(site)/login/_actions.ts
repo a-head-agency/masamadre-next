@@ -39,6 +39,7 @@ export async function sendOTP(vals: {
     }
   } catch (e) {
     if (e instanceof AxiosError) {
+      console.error("ERROR [login._actions.sendOTP]:", e);
       return {
         type: "error",
         action: e.response?.data.action,
