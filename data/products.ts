@@ -101,3 +101,37 @@ export async function getDishes() {
 
   return result;
 }
+
+export async function getOneDish(id: number) {
+  const api = createPublicApiAxios();
+
+  const schema = z.object({
+    id: z.number(),
+    name: z.string(),
+    description: z.string(),
+    img: z.string(),
+    short_description: z.string(),
+    content: z.string(),
+    alerg: z.string(),
+    date_contain: z.string(),
+    maker: z.string(),
+    category: z.number(),
+    price: z.number(),
+    weight: z.number(),
+    title: z.string(),
+    description_seo: z.string(),
+    keywords: z.string(),
+    link: z.string(),
+    alt: z.string(),
+  });
+
+  const response = await api.get("/api/dish", {
+    params: {
+      id,
+    },
+  });
+
+  const data = schema.parse(response.data);
+
+  return data;
+}

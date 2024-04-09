@@ -1,0 +1,34 @@
+"use client";
+
+import Button from "@/components/ui/button";
+import { useBasket } from "@/hooks/basket";
+import { useMemo } from "react";
+
+interface Props {
+  dish_id: number;
+}
+
+export default function AddToCartButton(props: Props) {
+  const basket = useBasket();
+
+  const count = useMemo(
+    () =>
+      basket.data?.list.find((d) => d.dish_id === props.dish_id)?.count || 0,
+    [basket.data, props.dish_id]
+  );
+
+  return (
+    <Button
+      isInverted
+      onPress={() =>
+        basket.addDish({
+          dish_id: props.dish_id,
+          count: count + 1,
+        })
+      }
+      isDisabled={basket.isLoading}
+    >
+      <span className="text-xs md:text-base">добавить в корзину</span>
+    </Button>
+  );
+}
