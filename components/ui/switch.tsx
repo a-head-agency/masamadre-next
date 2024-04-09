@@ -11,7 +11,11 @@ import {
 import { motion } from "framer-motion";
 import cx from "clsx";
 
-export default function Switch(props: AriaSwitchProps) {
+interface Props extends AriaSwitchProps {
+  variant?: "reversed" | "default";
+}
+
+export default function Switch({ variant = "default", ...props }: Props) {
   let state = useToggleState(props);
   let ref = useRef(null);
   let { inputProps } = useSwitch(props, state, ref);
@@ -21,7 +25,9 @@ export default function Switch(props: AriaSwitchProps) {
     <label
       className={cx(
         "flex justify-between items-center flex-wrap gap-x-4 gap-y-2 transition-opacity cursor-pointer normal-case",
-        props.isDisabled ? "opacity-50" : "opacity-100"
+        props.isDisabled ? "opacity-50" : "opacity-100",
+        variant === "default" && "flex-row",
+        variant === "reversed" && "flex-row-reverse"
       )}
     >
       <VisuallyHidden>

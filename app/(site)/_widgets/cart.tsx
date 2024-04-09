@@ -1,5 +1,6 @@
 "use client";
 import Switch from "@/components/ui/switch";
+import { useBasket } from "@/hooks/basket";
 import { BasketIcon, CrossIcon, MinusIcon, PlusIcon } from "@/icons";
 import {
   AnimatePresence,
@@ -7,7 +8,7 @@ import {
   motion,
   useMotionValue,
 } from "framer-motion";
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Dialog,
@@ -23,53 +24,7 @@ const MotionModalOverlay = motion(ModalOverlay);
 export function CartModal(
   props: Required<Pick<ModalOverlayProps, "isOpen" | "onOpenChange">>
 ) {
-  const items = useMemo(
-    () => [
-      {
-        name: "фокачча пшеничная",
-        description: "на цельнозерновой заквасе и оливковом масле",
-        price: 300,
-        count: 2,
-        img: "/b1.png",
-      },
-      {
-        name: "фокачча пшеничная",
-        description: "на цельнозерновой заквасе и оливковом масле",
-        price: 300,
-        count: 2,
-        img: "/b2.png",
-      },
-      {
-        name: "фокачча пшеничная",
-        description: "на цельнозерновой заквасе и оливковом масле",
-        price: 300,
-        count: 2,
-        img: "/b3.png",
-      },
-      {
-        name: "фокачча пшеничная",
-        description: "на цельнозерновой заквасе и оливковом масле",
-        price: 300,
-        count: 2,
-        img: "/b3.png",
-      },
-      {
-        name: "фокачча пшеничная",
-        description: "на цельнозерновой заквасе и оливковом масле",
-        price: 300,
-        count: 2,
-        img: "/b3.png",
-      },
-      {
-        name: "фокачча пшеничная",
-        description: "на цельнозерновой заквасе и оливковом масле",
-        price: 300,
-        count: 2,
-        img: "/b3.png",
-      },
-    ],
-    []
-  );
+  const basket = useBasket();
 
   const x = useMotionValue("100%");
 
@@ -142,24 +97,46 @@ export function CartModal(
                     <CrossIcon className="size-6 text-black" />
                   </button>
                   <div className="pr-12 grow border-b border-black pb-6 sm:pb-12">
-                    {items.map((item, index) => (
+                    {basket.data?.list.map((item, index) => (
                       <div className="mb-4 flex gap-4 items-center" key={index}>
-                        <img className="size-24" src={item.img} alt="" />
-                        <div className="flex flex-col justify-between self-stretch items-stretch">
+                        <img className="size-24 object-contain" src={item.img} alt="" />
+                        <div className="flex flex-col justify-between self-stretch items-stretch grow">
                           <div className="leading-tight">
                             <div className="font-bold">{item.name}</div>
-                            <div>{item.description}</div>
+                            <div>{item.short_description}</div>
                           </div>
                           <div className="flex justify-between items-center">
                             <div className="text-lg">
                               <span className="font-bold">{item.price}</span> ₽
                             </div>
                             <div className="flex items-center gap-4">
-                              <button type="button">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  basket.addDish({
+                                    dish_id: item.dish_id,
+                                    count:
+                                      (basket.data?.list.find(
+                                        (d) => d.dish_id === item.dish_id
+                                      )?.count || 0) + 1,
+                                  })
+                                }
+                              >
                                 <PlusIcon className="size-4 text-black" />
                               </button>
                               <div>{item.count}шт</div>
-                              <button type="button">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  basket.addDish({
+                                    dish_id: item.dish_id,
+                                    count:
+                                      (basket.data?.list.find(
+                                        (d) => d.dish_id === item.dish_id
+                                      )?.count || 1) - 1,
+                                  })
+                                }
+                              >
                                 <MinusIcon className="size-4 text-black" />
                               </button>
                             </div>
@@ -170,15 +147,12 @@ export function CartModal(
                   </div>
 
                   <div className="mt-6 sm:mt-12">
-                    <div className="mb-2 flex justify-between items-center w-full">
-                      <span>Списать 129 бонусов</span>
-                      <div>
-                        <Switch />
-                      </div>
+                    <div className="mb-2">
+                      <Switch>Списать 129 бонусов</Switch>
                     </div>
                     <div className="mb-2 flex justify-between items-center w-full">
-                      <span>4 товара</span>
-                      <div>2620 ₽</div>
+                      <span>{basket.data?.total_count} товара</span>
+                      <div>{basket.data?.total_price} ₽</div>
                     </div>
                     <div className="flex justify-between items-center w-full">
                       <span>Начислим бонусы</span>

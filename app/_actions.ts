@@ -1,6 +1,7 @@
 "use server";
 
 import { createPrivateApiAxios } from "@/axios";
+import * as basketService from "@/data/basket";
 import { getSession } from "@/session";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -48,4 +49,12 @@ export async function setUser(inputs: z.input<typeof SetUserMeScheme>) {
   const response = await api.post("/user/me", data);
   console.log(response.data);
   revalidatePath("/profile");
+}
+
+export async function addToBasketAction(
+  data: z.input<typeof basketService.AddToBasketInputSchema>
+) {
+  const _data = basketService.AddToBasketInputSchema.parse(data);
+  const session = await getSession(cookies());
+  return basketService.addToBasket(session, _data);
 }

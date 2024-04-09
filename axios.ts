@@ -30,11 +30,13 @@ export const createPrivateApiAxios = (session: Session) => {
   privateApiAxios.interceptors.response.use(
     (res) => res,
     async (err: AxiosError) => {
+      console.log(err.response?.data);
       const originalConfig = err.config;
       if (err.response && err.response.status in [401, 403]) {
         session.destroy();
         throw redirect("/login");
       }
+      return Promise.reject(err);
     }
   );
 
