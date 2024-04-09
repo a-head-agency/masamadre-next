@@ -75,7 +75,7 @@ export default async function ProfileLayout({ children }: Props) {
 
           <div className="grow"></div>
 
-          <div className="flex flex-col items-start">
+          <div className="flex flex-col items-start gap-4">
             <form action={logout}>
               <button>выход из аккаунта</button>
             </form>
@@ -94,7 +94,7 @@ export default async function ProfileLayout({ children }: Props) {
 
         <div className="grow">{children}</div>
 
-        <div className="md:hidden px-[2vmax] flex flex-col items-start">
+        <div className="md:hidden px-[2vmax] flex flex-col items-start gap-4">
           <form action={logout}>
             <button>выход из аккаунта</button>
           </form>
