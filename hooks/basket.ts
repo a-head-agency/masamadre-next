@@ -4,7 +4,6 @@ import axios from "axios";
 import useSWR from "swr";
 import { z } from "zod";
 import { addToBasketAction } from "@/app/_actions";
-import { setUser } from "@/app/_actions";
 
 export function useBasket() {
   const basket = useSWR("basket", () =>

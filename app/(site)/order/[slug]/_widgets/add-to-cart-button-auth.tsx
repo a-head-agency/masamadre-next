@@ -8,7 +8,7 @@ interface Props {
   dish_id: number;
 }
 
-export default function AddToCartButton(props: Props) {
+export default function AddToCartButtonAuth(props: Props) {
   const basket = useBasket();
 
   const count = useMemo(

@@ -8,7 +8,7 @@ interface Props {
   dish_id: number;
 }
 
-export default function Adder(props: Props) {
+export default function AdderAuth(props: Props) {
   const basket = useBasket();
 
   const count = useMemo(
@@ -16,11 +16,6 @@ export default function Adder(props: Props) {
       basket.data?.list.find((d) => d.dish_id === props.dish_id)?.count || 0,
     [basket.data, props.dish_id]
   );
-
-  const totalSum = useMemo(() => {
-    const dish = basket.data?.list.find((d) => d.dish_id === props.dish_id);
-    return (dish?.count || 0) * (dish?.price || 0);
-  }, [basket.data, props.dish_id]);
 
   return (
     <div className="flex gap-4">

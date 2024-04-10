@@ -1,10 +1,12 @@
-import Button from "@/components/ui/button";
 import { getOneDish } from "@/data/products";
-import { MinusIcon, PlusIcon } from "@/icons";
-import { useState } from "react";
-import Adder from "./_widgets/adder";
 import TotalPrice from "./_widgets/total-price";
-import AddToCartButton from "./_widgets/add-to-cart-button";
+import AddToCartButtonAuth from "./_widgets/add-to-cart-button-auth";
+import AddToCartButtonNoAuth from "./_widgets/add-to-cart-button-noauth";
+import AdderAuth from "./_widgets/adder-auth";
+import AdderNoAuth from "./_widgets/adder-noauth";
+import BackButton from "./_widgets/back-button";
+import { getSession } from "@/session";
+import { cookies } from "next/headers";
 
 interface Params {
   slug: string;
@@ -15,12 +17,16 @@ interface Props {
 }
 
 export default async function Product({ params }: Props) {
+  const session = await getSession(cookies());
   const dish = await getOneDish(Number(params.slug));
 
   return (
     <>
       <div className="md:h-full mx-[2vmax] pb-[2vmax]">
-        <div className="md:h-full flex flex-col md:flex-row gap-8 md:gap-[4%] border border-black p-4">
+        <div className="md:h-full flex flex-col md:flex-row gap-8 md:gap-[4%] border border-black p-4 relative">
+          <div className="absolute right-4 top-4 hidden md:block">
+            <BackButton />
+          </div>
           <img
             className="object-cover md:hidden w-full object-center"
             src={dish.img}
@@ -33,7 +39,7 @@ export default async function Product({ params }: Props) {
               alt={dish.alt}
             />
           </div>
-          <div className="basis-[31%] max-w-lg flex flex-col">
+          <div className="basis-[31%] max-w-lg flex flex-col  py-8">
             <div className="grow-[3]"></div>
 
             <h1 className="text-xs md:text-base">
@@ -43,7 +49,11 @@ export default async function Product({ params }: Props) {
 
             <div className="text-sm md:text-2xl my-6 flex justify-between items-center">
               <div>{dish.price} ₽</div>
-              <Adder dish_id={dish.id} />
+              {session.isAuthenticated ? (
+                <AdderAuth dish_id={dish.id} />
+              ) : (
+                <AdderNoAuth />
+              )}
             </div>
 
             <div className="border-t text-xs md:text-base border-black mb-[9vmin]">
@@ -66,10 +76,16 @@ export default async function Product({ params }: Props) {
             </div>
 
             <div className="flex justify-between flex-wrap gap-4 items-center">
-              <p className="text-sm md:text-xl">
-                <TotalPrice dish_id={dish.id} />
-              </p>
-              <AddToCartButton dish_id={dish.id} />
+              {session.isAuthenticated && (
+                <p className="text-sm md:text-xl">
+                  <TotalPrice dish_id={dish.id} />
+                </p>
+              )}
+              {session.isAuthenticated ? (
+                <AddToCartButtonAuth dish_id={dish.id} />
+              ) : (
+                <AddToCartButtonNoAuth />
+              )}
             </div>
 
             <div className="grow-[2]"></div>
