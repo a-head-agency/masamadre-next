@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 interface Props {
@@ -12,8 +11,8 @@ export default function Footer({ withTree, withPhone }: Props) {
       {withPhone && (
         <img
           className="absolute bottom-full select-none w-full max-w-xl left-1/2 -translate-x-1/2 -translate-y-8 md:translate-y-0"
-          src="/phone-display.png"
-          alt="+79253687702"
+          src="/phone.svg"
+          alt="+79166714831"
           draggable="false"
         />
       )}
