@@ -165,10 +165,10 @@ export async function getOneDish(id: number) {
     },
   });
 
-  response.data.images = [
-    "https://s3.timeweb.cloud/516d5635-a864ec80-ee47-4c91-bc37-97ff745b4050/062c811c-6166-4f59-ba41-10ad4d75e2ca.1000055192.jpg",
-    "https://s3.timeweb.cloud/516d5635-a864ec80-ee47-4c91-bc37-97ff745b4050/678e62ee-0215-4609-b3d8-7428f4b9b9ef.107f5e00-63b5-4eb1-8b25-f0570371e0a61885376460395238346.jpg",
-  ];
+  // response.data.images = [
+  //   "https://s3.timeweb.cloud/516d5635-a864ec80-ee47-4c91-bc37-97ff745b4050/062c811c-6166-4f59-ba41-10ad4d75e2ca.1000055192.jpg",
+  //   "https://s3.timeweb.cloud/516d5635-a864ec80-ee47-4c91-bc37-97ff745b4050/678e62ee-0215-4609-b3d8-7428f4b9b9ef.107f5e00-63b5-4eb1-8b25-f0570371e0a61885376460395238346.jpg",
+  // ];
 
   const data = schema.parse(response.data);
 
