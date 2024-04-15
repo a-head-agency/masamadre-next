@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import YandexMetricaInitScript from "./metrics";
-import Head from "next/head";
+import Script from "next/script";
 
 const masamadreFontRegular = localFont({
   src: "./fonts/basis-grotesque-mono/basis-grotesque-mono-regular-pro.woff2",
@@ -33,8 +32,22 @@ export default function RootLayout({
       lang="ru"
       className={`${masamadreFontRegular.variable} ${masamadreFontBold.variable} scroll-smooth scroll-pt-32`}
     >
-      <Head>
-        <YandexMetricaInitScript />
+      <head>
+        <Script>
+          {`(function (m, e, t, r, i, k, a) {
+    m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
+    m[i].l = 1 * new Date();
+    for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+    k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+ym(97034850, "init", {
+    clickmap: true,
+    trackLinks: true,
+    accurateTrackBounce: true
+});`}
+        </Script>
         <noscript>
           <div>
             <img
@@ -44,7 +57,7 @@ export default function RootLayout({
             />
           </div>
         </noscript>
-      </Head>
+      </head>
       <body className="font-regular bg-white leading-none text-base lowercase selection:bg-black selection:text-white">
         {children}
       </body>
