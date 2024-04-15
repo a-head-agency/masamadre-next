@@ -5,6 +5,7 @@ export const CategoryScheme = z.object({
   id: z.number(),
   name: z.string(),
   link: z.string(),
+  show_title: z.boolean(),
   type: z
     .union([z.literal(0), z.literal(1), z.literal(2)])
     .optional()
@@ -24,7 +25,9 @@ export const CategoryScheme = z.object({
 
 export async function getCategories() {
   const schema = z.object({
-    list: CategoryScheme.array(),
+    list: CategoryScheme.array()
+      .nullable()
+      .transform((t) => t || []),
     total: z.number(),
   });
 
@@ -36,6 +39,8 @@ export async function getCategories() {
       limit: 999999999,
     },
   });
+
+  console.log("gandon", response.data);
 
   const data = schema.parse(response.data);
 
@@ -89,6 +94,8 @@ export async function getDishes() {
     categories.list.map((c) => getDishesOfCategory(c.link))
   );
 
+  console.log(dishesPromises);
+
   const result = dishesPromises
     .map((r, index) => {
       return {
@@ -100,6 +107,32 @@ export async function getDishes() {
     .filter((d) => d.dishes.length > 0);
 
   return result;
+}
+
+export const GetDishesByIdsScheme = z
+  .object({
+    id: z.number(),
+    name: z.string(),
+    img: z.string(),
+    alt: z.string(),
+    link: z.string(),
+    short_description: z.string(),
+    category: z.number(),
+    price: z.number(),
+    weight: z.number(),
+  })
+  .array();
+export async function getDishesByIds(dishes: number[]) {
+  const api = createPublicApiAxios();
+  const response = await api.post("/api/dishes/ids", {
+    dishes,
+  });
+
+  console.log("get dishes by ids", response.data);
+
+  const data = GetDishesByIdsScheme.parse(response.data);
+
+  return data;
 }
 
 export async function getOneDish(id: number) {
@@ -123,6 +156,7 @@ export async function getOneDish(id: number) {
     keywords: z.string(),
     link: z.string(),
     alt: z.string(),
+    images: z.string().array(),
   });
 
   const response = await api.get("/api/dish", {
@@ -130,6 +164,11 @@ export async function getOneDish(id: number) {
       id,
     },
   });
+
+  response.data.images = [
+    "https://s3.timeweb.cloud/516d5635-a864ec80-ee47-4c91-bc37-97ff745b4050/062c811c-6166-4f59-ba41-10ad4d75e2ca.1000055192.jpg",
+    "https://s3.timeweb.cloud/516d5635-a864ec80-ee47-4c91-bc37-97ff745b4050/678e62ee-0215-4609-b3d8-7428f4b9b9ef.107f5e00-63b5-4eb1-8b25-f0570371e0a61885376460395238346.jpg",
+  ];
 
   const data = schema.parse(response.data);
 

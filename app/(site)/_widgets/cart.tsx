@@ -8,7 +8,7 @@ import {
   motion,
   useMotionValue,
 } from "framer-motion";
-import { FC, useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import {
   Button,
   Dialog,
@@ -18,15 +18,23 @@ import {
   ModalOverlayProps,
 } from "react-aria-components";
 
+import UIButton from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+
 const MotionModal = motion(Modal);
 const MotionModalOverlay = motion(ModalOverlay);
 
 export function CartModal(
   props: Required<Pick<ModalOverlayProps, "isOpen" | "onOpenChange">>
 ) {
+  const router = useRouter();
   const basket = useBasket();
 
   const x = useMotionValue("100%");
+
+  const checkout = () => {
+    location.pathname = "/checkout";
+  };
 
   return (
     <AnimatePresence>
@@ -99,7 +107,11 @@ export function CartModal(
                   <div className="pr-12 grow border-b border-black pb-6 sm:pb-12">
                     {basket.data?.list.map((item, index) => (
                       <div className="mb-4 flex gap-4 items-center" key={index}>
-                        <img className="size-24 object-contain" src={item.img} alt="" />
+                        <img
+                          className="size-24 object-contain"
+                          src={item.img}
+                          alt=""
+                        />
                         <div className="flex flex-col justify-between self-stretch items-stretch grow">
                           <div className="leading-tight">
                             <div className="font-bold">{item.name}</div>
@@ -160,9 +172,12 @@ export function CartModal(
                     </div>
                   </div>
 
-                  <button className="mt-6 sm:mt-12 py-2 px-3 w-full lowercase bg-black text-white rounded-full">
+                  {/* <button className=" py-2 px-3 w-full lowercase bg-black text-white rounded-full">
                     оформить заказ
-                  </button>
+                  </button> */}
+                  <div className="mt-6 sm:mt-12 *:w-full">
+                    <UIButton onPress={checkout}>оформить заказ</UIButton>
+                  </div>
                 </>
               )}
             </Dialog>
@@ -175,10 +190,12 @@ export function CartModal(
 
 export function Cart() {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const { data } = useBasket();
+
   return (
     <DialogTrigger onOpenChange={(v) => setIsCartOpen(v)}>
       <Button>
-        <BasketIcon className="text-black h-6 md:h-7" />
+        <BasketIcon count={data?.total} className="text-black h-6 md:h-7" />
       </Button>
       <CartModal isOpen={isCartOpen} onOpenChange={setIsCartOpen} />
     </DialogTrigger>
