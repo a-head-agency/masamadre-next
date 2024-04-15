@@ -16,6 +16,8 @@ import AddToBasketButton from "./_widgets/add-to-basket-button";
 export default async function Order() {
   const categoriesWithDishes = await getDishes();
 
+  console.log(categoriesWithDishes);
+
   return (
     <div className="min-h-full flex flex-col">
       <div className="px-[2vmax] py-4 flex flex-col lowercase items-start">
@@ -31,7 +33,7 @@ export default async function Order() {
       </div>
       {categoriesWithDishes.map((dc, i) => (
         <div className="mb-16 px-[2vmax]" key={i} id={dc.category.link}>
-          {dc.category.name && (
+          {dc.category.name && dc.category.show_title && (
             <div className="flex items-center gap-4 lowercase mb-4">
               <h2 className="text-3xl font-bold">{dc.category.name}</h2>
             </div>

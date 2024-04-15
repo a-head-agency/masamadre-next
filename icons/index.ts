@@ -1,7 +1,10 @@
-export { default as UserIcon } from "./user";
-export { default as BasketIcon } from "./basket";
-export { default as PlusIcon } from "./plus";
-export { default as MinusIcon } from "./minus";
-export { default as CrossIcon } from "./cross";
-export { default as CardIcon } from "./card";
 export { default as ArrowIcon } from "./arrow";
+export { default as BasketIcon } from "./basket";
+export { default as CardIcon } from "./card";
+export { default as ChevronDown } from "./chevron-down";
+export { default as CreditCard } from "./credit-card";
+export { default as CrossIcon } from "./cross";
+export { default as MinusIcon } from "./minus";
+export { default as PlusIcon } from "./plus";
+export { default as UserIcon } from "./user";
+export { default as WalletIcon } from "./wallet";

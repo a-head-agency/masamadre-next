@@ -56,5 +56,7 @@ export async function addToBasketAction(
 ) {
   const _data = basketService.AddToBasketInputSchema.parse(data);
   const session = await getSession(cookies());
-  return basketService.addToBasket(session, _data);
+  const result = basketService.addToBasket(session, _data);
+  await session.save();
+  return result;
 }

@@ -30,7 +30,7 @@ export default async function SiteLayout({
         <div className="hidden md:block grow-[1]"></div>
 
         <div className="flex gap-4">
-          {session.isAuthenticated && <Cart />}
+          <Cart />
 
           <Link href="/profile">
             <UserIcon className="h-6 md:h-7" />

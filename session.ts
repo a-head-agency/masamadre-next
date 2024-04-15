@@ -5,9 +5,10 @@ export interface SessionData {
   isAuthenticated: boolean;
   accessToken: string;
   refreshToken: string;
+  basket?: number[];
 }
 
-export function getSession(cookies: ReturnType<typeof _cookies>) {
+export async function getSession(cookies: ReturnType<typeof _cookies>) {
   if (
     !process.env.SESSION_COOKIE_NAME ||
     !process.env.SESSION_COOKIE_SECRET ||
@@ -18,7 +19,7 @@ export function getSession(cookies: ReturnType<typeof _cookies>) {
     );
   }
 
-  const session = getIronSession<SessionData>(cookies, {
+  const session = await getIronSession<SessionData>(cookies, {
     cookieName: process.env.SESSION_COOKIE_NAME,
     password: process.env.SESSION_COOKIE_SECRET,
     cookieOptions: {
@@ -28,6 +29,11 @@ export function getSession(cookies: ReturnType<typeof _cookies>) {
       SameSite: "strict",
     },
   });
+
+  session.accessToken = session.accessToken || "";
+  session.refreshToken = session.refreshToken || "";
+  session.basket = session.basket || [];
+  session.isAuthenticated = session.isAuthenticated || false;
 
   return session;
 }

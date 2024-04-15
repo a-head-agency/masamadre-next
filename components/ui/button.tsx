@@ -24,7 +24,7 @@ export default function Button({ isLoading, isInverted, ...props }: Props) {
       className={cx(
         "outline-none rounded-full border border-black px-4 py-2 transition-all",
         "disabled:opacity-50",
-        isInverted && "hover:bg-black hover:text-white",
+        isInverted && !props.isDisabled && "hover:bg-black hover:text-white",
         !isInverted && "bg-black text-white",
         isFocusVisible && "ring-2 ring-offset-2 ring-black",
         isLoading && "opacity-50"

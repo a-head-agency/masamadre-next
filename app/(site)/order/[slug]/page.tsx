@@ -7,6 +7,7 @@ import AdderNoAuth from "./_widgets/adder-noauth";
 import BackButton from "./_widgets/back-button";
 import { getSession } from "@/session";
 import { cookies } from "next/headers";
+import Slider from "./_widgets/slider";
 
 interface Params {
   slug: string;
@@ -27,18 +28,7 @@ export default async function Product({ params }: Props) {
           <div className="absolute right-4 top-4 hidden md:block">
             <BackButton />
           </div>
-          <img
-            className="object-cover md:hidden w-full object-center"
-            src={dish.img}
-            alt={dish.alt}
-          />
-          <div className="hidden md:block shrink grow relative">
-            <img
-              className="object-cover h-full inset-0 absolute w-full object-center"
-              src={dish.img}
-              alt={dish.alt}
-            />
-          </div>
+          <Slider images={dish.images} />
           <div className="basis-[31%] max-w-lg flex flex-col  py-8">
             <div className="grow-[3]"></div>
 
@@ -49,11 +39,7 @@ export default async function Product({ params }: Props) {
 
             <div className="text-sm md:text-2xl my-6 flex justify-between items-center">
               <div>{dish.price} ₽</div>
-              {session.isAuthenticated ? (
-                <AdderAuth dish_id={dish.id} />
-              ) : (
-                <AdderNoAuth />
-              )}
+              <AdderAuth dish_id={dish.id} />
             </div>
 
             <div className="border-t text-xs md:text-base border-black mb-[9vmin]">
@@ -81,11 +67,7 @@ export default async function Product({ params }: Props) {
                   <TotalPrice dish_id={dish.id} />
                 </p>
               )}
-              {session.isAuthenticated ? (
-                <AddToCartButtonAuth dish_id={dish.id} />
-              ) : (
-                <AddToCartButtonNoAuth />
-              )}
+              <AddToCartButtonAuth dish_id={dish.id} />
             </div>
 
             <div className="grow-[2]"></div>
