@@ -41,12 +41,13 @@ export default async function SiteLayout({
           <NavLink href="/order" activeClassName="underline">
             заказ
           </NavLink>
-          <NavLink href="/booking" activeClassName="underline">
+          {/* <NavLink href="/booking" activeClassName="underline">
             бронирование
-          </NavLink>
+          </NavLink> */}
           <NavLink href="/work" activeClassName="underline">
             сотрудничество
           </NavLink>
+          <div className="grow[0.5] hidden md:block"></div>
         </div>
       </div>
 

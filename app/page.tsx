@@ -370,8 +370,9 @@ export default function Home() {
       </div>
       <div className="flex flex-col gap-x-4 gap-y-8 justify-between md:flex-row px-[2vmax] w-full max-w-[50%] absolute top-1/2 -translate-y-1/2">
         <Link href="/order">заказ</Link>
-        <Link href="/booking">бронирование</Link>
+        {/* <Link href="/booking">бронирование</Link> */}
         <Link href="/work">сотрудничество</Link>
+        <div className="grow[0.5] hidden md:block"></div>
       </div>
 
       <div className="grow"></div>
