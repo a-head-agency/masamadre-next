@@ -104,7 +104,7 @@ export function CartModal(
                   >
                     <CrossIcon className="size-6 text-black" />
                   </button>
-                  <div className="pr-12 grow border-b border-black pb-6 sm:pb-12">
+                  <div className="pr-12 grow pb-6 sm:pb-12">
                     {basket.data?.list.map((item, index) => (
                       <div className="mb-4 flex gap-4 items-center" key={index}>
                         <img
@@ -158,7 +158,7 @@ export function CartModal(
                     ))}
                   </div>
 
-                  <div className="mt-6 sm:mt-12">
+                  {/* <div className="mt-6 sm:mt-12 border-t border-black">
                     <div className="mb-2">
                       <Switch>Списать 129 бонусов</Switch>
                     </div>
@@ -170,7 +170,7 @@ export function CartModal(
                       <span>Начислим бонусы</span>
                       <div>+ 45</div>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* <button className=" py-2 px-3 w-full lowercase bg-black text-white rounded-full">
                     оформить заказ
