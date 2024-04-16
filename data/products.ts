@@ -40,8 +40,6 @@ export async function getCategories() {
     },
   });
 
-  console.log("gandon", response.data);
-
   const data = schema.parse(response.data);
 
   return data;
