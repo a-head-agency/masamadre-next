@@ -28,18 +28,18 @@ export default async function ProfileLayout({ children }: Props) {
       textValue: "История заказов",
       exact: false,
     },
-    {
-      to: "/profile/bonuses",
-      content: <BonusesLink amount={data?.bonuses ?? 0} />,
-      textValue: "Бонусы",
-      exact: true,
-    },
-    {
-      to: "/profile/promocodes",
-      content: "Промокоды",
-      textValue: "Промокоды",
-      exact: true,
-    },
+    // {
+    //   to: "/profile/bonuses",
+    //   content: <BonusesLink amount={data?.bonuses ?? 0} />,
+    //   textValue: "Бонусы",
+    //   exact: true,
+    // },
+    // {
+    //   to: "/profile/promocodes",
+    //   content: "Промокоды",
+    //   textValue: "Промокоды",
+    //   exact: true,
+    // },
     {
       to: "/profile/payment",
       content: "способ оплаты",
