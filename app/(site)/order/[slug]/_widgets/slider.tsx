@@ -55,17 +55,17 @@ export default function Slider(props: Props) {
           type="button"
           onClick={prev}
           disabled={!hasPrev}
-          className="p-2 bg-white outline-none focus-visible:border-black disabled:opacity-50 transition-colors border-2 border-transparent z-10 flex items-center justify-center"
+          className="p-2 bg-white outline-none focus-visible:border-black text-black disabled:text-gray-500 transition-colors border-2 border-transparent z-10 flex items-center justify-center"
         >
-          <ArrowIcon className="size-4 text-black rotate-180" />
+          <ArrowIcon className="size-4 rotate-180" />
         </button>
         <button
           type="button"
           disabled={!hasNext}
           onClick={next}
-          className="p-2 bg-white outline-none focus-visible:border-black disabled:opacity-50 transition-colors border-2 border-transparent z-10 flex items-center justify-center"
+          className="p-2 bg-white outline-none focus-visible:border-black text-black disabled:text-gray-500 transition-colors border-2 border-transparent z-10 flex items-center justify-center"
         >
-          <ArrowIcon className="size-4 text-black" />
+          <ArrowIcon className="size-4" />
         </button>
       </div>
 

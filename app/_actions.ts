@@ -10,7 +10,6 @@ import { z } from "zod";
 
 export async function logout() {
   const session = await getSession(cookies());
-  console.log("executed");
   session.destroy();
   return redirect("/login");
 }
@@ -34,9 +33,7 @@ const SetUserMeScheme = z.object({
   sms_pushes: z.boolean().optional(),
 });
 export async function setUser(inputs: z.input<typeof SetUserMeScheme>) {
-  console.log("set user blat");
   const session = await getSession(cookies());
-  console.log("update request session", session);
   if (!session.isAuthenticated) {
     session.destroy();
     redirect("/login");
@@ -45,9 +42,7 @@ export async function setUser(inputs: z.input<typeof SetUserMeScheme>) {
   const api = createPrivateApiAxios(session);
 
   const data = SetUserMeScheme.parse(inputs);
-  console.log("send update request", data);
   const response = await api.post("/user/me", data);
-  console.log(response.data);
   revalidatePath("/profile");
 }
 

@@ -57,7 +57,6 @@ export default function Profile() {
   });
 
   useEffect(() => {
-    console.log(data);
     if (data) {
       reset({
         ...data,

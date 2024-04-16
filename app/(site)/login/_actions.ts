@@ -21,8 +21,6 @@ export async function sendOTP(vals: {
   const api = createPublicApiAxios();
 
   try {
-    console.log("sent otp");
-
     const response = await api.post(
       "/auth/login",
       {

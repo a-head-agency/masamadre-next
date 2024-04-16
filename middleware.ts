@@ -12,7 +12,6 @@ export async function middleware(request: NextRequest) {
 
   if (request.nextUrl.pathname.startsWith("/login")) {
     const session = await getSession(cookies());
-    console.log("middleware session", session);
     if (session.isAuthenticated) {
       return NextResponse.redirect(new URL("/profile", request.url));
     }

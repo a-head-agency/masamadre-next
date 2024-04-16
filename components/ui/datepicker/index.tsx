@@ -34,13 +34,7 @@ const DatePicker: FC<Props> = ({ onChange, value, formatter, ...props }) => {
 
   const _value = useMemo(() => {
     if (value) {
-      console.log(value);
       const dt = DateTime.fromISO(value);
-      console.log({
-        year: dt.year,
-        month: dt.month,
-        day: dt.day,
-      });
       return new CalendarDate(dt.year, dt.month, dt.day);
     }
   }, [value]);

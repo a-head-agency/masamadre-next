@@ -190,12 +190,15 @@ export function CartModal(
 
 export function Cart() {
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const { data } = useBasket();
+  const { data, isLoading } = useBasket();
 
   return (
     <DialogTrigger onOpenChange={(v) => setIsCartOpen(v)}>
-      <Button>
-        <BasketIcon count={data?.total} className="text-black h-6 md:h-7" />
+      <Button isDisabled={isLoading}>
+        <BasketIcon
+          count={data?.total_count}
+          className="text-black h-6 md:h-7"
+        />
       </Button>
       <CartModal isOpen={isCartOpen} onOpenChange={setIsCartOpen} />
     </DialogTrigger>

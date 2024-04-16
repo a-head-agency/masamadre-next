@@ -92,8 +92,6 @@ export async function getDishes() {
     categories.list.map((c) => getDishesOfCategory(c.link))
   );
 
-  console.log(dishesPromises);
-
   const result = dishesPromises
     .map((r, index) => {
       return {
@@ -125,8 +123,6 @@ export async function getDishesByIds(dishes: number[]) {
   const response = await api.post("/api/dishes/ids", {
     dishes,
   });
-
-  console.log("get dishes by ids", response.data);
 
   const data = GetDishesByIdsScheme.parse(response.data);
 

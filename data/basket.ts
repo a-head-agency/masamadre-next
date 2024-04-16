@@ -13,8 +13,6 @@ export async function addToBasket(
 ) {
   const _input = AddToBasketInputSchema.parse(input);
 
-  console.log("session", session);
-
   const schema = z.object({
     action: z.union([
       z.literal("auth"),
@@ -39,7 +37,6 @@ export async function addToBasket(
   const api = createPrivateApiAxios(session);
 
   const response = await api.post("/user/basket", _input);
-  console.log({ res: response.data });
   const data = schema.parse(response.data);
   return data;
 }
@@ -84,10 +81,7 @@ export async function getBasket(
       {} as { [key: number]: number }
     );
 
-    console.log(counts);
-
     const withoutDupsBasket = Array.from(new Set(session.basket));
-    console.log("without dups", withoutDupsBasket);
     const dishes = await getDishesByIds(withoutDupsBasket);
 
     const total = Object.keys(counts).length;

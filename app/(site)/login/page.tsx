@@ -62,7 +62,6 @@ function Step1(props: { onSuccess?: (phone: string) => void }) {
         if (props.onSuccess) {
           props.onSuccess(vals.phone);
         }
-        console.log(vals.phone);
       }
     },
     [props, setError]

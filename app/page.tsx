@@ -233,7 +233,6 @@ export default function Home() {
     let lastLeafXOffset;
 
     if (window.getComputedStyle(bottomTextBlock, null).display === "none") {
-      console.log("overide", window.screen.height);
       breadTopDy = window.screen.height + 20;
       breadLeftDy = window.screen.height;
       breadRightDy = window.screen.height;
