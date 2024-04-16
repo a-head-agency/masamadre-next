@@ -1,7 +1,8 @@
 "use client";
 
 import { ArrowIcon } from "@/icons";
-import { useCallback, useMemo, useState } from "react";
+import clsx from "clsx";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 interface Props {
   fallback: string;
@@ -43,8 +44,10 @@ export default function Slider(props: Props) {
 
   const hasPrev = useMemo(() => 0 <= slide - 1, [slide]);
 
+  const container = useRef<HTMLDivElement>(null);
+
   return (
-    <div className="relative w-full">
+    <div className="relative w-full" ref={container}>
       <div className="absolute hidden">
         {props.images.map((img) => (
           <img src={img} alt="" key={img} />
@@ -69,17 +72,52 @@ export default function Slider(props: Props) {
         </button>
       </div>
 
-      <img
-        className="object-cover md:hidden w-full h-full object-center"
-        src={currentImage}
-        alt=""
-      />
+      <div className="flex md:hidden items-stretch h-64">
+        {!props.images.length && props.fallback && (
+          <img
+            className={clsx(
+              "object-cover h-full min-w-0 shrink grow-0 object-center"
+            )}
+            src={props.fallback}
+            alt=""
+          />
+        )}
+        {props.images.map((img, idx) => (
+          <img
+            className={clsx(
+              "object-cover h-full min-w-0 shrink grow-0 object-center transition-all ease-in-out duration-1000 will-change-[flex-basis]",
+              idx == slide ? "basis-full" : "basis-0"
+            )}
+            src={img}
+            alt=""
+            key={img}
+          />
+        ))}
+      </div>
+
       <div className="hidden md:block shrink grow relative h-full">
-        <img
-          className="object-cover h-full inset-0 absolute w-full object-center"
-          src={currentImage}
-          alt=""
-        />
+        <div className="absolute inset-0 flex">
+          {!props.images.length && props.fallback && (
+            <img
+              className={clsx(
+                "object-cover h-full min-w-0 shrink grow-0 object-center"
+              )}
+              src={props.fallback}
+              alt=""
+            />
+          )}
+          {props.images.map((img, idx) => (
+            <img
+              className={clsx(
+                "object-cover h-full min-w-0 shrink grow-0 object-center transition-all ease-in-out duration-1000 will-change-[flex-basis]",
+                idx == slide ? "basis-full" : "basis-0"
+              )}
+              src={img}
+              alt=""
+              key={img}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
