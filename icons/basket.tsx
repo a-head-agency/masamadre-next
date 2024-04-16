@@ -102,7 +102,17 @@ const BasketIcon: FC<{ count?: number } & ComponentPropsWithoutRef<"div">> = ({
       />
       <RightPart className="h-full -translate-x-[0.5px]" />
 
-      <div className="absolute select-none text-xs font left-1/2 -translate-x-1/2 translate-y-1/2 bottom-[35%] leading-none">
+      <div
+        className="absolute select-none text-xs leading-none"
+        // I don't know why, but for some reason "bottom-*", "left-*" and "translate-*-*" Tailwind utility classes
+        // are not included in final css file in this particular situation
+        // TODO: figure out why this happens
+        style={{
+          left: "50%",
+          bottom: "35%",
+          transform: "translate(-50%, 50%)",
+        }}
+      >
         {count > 0 && count}
       </div>
     </div>
