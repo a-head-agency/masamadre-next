@@ -54,7 +54,10 @@ export const GetBasketSchema = z.object({
       count_in: z.number(),
       price: z.number(),
       weight: z.number(),
-      short_description: z.string(),
+      short_description: z
+        .string()
+        .optional()
+        .transform((t) => t || ""),
       img: z.string(),
       name: z.string(),
     })
@@ -120,8 +123,6 @@ export async function getBasket(
       limit: 9999999999,
     },
   });
-
-  // console.log("basket", response.data);
 
   const data = GetBasketSchema.parse(response.data);
   return data;
