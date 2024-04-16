@@ -45,6 +45,11 @@ export default function Slider(props: Props) {
 
   return (
     <div className="relative w-full">
+      <div className="absolute hidden">
+        {props.images.map((img) => (
+          <img src={img} alt="" key={img} />
+        ))}
+      </div>
       <div className="absolute top-2 right-2 z-10 flex">
         <button
           type="button"
