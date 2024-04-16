@@ -156,7 +156,11 @@ export async function getOneDish(id: number) {
     keywords: z.string(),
     link: z.string(),
     alt: z.string(),
-    images: z.string().array(),
+    images: z
+      .string()
+      .array()
+      .nullable()
+      .transform((a) => a || []),
   });
 
   const response = await api.get("/api/dish", {
