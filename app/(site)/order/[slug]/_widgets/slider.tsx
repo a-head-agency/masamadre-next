@@ -3,14 +3,23 @@
 import { ArrowIcon } from "@/icons";
 import clsx from "clsx";
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useInterval } from "usehooks-ts";
 
 interface Props {
   fallback: string;
   images: string[];
+  autoplay?: boolean;
 }
 
 export default function Slider(props: Props) {
   const [slide, setSlide] = useState(0);
+
+  useInterval(
+    useCallback(() => {
+      setSlide((prev) => (prev + 1) % props.images.length);
+    }, [setSlide, props.images]),
+    props.autoplay ? 5000 : null
+  );
 
   const next = useCallback(() => {
     setSlide((prev) => {

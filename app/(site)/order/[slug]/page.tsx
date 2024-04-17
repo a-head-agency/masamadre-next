@@ -28,7 +28,7 @@ export default async function Product({ params }: Props) {
           <div className="absolute right-4 top-4 hidden md:block">
             <BackButton />
           </div>
-          <Slider fallback={dish.img} images={dish.images} />
+          <Slider autoplay fallback={dish.img} images={dish.images} />
           <div className="basis-[31%] max-w-lg flex flex-col  py-8">
             <div className="grow-[3]"></div>
 
