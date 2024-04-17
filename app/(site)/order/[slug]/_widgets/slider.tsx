@@ -13,25 +13,29 @@ interface Props {
 
 export default function Slider(props: Props) {
   const [slide, setSlide] = useState(0);
+  const images = useMemo(() => {
+    if (props.images.length) return props.images;
+    return [props.fallback];
+  }, [props.images, props.fallback]);
   const container = useRef<HTMLDivElement>(null);
 
   const isHovered = useHover(container);
 
   useInterval(
     useCallback(() => {
-      setSlide((prev) => (prev + 1) % props.images.length);
-    }, [setSlide, props.images]),
+      setSlide((prev) => (prev + 1) % images.length);
+    }, [setSlide, images]),
     props.autoplay && !isHovered ? 5000 : null
   );
 
   const next = useCallback(() => {
     setSlide((prev) => {
-      if (prev + 1 < props.images.length) {
+      if (prev + 1 < images.length) {
         return prev + 1;
       }
       return prev;
     });
-  }, [props.images]);
+  }, [images]);
 
   const prev = useCallback(() => {
     setSlide((prev) => {
@@ -42,20 +46,12 @@ export default function Slider(props: Props) {
     });
   }, []);
 
-  const hasNext = useMemo(
-    () => slide + 1 < props.images.length,
-    [slide, props.images]
-  );
+  const hasNext = useMemo(() => slide + 1 < images.length, [slide, images]);
 
   const hasPrev = useMemo(() => 0 <= slide - 1, [slide]);
 
   return (
     <div className="relative w-full" ref={container}>
-      <div className="absolute hidden">
-        {props.images.map((img) => (
-          <img src={img} alt="" key={img} />
-        ))}
-      </div>
       <div className="absolute top-2 right-2 z-10 flex">
         <button
           type="button"
@@ -76,16 +72,7 @@ export default function Slider(props: Props) {
       </div>
 
       <div className="flex md:hidden items-stretch h-64">
-        {!props.images.length && props.fallback && (
-          <img
-            className={clsx(
-              "object-cover h-full min-w-0 shrink grow-0 object-center"
-            )}
-            src={props.fallback}
-            alt=""
-          />
-        )}
-        {props.images.map((img, idx) => (
+        {images.map((img, idx) => (
           <img
             className={clsx(
               "object-cover h-full min-w-0 shrink grow-0 object-center transition-all ease-in-out duration-1000 will-change-[flex-basis]",
@@ -100,16 +87,7 @@ export default function Slider(props: Props) {
 
       <div className="hidden md:block shrink grow relative h-full">
         <div className="absolute inset-0 flex">
-          {!props.images.length && props.fallback && (
-            <img
-              className={clsx(
-                "object-cover h-full min-w-0 shrink grow-0 object-center"
-              )}
-              src={props.fallback}
-              alt=""
-            />
-          )}
-          {props.images.map((img, idx) => (
+          {images.map((img, idx) => (
             <img
               className={clsx(
                 "object-cover h-full min-w-0 shrink grow-0 object-center transition-all ease-in-out duration-1000 will-change-[flex-basis]",
