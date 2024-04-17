@@ -3,7 +3,7 @@
 import { ArrowIcon } from "@/icons";
 import clsx from "clsx";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { useInterval } from "usehooks-ts";
+import { useHover, useInterval } from "usehooks-ts";
 
 interface Props {
   fallback: string;
@@ -13,12 +13,15 @@ interface Props {
 
 export default function Slider(props: Props) {
   const [slide, setSlide] = useState(0);
+  const container = useRef<HTMLDivElement>(null);
+
+  const isHovered = useHover(container);
 
   useInterval(
     useCallback(() => {
       setSlide((prev) => (prev + 1) % props.images.length);
     }, [setSlide, props.images]),
-    props.autoplay ? 5000 : null
+    props.autoplay && !isHovered ? 5000 : null
   );
 
   const next = useCallback(() => {
@@ -39,21 +42,12 @@ export default function Slider(props: Props) {
     });
   }, []);
 
-  const currentImage = useMemo(() => {
-    if (props.images.length === 0) {
-      return props.fallback;
-    }
-    return props.images[slide];
-  }, [slide, props.images, props.fallback]);
-
   const hasNext = useMemo(
     () => slide + 1 < props.images.length,
     [slide, props.images]
   );
 
   const hasPrev = useMemo(() => 0 <= slide - 1, [slide]);
-
-  const container = useRef<HTMLDivElement>(null);
 
   return (
     <div className="relative w-full" ref={container}>
