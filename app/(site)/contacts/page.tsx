@@ -14,7 +14,7 @@ export default function Contacts() {
     <div className="flex flex-col items-stretch min-h-full">
       <div className="flex gap-4 p-[2vmax] items-start lg:items-end flex-col lg:flex-row grow mb-24">
         {/*  */}
-        <div className="self-stretch basis-1/2">
+        <div className="self-stretch md:basis-3/5 max-md:aspect-[4/3]">
           <MyMap
             coordinates={{
               lat: 55.754031,

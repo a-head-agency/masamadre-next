@@ -60,6 +60,7 @@ ym(97034850, "init", {
 
         <Script
           src={`https://api-maps.yandex.ru/v3/?apikey=${process.env.NEXT_PUBLIC_YANDEX_MAPS_V3_API_KEY}&lang=ru_RU`}
+          // type="module"
           strategy="beforeInteractive"
         />
       </head>
