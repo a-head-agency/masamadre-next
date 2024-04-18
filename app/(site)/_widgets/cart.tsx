@@ -27,7 +27,6 @@ const MotionModalOverlay = motion(ModalOverlay);
 export function CartModal(
   props: Required<Pick<ModalOverlayProps, "isOpen" | "onOpenChange">>
 ) {
-  const router = useRouter();
   const basket = useBasket();
 
   const x = useMotionValue("100%");
@@ -158,23 +157,20 @@ export function CartModal(
                     ))}
                   </div>
 
-                  {/* <div className="mt-6 sm:mt-12 border-t border-black">
-                    <div className="mb-2">
+                  <div className="mt-6 sm:mt-12 border-t border-black">
+                    {/* <div className="mb-2">
                       <Switch>Списать 129 бонусов</Switch>
-                    </div>
+                    </div> */}
                     <div className="mb-2 flex justify-between items-center w-full">
                       <span>{basket.data?.total_count} товара</span>
                       <div>{basket.data?.total_price} ₽</div>
                     </div>
-                    <div className="flex justify-between items-center w-full">
+                    {/* <div className="flex justify-between items-center w-full">
                       <span>Начислим бонусы</span>
                       <div>+ 45</div>
-                    </div>
-                  </div> */}
+                    </div> */}
+                  </div>
 
-                  {/* <button className=" py-2 px-3 w-full lowercase bg-black text-white rounded-full">
-                    оформить заказ
-                  </button> */}
                   <div className="mt-6 sm:mt-12 *:w-full">
                     <UIButton onPress={checkout}>оформить заказ</UIButton>
                   </div>
