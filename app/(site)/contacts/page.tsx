@@ -27,7 +27,9 @@ export default function Contacts() {
           <p className="underline mb-8">г. Москва,ул.Солянка,1/2с1</p>
 
           <p>телефон:</p>
-          <p className="underline mb-8">+7 999 346 57 74</p>
+          <a className="underline mb-8 inline-block" href="tel:+74956362981">
+            +7 495 636 29 81
+          </a>
 
           <p>график работы:</p>
           <p className="underline">с 8:00 до 18:00 / ежедневно</p>
