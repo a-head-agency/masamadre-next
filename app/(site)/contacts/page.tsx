@@ -32,7 +32,7 @@ export default function Contacts() {
           </a>
 
           <p>график работы:</p>
-          <p className="underline">с 8:00 до 18:00 / ежедневно</p>
+          <p className="underline">с 8:00 до 19:00 / ежедневно</p>
         </div>
       </div>
 
