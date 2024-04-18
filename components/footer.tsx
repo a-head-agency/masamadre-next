@@ -25,10 +25,9 @@ export default function Footer({ withTree, withPhone }: Props) {
           />
         )}
 
-        <Link href="https://vk.com">vk</Link>
-        <Link href="https://vk.com">tg</Link>
-        <Link href="https://vk.com">доставка и оплата</Link>
-        <Link href="https://vk.com">контакты</Link>
+        <Link href="https://t.me/masamadremsc">tg</Link>
+        <Link href="/delivery">доставка и оплата</Link>
+        <Link href="/contacts">контакты</Link>
       </div>
       <div className="hidden lg:block">
         <p className="mb-4">

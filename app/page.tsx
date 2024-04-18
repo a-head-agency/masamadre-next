@@ -378,10 +378,9 @@ export default function Home() {
 
       <div className="flex justify-between items-end gap-4 px-[2vmax] pb-[2vmax]">
         <div className="flex flex-col">
-          <Link href="https://vk.com">vk</Link>
-          <Link href="https://vk.com">tg</Link>
-          <Link href="https://vk.com">доставка и оплата</Link>
-          <Link href="https://vk.com">контакты</Link>
+          <Link href="https://t.me/masamadremsc">tg</Link>
+          <Link href="/delivery">доставка и оплата</Link>
+          <Link href="/contacts">контакты</Link>
         </div>
         <div id="footer--text-block" className="hidden lg:block">
           <p className="mb-4">

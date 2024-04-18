@@ -1,10 +1,27 @@
+"use client";
+
 import Footer from "@/components/footer";
 
+import dynamic from "next/dynamic";
+
+const MyMap = dynamic(() => import("./_widgets/map"), {
+  ssr: false,
+});
+
 export default function Contacts() {
+  // console.log(ymaps3)
   return (
-    <div>
-      <div className="flex gap-4 p-[2vmax] items-start lg:items-end mb-32 flex-col lg:flex-row ">
-        <img src="/map.png" className="h-[70vmin]" alt="" />
+    <div className="flex flex-col items-stretch min-h-full">
+      <div className="flex gap-4 p-[2vmax] items-start lg:items-end flex-col lg:flex-row grow mb-24">
+        {/*  */}
+        <div className="self-stretch basis-1/2">
+          <MyMap
+            coordinates={{
+              lat: 55.754031,
+              lng: 37.637524,
+            }}
+          />
+        </div>
         <div>
           <p>адрес:</p>
           <p className="underline mb-8">г. Москва,ул.Солянка,1/2с1</p>
@@ -17,7 +34,9 @@ export default function Contacts() {
         </div>
       </div>
 
-      <Footer withTree />
+      <div className="px-[2vmax] pb-[2vmax]">
+        <Footer withTree />
+      </div>
     </div>
   );
 }

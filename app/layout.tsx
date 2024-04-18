@@ -57,6 +57,11 @@ ym(97034850, "init", {
             />
           </div>
         </noscript>
+
+        <Script
+          src={`https://api-maps.yandex.ru/v3/?apikey=${process.env.NEXT_PUBLIC_YANDEX_MAPS_V3_API_KEY}&lang=ru_RU`}
+          strategy="beforeInteractive"
+        />
       </head>
       <body className="font-regular bg-white leading-none text-base lowercase selection:bg-black selection:text-white">
         {children}
