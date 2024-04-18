@@ -69,6 +69,7 @@ export default function PhoneField({
         )}
         getInputRef={ref}
         format={formatPhone}
+        inputMode="tel"
       />
     </div>
   );
