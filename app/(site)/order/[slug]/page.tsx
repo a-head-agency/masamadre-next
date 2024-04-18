@@ -1,9 +1,7 @@
 import { getOneDish } from "@/data/products";
 import TotalPrice from "./_widgets/total-price";
 import AddToCartButtonAuth from "./_widgets/add-to-cart-button-auth";
-import AddToCartButtonNoAuth from "./_widgets/add-to-cart-button-noauth";
-import AdderAuth from "./_widgets/adder-auth";
-import AdderNoAuth from "./_widgets/adder-noauth";
+import Adder from "@/components/functional/adder";
 import BackButton from "./_widgets/back-button";
 import { getSession } from "@/session";
 import { cookies } from "next/headers";
@@ -39,7 +37,7 @@ export default async function Product({ params }: Props) {
 
             <div className="text-sm md:text-2xl my-6 flex justify-between items-center">
               <div>{dish.price} ₽</div>
-              <AdderAuth dish_id={dish.id} />
+              <Adder dish_id={dish.id} />
             </div>
 
             <div className="border-t text-xs md:text-base border-black mb-[9vmin]">
