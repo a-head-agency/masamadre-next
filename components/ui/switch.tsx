@@ -38,8 +38,9 @@ export default function Switch({ variant = "default", ...props }: Props) {
 
       <span
         className={cx(
-          "block relative h-5 w-10 bg-black rounded-full transition-shadow",
-          isFocusVisible && "ring-2 ring-offset-2 ring-black"
+          "block relative h-5 w-10 rounded-full transition-all border border-black box-content",
+          isFocusVisible && "ring-2 ring-offset-2 ring-black",
+          state.isSelected ? "bg-black" : "bg-white"
         )}
       >
         <motion.span
@@ -53,7 +54,11 @@ export default function Switch({ variant = "default", ...props }: Props) {
           }}
           initial={state.isSelected ? "on" : "off"}
           animate={state.isSelected ? "on" : "off"}
-          className="absolute top-0.5 left-0.5 size-4 bg-white rounded-full"
+          className={cx(
+            "absolute top-0.5 left-0.5 size-4 rounded-full transition-colors",
+
+            state.isSelected ? "bg-white" : "bg-black"
+          )}
         ></motion.span>
       </span>
     </label>
