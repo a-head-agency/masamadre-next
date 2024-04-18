@@ -384,7 +384,7 @@ export default function Home() {
         </div>
         <div id="footer--text-block" className="hidden lg:block">
           <p className="mb-4">
-            <span id="footer--first-row">El panadería de manera nueva</span>
+            <span id="footer--first-row">La panadería de manera nueva</span>
             <br />
             <span id="footer--second-row">
               En la cocina abierta puedes ver todos procesos del pan ¡Vamos!

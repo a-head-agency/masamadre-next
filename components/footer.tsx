@@ -31,7 +31,7 @@ export default function Footer({ withTree, withPhone }: Props) {
       </div>
       <div className="hidden lg:block">
         <p className="mb-4">
-          <span>El panadería de manera nueva</span>
+          <span>La panadería de manera nueva</span>
           <br />
           <span>
             En la cocina abierta puedes ver todos procesos del pan ¡Vamos!
