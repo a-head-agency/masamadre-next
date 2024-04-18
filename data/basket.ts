@@ -104,7 +104,7 @@ export async function getBasket(
         weight: d.weight,
       })),
       total,
-      total_count: total,
+      total_count: session.basket.length,
       total_price: total_price,
     };
   }
