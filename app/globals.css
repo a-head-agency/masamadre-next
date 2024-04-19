@@ -10,7 +10,11 @@
   @apply my-4;
 }
 
-.document ul li {
+.document ul, .document ol {
+  @apply pl-[2vmax];
+}
+
+.document li {
   @apply pl-4;
 }
 
