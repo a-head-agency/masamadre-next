@@ -41,7 +41,7 @@ export default async function Order() {
             key={i}
           >
             {dc.dishes.map((item) => (
-              <div className="leading-4" key={item.id}>
+              <div className="leading-4 flex flex-col items-stretch" key={item.id}>
                 <Link href={`order/${item.id}`}>
                   <img
                     className="aspect-square mb-4 w-full border border-black/25 object-cover object-center"
@@ -49,7 +49,7 @@ export default async function Order() {
                     alt={item.name}
                   />
                 </Link>
-                <div className="flex flex-col md:flex-row gap-x-4 gap-y-2 items-stretch justify-between pr-2">
+                <div className="flex flex-col grow md:flex-row gap-x-4 gap-y-2 items-stretch justify-between pr-2">
                   <Link className="block" href={`order/${item.id}`}>
                     <h3 className="font-bold lowercase">{item.name}</h3>
                     <p>{item.short_description}</p>
