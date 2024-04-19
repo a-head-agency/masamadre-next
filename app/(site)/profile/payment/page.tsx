@@ -59,7 +59,7 @@ export default function Payment() {
         </div>
       ))}
 
-      <button
+      {/* <button
         type="button"
         className="p-3 w-full max-w-xs flex items-center gap-4 mt-6"
       >
@@ -76,7 +76,7 @@ export default function Payment() {
           <CardIcon className="h-6 text-black" />
         </div>
         <span>Добавить способ оплаты</span>
-      </button>
+      </button> */}
 
       <button
         type="button"
