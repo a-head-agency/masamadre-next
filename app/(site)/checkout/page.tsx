@@ -180,20 +180,6 @@ export default function Page() {
         <RadioGroup className="flex flex-col" value={value} onChange={setValue}>
           <Label className="text-black opacity-50 mb-4">Способ оплаты</Label>
 
-          <PaymentOption value="1">
-            <div className="flex items-center gap-x-2">
-              <WalletIcon className="size-8" />
-              Наличными
-            </div>
-          </PaymentOption>
-
-          <PaymentOption value="2">
-            <div className="flex items-center gap-x-2">
-              <CreditCard className="size-8" />
-              Картой при получении
-            </div>
-          </PaymentOption>
-
           <PaymentOption value="3">
             <div className="flex items-center gap-x-2">
               <CreditCard className="size-8" />
