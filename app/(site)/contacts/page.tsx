@@ -17,8 +17,8 @@ export default function Contacts() {
         <div className="self-stretch md:basis-3/5 max-md:aspect-[4/3]">
           <MyMap
             coordinates={{
-              lat: 55.754031,
-              lng: 37.637524,
+              lat: 55.754138,
+              lng: 37.638634,
             }}
           />
         </div>
