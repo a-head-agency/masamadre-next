@@ -240,11 +240,11 @@ export default function Login() {
 
               <div className="mt-12">
                 <span className="opacity-50">Продолжая, вы соглашаетесь </span>
-                <Link className="underline" href="https://youtube.com">
+                <Link className="underline" href="/agree">
                   со сбором и обработкой персональных данных
                 </Link>
                 <span className="opacity-50"> и </span>
-                <Link className="underline" href="https://yandex.ru">
+                <Link className="underline" href="/agree">
                   пользовательским соглашением
                 </Link>
               </div>
