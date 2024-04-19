@@ -379,7 +379,7 @@ export default function Home() {
       <div className="flex justify-between items-end gap-4 px-[2vmax] pb-[2vmax]">
         <div className="flex flex-col">
           <Link href="https://t.me/masamadremsc">tg</Link>
-          <Link href="/delivery">доставка и оплата</Link>
+          <Link href="/about-payment-and-delivery">доставка и оплата</Link>
           <Link href="/contacts">контакты</Link>
         </div>
         <div id="footer--text-block" className="hidden lg:block">

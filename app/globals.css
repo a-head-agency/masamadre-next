@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.document h2 {
+  @apply text-xl font-bold mb-4 first:mt-0 mt-12;
+}
+
+.document p {
+  @apply my-4;
+}
+
+.document ul li {
+  @apply pl-4;
+}
+
+
