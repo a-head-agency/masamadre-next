@@ -4,6 +4,7 @@ import Footer from "@/components/footer";
 import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/button";
 import PhoneField from "@/components/ui/phone-field";
+import TimePicker from "@/components/ui/timepicker";
 import { GetUserMeSchemeType } from "@/data/user";
 import { CreditCard, WalletIcon } from "@/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -170,9 +171,7 @@ export default function Page() {
 
         <div className="col-span-full flex gap-4 flex-wrap">
           <Button>как можно быстрее</Button>
-          <Button isInverted isDisabled>
-            ко времени
-          </Button>
+          <TimePicker />
         </div>
       </div>
 
