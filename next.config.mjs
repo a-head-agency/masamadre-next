@@ -1,12 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
-  async redirects() {
+  redirects() {
     return [
       {
-        source: "/app",
-        destination: "/",
-        permanent: true,
+        source: "/((?!tech-works|logo).*):slug*",
+        destination: "/tech-works",
+        permanent: false,
       },
     ];
   },
