@@ -23,7 +23,7 @@ export default async function Product({ params }: Props) {
     <>
       <div className="md:h-full mx-[2vmax] pb-[2vmax]">
         <div className="md:h-full flex flex-col md:flex-row gap-8 md:gap-[4%] border border-black p-4 relative">
-          <div className="absolute right-4 top-4 hidden md:block">
+          <div className="absolute z-10 max-md:left-6 md:right-4 top-6 md:top-4">
             <BackButton />
           </div>
           <Slider autoplay fallback={dish.img} images={dish.images} />
