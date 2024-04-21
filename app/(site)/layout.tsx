@@ -4,6 +4,7 @@ import { BasketIcon, UserIcon } from "@/icons";
 import { Cart } from "./_widgets/cart";
 import { getSession } from "@/session";
 import { cookies } from "next/headers";
+import Booking from "@/app/_widgets/booking";
 
 export default async function SiteLayout({
   children,
@@ -41,13 +42,10 @@ export default async function SiteLayout({
           <NavLink href="/order" activeClassName="underline">
             заказ
           </NavLink>
-          {/* <NavLink href="/booking" activeClassName="underline">
-            бронирование
-          </NavLink> */}
+          <Booking withTopPadding />
           <NavLink href="/work" activeClassName="underline">
             сотрудничество
           </NavLink>
-          <div className="grow[0.5] hidden md:block"></div>
         </div>
       </div>
 
