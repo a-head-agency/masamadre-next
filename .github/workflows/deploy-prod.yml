@@ -35,4 +35,4 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
-          script: echo "MASAMADRE_NEXT_PROD_IMAGE_TAG=${{ github.ref_name }}" > .env.prod && ./deploy-prod.sh
+          script: ./deploy-prod.sh ${{ github.ref_name }}

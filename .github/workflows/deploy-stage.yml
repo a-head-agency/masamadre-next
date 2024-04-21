@@ -35,4 +35,4 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
-          script: echo "MASAMADRE_NEXT_STAGE_IMAGE_TAG=${{ github.ref_name }}" > .env.stage && ./deploy-stage.sh
+          script: ./deploy-stage.sh ${{ github.ref_name }}
