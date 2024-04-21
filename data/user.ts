@@ -20,9 +20,9 @@ const GetUserScheme = z.object({
         month: Number(parts[1]),
         day: Number(parts[2]),
       });
-      return d.toISO();
+      return d.toISO() ?? null;
     }
-    return "";
+    return null;
   }),
   adres_id: z.number(),
   rest_id: z.number(),

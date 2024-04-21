@@ -2,8 +2,7 @@
 
 import { setUser } from "@/app/_actions";
 import Button from "@/components/ui/button";
-import DatePicker from "@/components/ui/datepicker";
-import ListBox from "@/components/ui/listbox";
+import DatePicker from "@/components/ui/datepicker-old";
 import SelectOld from "@/components/ui/old-select";
 import PhoneField from "@/components/ui/phone-field";
 import Switch from "@/components/ui/switch";
@@ -16,6 +15,7 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import useSWR from "swr";
 import { z } from "zod";
+import {} from "@internationalized/date";
 
 const fetcher = (url: string) =>
   axios.get(url, { withCredentials: true }).then((res) => res.data);
@@ -31,6 +31,7 @@ const formScheme = z.object({
         .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())
         .join(" ")
     ),
+  birthday: z.string().nullable(),
   email: z.string().email().or(z.literal("")),
   phone: z.string().or(z.literal("")),
   email_pushes: z.boolean(),
@@ -53,6 +54,7 @@ export default function Profile() {
       email: "",
       phone: "",
       email_pushes: false,
+      birthday: null,
     },
   });
 
@@ -94,16 +96,7 @@ export default function Profile() {
             />
           )}
         />
-        <SelectOld
-          big
-          label="пол"
-          options={[
-            { label: "мужской", code: "male" },
-            { label: "женский", code: "female" },
-          ]}
-          onChange={() => {}}
-        />
-        {/* <Controller
+        <Controller
           name="birthday"
           control={control}
           render={({ field, fieldState: { invalid, error } }) => (
@@ -113,10 +106,21 @@ export default function Profile() {
               onChange={field.onChange}
               onBlur={field.onBlur}
               isInvalid={invalid}
-              errorMessage={error?.message}
+              aria-label="день рождения"
             />
           )}
-        /> */}
+        />
+        <SelectOld
+          big
+          label="пол"
+          options={[
+            { label: "мужской", code: "male" },
+            { label: "женский", code: "female" },
+          ]}
+          onChange={() => {}}
+        />
+
+        {/* <DatePicker label="день рождения" onChange={() => {}} value="" /> */}
         {/* <InputSelect
           big
           label="пол"

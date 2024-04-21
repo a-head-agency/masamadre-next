@@ -3,6 +3,7 @@
 import { createPrivateApiAxios } from "@/axios";
 import * as basketService from "@/data/basket";
 import { getSession } from "@/session";
+import { DateTime } from "luxon";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -24,7 +25,20 @@ const SetUserMeScheme = z.object({
   name: z.string().optional(),
   phone: z.string().optional(),
   email: z.string().optional(),
-  birthday: z.string().optional(),
+  birthday: z
+    .string()
+    .nullish()
+    .transform((v) => {
+      if (v === null) {
+        return "";
+      }
+      if (v === undefined) {
+        return;
+      }
+      const dt = DateTime.fromISO(v);
+      const vl = dt.toFormat("yyyy/MM/dd");
+      return vl;
+    }),
   adres: z.number().optional(),
   rest: z.number().optional(),
   status_pushes: z.boolean().optional(),
@@ -43,6 +57,7 @@ export async function setUser(inputs: z.input<typeof SetUserMeScheme>) {
 
   const data = SetUserMeScheme.parse(inputs);
   const response = await api.post("/user/me", data);
+  console.log(response.data);
   revalidatePath("/profile");
 }
 
