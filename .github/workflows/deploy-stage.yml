@@ -1,12 +1,11 @@
-name: deploy
+name: deploy-stage
 
 on:
   push:
+    branches:
+      - "stage"
     tags:
-      - "v*.*.*"
-  pull_request:
-    tags:
-      - "v*.*.*"
+      - "stage-v*.*.*"
 
 jobs:
   docker:
@@ -23,7 +22,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: theayarayarovich/masamadre-next:latest,theayarayarovich/masamadre-next:${{ github.ref_name }}
+          tags: theayarayarovich/masamadre-next:${{ github.ref_name }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -36,4 +35,4 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
-          script: echo "MASAMADRE_NEXT_IMAGE_TAG=${{ github.ref_name }}" > .env && ./deploy.sh
+          script: echo "MASAMADRE_NEXT_STAGE_IMAGE_TAG=${{ github.ref_name }}" > .env.stage && ./deploy-stage.sh
