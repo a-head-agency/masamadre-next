@@ -4,10 +4,8 @@ export default function NotFound() {
       <img className="h-6" src="/logo.svg" alt="masamadre" />
 
       <div className="grow"></div>
-      <span className="text-3xl font-bold rotate-90">:)</span>
       <strong className="font-bold text-3xl">
-        ведутся технические работы, приносим свои извинения за предоставленные
-        неудобства
+        ведутся технические работы
       </strong>
       <div className="grow"></div>
     </div>
