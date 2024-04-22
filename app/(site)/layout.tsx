@@ -46,6 +46,7 @@ export default async function SiteLayout({
           <NavLink href="/work" activeClassName="underline">
             сотрудничество
           </NavLink>
+          <div></div>
         </div>
       </div>
 
