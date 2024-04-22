@@ -2,25 +2,30 @@
 
 import Footer from "@/components/footer";
 
-import dynamic from "next/dynamic";
-
-const MyMap = dynamic(() => import("./_widgets/map"), {
-  ssr: false,
-});
-
 export default function Contacts() {
-  // console.log(ymaps3)
   return (
     <div className="flex flex-col items-stretch min-h-full">
       <div className="flex gap-4 p-[2vmax] items-start lg:items-end flex-col lg:flex-row grow mb-24">
-        {/*  */}
         <div className="self-stretch md:basis-3/5 max-md:aspect-[4/3]">
-          <MyMap
-            coordinates={{
-              lat: 55.754138,
-              lng: 37.638634,
-            }}
-          />
+          <div className="relative overflow-hidden h-full w-full">
+            <a
+              href="https://yandex.ru/maps/213/moscow/?utm_medium=mapframe&utm_source=maps"
+              className="text-[#eeeeee] text-[12px] absolute top-[0px]"
+            >
+              Москва
+            </a>
+            <a
+              href="https://yandex.ru/maps/213/moscow/?ll=37.637524%2C55.754031&mode=routes&rtext=~55.754031%2C37.637524&rtt=auto&ruri=~ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgg1NjcxNDg5NBI90KDQvtGB0YHQuNGPLCDQnNC-0YHQutCy0LAsINGD0LvQuNGG0LAg0KHQvtC70Y_QvdC60LAsIDEvMtGBMSIKDdOMFkIVIQRfQg%2C%2C&utm_campaign=desktop&utm_medium=mapframe&utm_source=maps&z=17.53"
+              className="text-[#eeeeee] text-[12px] absolute top-[14px]"
+            >
+              Яндекс Карты
+            </a>
+            <iframe
+              src="https://yandex.ru/map-widget/v1/?ll=37.637524%2C55.754031&mode=routes&rtext=~55.754031%2C37.637524&rtt=auto&ruri=~ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgg1NjcxNDg5NBI90KDQvtGB0YHQuNGPLCDQnNC-0YHQutCy0LAsINGD0LvQuNGG0LAg0KHQvtC70Y_QvdC60LAsIDEvMtGBMSIKDdOMFkIVIQRfQg%2C%2C&utm_campaign=desktop&utm_medium=search&utm_source=maps&z=17.53"
+              allowFullScreen
+              className="relative w-full h-full"
+            ></iframe>
+          </div>
         </div>
         <div>
           <p>адрес:</p>
