@@ -42,7 +42,7 @@ export default async function SiteLayout({
           <NavLink href="/order" activeClassName="underline">
             заказ
           </NavLink>
-          <Booking withTopPadding />
+          {/* <Booking withTopPadding /> */}
           <NavLink href="/work" activeClassName="underline">
             сотрудничество
           </NavLink>
