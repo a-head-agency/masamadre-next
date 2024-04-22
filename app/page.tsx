@@ -373,6 +373,8 @@ export default function Home() {
         {/* <Link href="/booking">бронирование</Link> */}
         {/* <Booking /> */}
         <Link href="/work">сотрудничество</Link>
+        <div></div>
+
       </div>
 
       <div className="grow"></div>
