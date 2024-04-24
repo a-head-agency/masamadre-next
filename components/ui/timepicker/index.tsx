@@ -1,27 +1,35 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import TimePickerModal from "./modal";
 import { motion, useDragControls } from "framer-motion";
-import { time } from "console";
+import {
+  CalendarDate,
+  CalendarDateTime,
+  getDayOfWeek,
+  today,
+} from "@internationalized/date";
+import Button from "../button";
 
-interface VerticalDragNumberSelectorProps {
-  min: number;
-  max: number;
-  onValueChange?: (value: number) => void;
+interface VerticalDragSelectorProps<T> {
+  options?: T[];
+  onValueChange?: (optionIndex: number) => void;
 }
 
-function VerticalDragNumberSelector({
-  min,
-  max,
+function VerticalDragSelector<T extends string>({
   onValueChange = () => {},
-}: VerticalDragNumberSelectorProps) {
+  options = [],
+}: VerticalDragSelectorProps<T>) {
   const cellSize = 50;
+  const cellMaxWidth = useMemo(() => {
+    return Math.max(...options.map((o) => o.length));
+  }, [options]);
   return (
     <div
-      className="relative w-[5ch] overflow-hidden"
+      className="relative overflow-hidden"
       style={{
         height: cellSize * 5 + "px",
+        width: cellMaxWidth + 2 + "ch",
       }}
     >
       <div
@@ -45,7 +53,7 @@ function VerticalDragNumberSelector({
         dragConstraints={{
           left: 0,
           right: 0,
-          top: -cellSize * max,
+          top: -cellSize * (options.length - 1),
           bottom: 0,
         }}
         dragTransition={{
@@ -53,10 +61,13 @@ function VerticalDragNumberSelector({
           power: 0.1,
           modifyTarget(v) {
             const snapped = Math.round(v / cellSize) * cellSize;
-            const constrained = Math.min(Math.max(snapped, -cellSize * max), 0);
+            const constrained = Math.min(
+              Math.max(snapped, -cellSize * (options.length - 1)),
+              0
+            );
             console.log({ v, snapped, consrtained: constrained });
-            const value = Math.floor(Math.abs(constrained) / cellSize);
-            onValueChange(value);
+            const index = Math.floor(Math.abs(constrained) / cellSize);
+            onValueChange(index);
             return constrained;
           },
         }}
@@ -67,7 +78,7 @@ function VerticalDragNumberSelector({
           bottom: 0.2,
         }}
       >
-        {[...Array(max + 1)].map((_, idx) => (
+        {options.map((opt, idx) => (
           <div
             key={idx}
             className="flex items-center justify-center"
@@ -75,7 +86,7 @@ function VerticalDragNumberSelector({
               height: cellSize + "px",
             }}
           >
-            {String(idx).padStart(2, "0")}
+            {opt}
           </div>
         ))}
       </motion.div>
@@ -84,52 +95,101 @@ function VerticalDragNumberSelector({
 }
 
 interface TimePickerProps {
-  onValueChange?: (time: { hours: number; minutes: number }) => void;
+  onValueChange?: (time: CalendarDateTime) => void;
 }
 
 export default function TimePicker({
   onValueChange = () => {},
 }: TimePickerProps) {
-  const [hours, setHours] = useState<number>();
-  const [minutes, setMinutes] = useState<number>();
+  const [hours, setHours] = useState<number>(0);
+  const [minutes, setMinutes] = useState<number>(0);
+  const [day, setDay] = useState<number>(0);
+  const [dateTime, setDateTime] = useState<CalendarDateTime>();
 
-  useEffect(() => {
-    console.log({ hours, minutes });
-    if (hours != undefined && minutes != undefined) {
-      onValueChange({
-        hours,
-        minutes,
-      });
-    }
-  }, [hours, minutes, onValueChange]);
+  const hoursOptions = useMemo(() => {
+    return Array(24)
+      .fill(0)
+      .map((_, i) => String(i).padStart(2, "0"));
+  }, []);
 
-  const time = useMemo(() => {
-    if (hours == undefined || minutes == undefined) {
-      return;
+  const minutesOptions = useMemo(() => {
+    return Array(60)
+      .fill(0)
+      .map((_, i) => String(i).padStart(2, "0"));
+  }, []);
+
+  const daysOptions = useMemo(() => {
+    const td = today("Europe/Moscow");
+    const forward = td.add({ months: 1 });
+    const days: CalendarDate[] = [];
+    let currentDay = td;
+    while (currentDay.compare(forward) <= 0) {
+      days.push(currentDay);
+      currentDay = currentDay.add({ days: 1 });
     }
-    return {
+    return days;
+  }, []);
+
+  const daysOptionsSerialized = useMemo(() => {
+    return daysOptions.map((o) => {
+      const weekdays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+
+      const months = [
+        "янв.",
+        "фев.",
+        "мар.",
+        "апр.",
+        "май",
+        "июн.",
+        "июл.",
+        "авг.",
+        "сен.",
+        "окт.",
+        "ноя.",
+        "дек.",
+      ];
+
+      return `${weekdays[getDayOfWeek(o, "ru-RU")]} ${o.day} ${
+        months[o.month - 1]
+      }`;
+    });
+  }, [daysOptions]);
+
+  const select = useCallback(() => {
+    const v = daysOptions[day];
+    const datetime = new CalendarDateTime(
+      v.year,
+      v.month,
+      v.day,
       hours,
-      minutes,
-    };
-  }, [hours, minutes]);
-
-  const resetTimeOnOpen = (isOpen: boolean) => {
-    console.log("open changed", isOpen);
-    if (isOpen) {
-      setMinutes(undefined);
-      setHours(undefined);
-    }
-  };
+      minutes
+    );
+    setDateTime(datetime);
+    onValueChange(datetime);
+  }, [daysOptions, day, minutes, hours, onValueChange]);
 
   return (
-    <TimePickerModal time={time} onOpenChange={resetTimeOnOpen}>
-      <div className="h-full flex items-center justify-center text-2xl">
-        <VerticalDragNumberSelector min={0} max={23} onValueChange={setHours} />
-        <VerticalDragNumberSelector
-          min={0}
-          max={59}
-          onValueChange={setMinutes}
-        />
+    <TimePickerModal time={dateTime}>
+      <div className="flex flex-col items-stretch justify-evenly h-full">
+        <div className="flex items-center justify-center text-2xl">
+          <VerticalDragSelector
+            options={daysOptionsSerialized}
+            onValueChange={setDay}
+          />
+          <VerticalDragSelector
+            options={hoursOptions}
+            onValueChange={setHours}
+          />
+          <VerticalDragSelector
+            options={minutesOptions}
+            onValueChange={setMinutes}
+          />
+        </div>
+        <div className="flex justify-center">
+          <Button type="button" onPress={select}>
+            Выбрать
+          </Button>
+        </div>
       </div>
     </TimePickerModal>
   );
