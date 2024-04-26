@@ -2,6 +2,8 @@ import Footer from "@/components/footer";
 import Link from "next/link";
 import { getDishes } from "@/data/products";
 import AddToBasketButton from "./_widgets/add-to-basket-button";
+import { getSession } from "@/session";
+import { cookies } from "next/headers";
 
 // async function getProducts() {
 //   const res = await fetch(process.env.NEXT_PUBLIC_NEXT_URL + "/api/products");
@@ -41,7 +43,10 @@ export default async function Order() {
             key={i}
           >
             {dc.dishes.map((item) => (
-              <div className="leading-4 flex flex-col items-stretch" key={item.id}>
+              <div
+                className="leading-4 flex flex-col items-stretch"
+                key={item.id}
+              >
                 <Link href={`order/${item.id}`}>
                   <img
                     className="aspect-square mb-4 w-full border border-black/25 object-cover object-center"

@@ -2,7 +2,7 @@
 
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import TimePickerModal from "./modal";
-import { motion, useDragControls } from "framer-motion";
+import { motion, useDragControls, useMotionValue } from "framer-motion";
 import {
   CalendarDate,
   CalendarDateTime,
@@ -24,6 +24,8 @@ function VerticalDragSelector<T extends string>({
   const cellMaxWidth = useMemo(() => {
     return Math.max(...options.map((o) => o.length));
   }, [options]);
+  const y = useMotionValue(0);
+
   return (
     <div
       className="relative overflow-hidden"
@@ -47,6 +49,7 @@ function VerticalDragSelector<T extends string>({
       <motion.div
         className="text-center absolute top-0 inset-x-0"
         style={{
+          y,
           paddingBlock: cellSize * 2 + "px",
         }}
         drag
@@ -95,22 +98,29 @@ function VerticalDragSelector<T extends string>({
 }
 
 interface TimePickerProps {
+  maxMinutes?: number;
+  minMinutes?: number;
   onValueChange?: (time: CalendarDateTime) => void;
 }
 
 export default function TimePicker({
+  minMinutes = 0,
+  maxMinutes = 24 * 60,
   onValueChange = () => {},
 }: TimePickerProps) {
-  const [hours, setHours] = useState<number>(0);
-  const [minutes, setMinutes] = useState<number>(0);
-  const [day, setDay] = useState<number>(0);
+  const [hoursIndex, setHoursIndex] = useState<number>(0);
+  const [minutesIndex, setMinutesIndex] = useState<number>(0);
+  const [dayIndex, setDayIndex] = useState<number>(0);
   const [dateTime, setDateTime] = useState<CalendarDateTime>();
 
   const hoursOptions = useMemo(() => {
+    const minHours = Math.floor(minMinutes / 60);
+    const maxHours = Math.floor(maxMinutes / 60);
     return Array(24)
       .fill(0)
-      .map((_, i) => String(i).padStart(2, "0"));
-  }, []);
+      .map((_, i) => String(i).padStart(2, "0"))
+      .filter((s) => minHours <= Number(s) && Number(s) <= maxHours);
+  }, [minMinutes, maxMinutes]);
 
   const minutesOptions = useMemo(() => {
     return Array(60)
@@ -156,17 +166,23 @@ export default function TimePicker({
   }, [daysOptions]);
 
   const select = useCallback(() => {
-    const v = daysOptions[day];
-    const datetime = new CalendarDateTime(
-      v.year,
-      v.month,
-      v.day,
-      hours,
-      minutes
-    );
+    const v = daysOptions[dayIndex];
+
+    const hour = Number(hoursOptions[hoursIndex]);
+    const minute = Number(minutesOptions[minutesIndex]);
+    const datetime = new CalendarDateTime(v.year, v.month, v.day, hour, minute);
+
     setDateTime(datetime);
     onValueChange(datetime);
-  }, [daysOptions, day, minutes, hours, onValueChange]);
+  }, [
+    daysOptions,
+    dayIndex,
+    minutesIndex,
+    hoursIndex,
+    onValueChange,
+    minutesOptions,
+    hoursOptions,
+  ]);
 
   return (
     <TimePickerModal time={dateTime}>
@@ -174,15 +190,15 @@ export default function TimePicker({
         <div className="flex items-center justify-center text-2xl">
           <VerticalDragSelector
             options={daysOptionsSerialized}
-            onValueChange={setDay}
+            onValueChange={setDayIndex}
           />
           <VerticalDragSelector
             options={hoursOptions}
-            onValueChange={setHours}
+            onValueChange={setHoursIndex}
           />
           <VerticalDragSelector
             options={minutesOptions}
-            onValueChange={setMinutes}
+            onValueChange={setMinutesIndex}
           />
         </div>
         <div className="flex justify-center">
