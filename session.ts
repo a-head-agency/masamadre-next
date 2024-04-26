@@ -6,6 +6,11 @@ export interface SessionData {
   accessToken: string;
   refreshToken: string;
   basket?: number[];
+  tableOrder?: {
+    rest: number;
+    table: number;
+    sit: number;
+  };
 }
 
 export async function getSession(cookies: ReturnType<typeof _cookies>) {
