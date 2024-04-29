@@ -1,4 +1,4 @@
-import { getIronSession, SessionOptions } from "iron-session";
+import { getIronSession } from "iron-session";
 import { cookies as _cookies } from "next/headers";
 
 export interface SessionData {
@@ -11,6 +11,10 @@ export interface SessionData {
     table: number;
     sit: number;
   };
+  lastOrders?: {
+    id: number;
+    time?: string;
+  }[];
 }
 
 export async function getSession(cookies: ReturnType<typeof _cookies>) {
