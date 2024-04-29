@@ -11,6 +11,11 @@ export interface SessionData {
     table: number;
     sit: number;
   };
+  lastOrders?: {
+    id: number;
+    time?: string;
+    expire_at: string;
+  }[];
 }
 
 export async function getSession(cookies: ReturnType<typeof _cookies>) {

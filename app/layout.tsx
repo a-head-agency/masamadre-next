@@ -17,6 +17,13 @@ const masamadreFontBold = localFont({
   variable: "--font-masamadre-700",
 });
 
+const newFontRegular = localFont({
+  src: "./fonts/new-font/NewFont-Regular.woff",
+  display: "swap",
+  weight: "400",
+  variable: "--font-new-font-400",
+});
+
 export const metadata: Metadata = {
   title: "Masamadre",
   description: "Masamadre description",
@@ -30,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${masamadreFontRegular.variable} ${masamadreFontBold.variable} scroll-smooth scroll-pt-32`}
+      className={`${masamadreFontRegular.variable} ${masamadreFontBold.variable} ${newFontRegular.variable} scroll-smooth scroll-pt-32`}
     >
       <head>
         <Script id="yandex-metrika">

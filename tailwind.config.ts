@@ -16,6 +16,7 @@ const config: Config = {
       fontFamily: {
         regular: ["var(--font-masamadre-400)"],
         bold: ["var(--font-masamadre-700)"],
+        display: ["var(--font-new-font-400)"],
       },
       fontSize: {
         xs: "0.875rem",
