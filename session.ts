@@ -1,4 +1,4 @@
-import { getIronSession, SessionOptions } from "iron-session";
+import { getIronSession } from "iron-session";
 import { cookies as _cookies } from "next/headers";
 
 export interface SessionData {
@@ -14,7 +14,6 @@ export interface SessionData {
   lastOrders?: {
     id: number;
     time?: string;
-    expire_at: string;
   }[];
 }
 

@@ -45,7 +45,6 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
     session.lastOrders = session.lastOrders || [];
     session.lastOrders.push({
       id: response.data.id,
-      expire_at: DateTime.now().plus({ hours: 3 }).toISO(),
     });
   }
 

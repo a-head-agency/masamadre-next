@@ -55,11 +55,6 @@ export async function getUser(session: Session) {
 export async function getLastOrders(session: Session) {
   let lastOrders = session.lastOrders || [];
 
-  // remove expired orders
-  lastOrders = lastOrders.filter(
-    (o) => DateTime.fromISO(o.expire_at) < DateTime.now()
-  );
-
   session.lastOrders = lastOrders;
 
   return lastOrders;
