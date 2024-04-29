@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo -p 8889",
+    "dev": "node check-env.js && next dev --turbo -p 8889",
     "build": "next build",
     "start": "next start -p 8889",
     "lint": "next lint"
