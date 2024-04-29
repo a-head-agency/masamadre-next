@@ -32,7 +32,7 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
       });
       console.log("PLACE ORDER API RESPONSE (NO USER)", response.data);
     } catch {}
-    redirect("https://masamadre.ru/profile/orders");
+    redirect(process.env.NEXT_PUBLIC_URL! + "/profile/orders");
   }
 
   try {
@@ -42,5 +42,5 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
     console.log("PLACE ORDER API RESPONSE (WITH USER)", response.data);
   } catch {}
 
-  redirect("https://masamadre.ru/profile/orders");
+  redirect(process.env.NEXT_PUBLIC_URL! + "/profile/orders");
 }

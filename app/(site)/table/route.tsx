@@ -10,10 +10,10 @@ export async function GET(request: NextRequest) {
   const table = searchParams.get("table");
   const sit = searchParams.get("sit");
   revalidatePath("/order");
-  revalidatePath("/order/checkout");
-  revalidatePath("/order/checkout/self-receipt");
+  revalidatePath("/checkout");
+  revalidatePath("/checkout/self-receipt");
   if (!rest || !table || !sit) {
-    redirect("https://masamadre.ru");
+    redirect(process.env.NEXT_PUBLIC_URL!);
   }
   const session = await getSession(cookies());
   session.tableOrder = {
@@ -22,5 +22,5 @@ export async function GET(request: NextRequest) {
     sit: Number(sit),
   };
   await session.save();
-  redirect("https://masamadre.ru/order");
+  redirect(process.env.NEXT_PUBLIC_URL! + "/order");
 }
