@@ -5,7 +5,6 @@ import { getSession } from "@/session";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { z } from "zod";
-import { DateTime } from "luxon";
 import { revalidatePath } from "next/cache";
 
 const PlaceOrderScheme = z.object({
@@ -46,6 +45,12 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
     session.lastOrders.push({
       id: response.data.id,
     });
+  } else if (response.data.link) {
+    session.lastOrders = session.lastOrders || [];
+    session.lastOrders.push({
+      id: response.data.id,
+    });
+    redirect(response.data.link);
   }
 
   revalidatePath("/thanks");
