@@ -55,9 +55,6 @@ export const ShortDishSchema = z.object({
   category: z.number(),
   price: z.number(),
   weight: z.number(),
-  count: z.number(),
-  count_basket: z.number(),
-  basket_id: z.number(),
 });
 
 export async function getDishesOfCategory(link: string) {
