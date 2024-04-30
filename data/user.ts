@@ -1,4 +1,4 @@
-import { createPrivateApiAxios } from "@/axios";
+import { createPrivateApiAxios, createPublicApiAxios } from "@/axios";
 import { Session } from "@/session";
 import { DateTime } from "luxon";
 import { redirect } from "next/navigation";
@@ -45,17 +45,28 @@ export async function getUser(session: Session) {
   return data;
 }
 
-// filters session.lastOrders based on their expire_at property
+const ShortOrderSchema = z.object({
+  id: z.number(),
+  status: z.string(),
+  time_deliver: z.string().transform((s) => {
+    const dt = DateTime.fromFormat(s, "yyyy-MM-dd HH:mm:ss", {
+      zone: "Europe/Moscow",
+    });
+    return dt.toISO()!;
+  }),
+  price: z.number(),
+  created_at: z.string(),
+});
 
-/**
- * Filters session.lastOrders based on their expire_at property.
- *
- * **Does not save session after changes**, so you need to handle saving yourself.
- */
+const ManyShortOrdersScheme = ShortOrderSchema.array();
+
 export async function getLastOrders(session: Session) {
   let lastOrders = session.lastOrders || [];
 
-  session.lastOrders = lastOrders;
-
-  return lastOrders;
+  const api = createPublicApiAxios();
+  const response = await api.post("/api/orders", {
+    ids: lastOrders.map((o) => o.id).sort(),
+  });
+  const data = ManyShortOrdersScheme.parse(response.data);
+  return data;
 }
