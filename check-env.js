@@ -1,3 +1,5 @@
+require("dotenv").config({ path: ".env.local" });
+
 const REQUIRED_ENVS = [
   "SESSION_COOKIE_NAME",
   "SESSION_COOKIE_SECRET",

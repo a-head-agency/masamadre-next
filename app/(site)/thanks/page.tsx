@@ -1,6 +1,7 @@
 import Footer from "@/components/footer";
 import { getLastOrders } from "@/data/user";
 import { getSession } from "@/session";
+import { DateTime } from "luxon";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -13,6 +14,10 @@ export default async function Thanks() {
     redirect(process.env.NEXT_PUBLIC_URL!);
   }
 
+  lastOrder.time_deliver = DateTime.fromISO(lastOrder.time_deliver).toFormat(
+    "hh:mm"
+  );
+
   return (
     <div className="min-h-full flex flex-col">
       <div className="grow flex items-center px-[2vmax] py-8">
@@ -22,7 +27,8 @@ export default async function Thanks() {
           </strong>
           <p className="normal-case text-lg">
             ваш номер заказа {lastOrder.id} будет ждать вас в Маса Мадре по
-            адресу солянка 1/2с1 {lastOrder.time && `в ${lastOrder.time}`}
+            адресу солянка 1/2с1{" "}
+            {lastOrder.time_deliver && `в ${lastOrder.time_deliver}`}
           </p>
         </div>
       </div>

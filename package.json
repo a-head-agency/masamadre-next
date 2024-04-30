@@ -15,6 +15,7 @@
     "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.6.8",
     "clsx": "^2.1.0",
+    "dotenv": "^16.4.5",
     "framer-motion": "^11.1.1",
     "gsap": "^3.12.5",
     "iron-session": "^8.0.1",
