@@ -177,12 +177,6 @@ export default function Page() {
                   Картой на сайте
                 </div>
               </PaymentOption>
-              <PaymentOption value="-2">
-                <div className="flex items-center gap-x-2">
-                  <WalletIcon className="size-8" />
-                  Наличные
-                </div>
-              </PaymentOption>
             </RadioGroup>
           )}
         />
