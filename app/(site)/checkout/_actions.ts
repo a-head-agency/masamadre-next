@@ -38,21 +38,27 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
     };
   }
 
+  console.log("payload", payload);
+
+  // return;
+
   const response = await api.post("user/order", payload);
+
+  console.log("place order", response.data);
 
   if (response.data.action === "success") {
     session.lastOrders = session.lastOrders || [];
     session.lastOrders.push({
       id: response.data.id,
     });
+    revalidatePath("/thanks");
+    redirect(process.env.NEXT_PUBLIC_URL! + "/thanks");
   } else if (response.data.link) {
     session.lastOrders = session.lastOrders || [];
     session.lastOrders.push({
       id: response.data.id,
     });
+    revalidatePath("/thanks");
     redirect(response.data.link);
   }
-
-  revalidatePath("/thanks");
-  redirect(process.env.NEXT_PUBLIC_URL! + "/thanks");
 }
