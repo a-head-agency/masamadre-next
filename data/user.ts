@@ -7,9 +7,10 @@ import { z } from "zod";
 const GetUserScheme = z.object({
   name: z.string(),
   status_pushes: z.boolean(),
-  get_pushes: z.boolean(),
+  get_tg: z.boolean(),
   email_pushes: z.boolean(),
-  sms_pushes: z.boolean(),
+  get_whatsapp: z.boolean(),
+  male: z.boolean().transform((m) => (m ? "male" : "female")),
   phone: z.string(),
   email: z.string(),
   birthday: z.string().transform((s) => {

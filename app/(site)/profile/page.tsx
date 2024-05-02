@@ -35,8 +35,9 @@ const formScheme = z.object({
   email: z.string().email().or(z.literal("")),
   phone: z.string().or(z.literal("")),
   email_pushes: z.boolean(),
-  whatsapp_pushes: z.boolean().optional(),
-  tg_pushes: z.boolean().optional(),
+  get_whatsapp: z.boolean().optional(),
+  get_tg: z.boolean().optional(),
+  male: z.string().nullable(),
 });
 
 export default function Profile() {
@@ -54,7 +55,10 @@ export default function Profile() {
       email: "",
       phone: "",
       email_pushes: false,
+      get_tg: false,
+      get_whatsapp: false,
       birthday: null,
+      male: null,
     },
   });
 
@@ -110,36 +114,28 @@ export default function Profile() {
             />
           )}
         />
-        <SelectOld
-          big
-          label="пол"
-          options={[
-            { label: "мужской", code: "male" },
-            { label: "женский", code: "female" },
-          ]}
-          onChange={() => {}}
+        <Controller
+          name="male"
+          control={control}
+          render={({ field, fieldState: { invalid, error } }) => (
+            <SelectOld
+              big
+              label="пол"
+              options={[
+                { label: "мужской", code: "male" },
+                { label: "женский", code: "female" },
+              ]}
+              onChange={field.onChange}
+              value={field.value}
+            />
+          )}
         />
 
-        {/* <DatePicker label="день рождения" onChange={() => {}} value="" /> */}
-        {/* <InputSelect
-          big
-          label="пол"
-          options={[
-            { label: "мужской", code: "male" },
-            { label: "женский", code: "female" },
-          ]}
-        /> */}
         <div className="hidden lg:block">
           <Button type="submit" isLoading={isSubmitting} isDisabled={!isValid}>
             сохранить
           </Button>
         </div>
-        {/* <button
-          type="submit"
-          className="hidden md:block self-start bg-black text-white px-8 py-1 rounded-full text-sm lowercase"
-        >
-          Сохранить
-        </button> */}
       </div>
       <div className="flex-1 flex flex-col gap-4 md:gap-8">
         <Controller
@@ -177,7 +173,7 @@ export default function Profile() {
           <p className="opacity-50 lowercase mb-8">получать инфо</p>
           <div className="flex flex-col items-stretch gap-y-4 md:max-w-48">
             <Controller
-              name="tg_pushes"
+              name="get_tg"
               control={control}
               render={({ field, fieldState: { invalid, error } }) => (
                 <Switch
@@ -190,7 +186,7 @@ export default function Profile() {
               )}
             />
             <Controller
-              name="whatsapp_pushes"
+              name="get_whatsapp"
               control={control}
               render={({ field, fieldState: { invalid, error } }) => (
                 <Switch
