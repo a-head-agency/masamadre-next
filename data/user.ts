@@ -71,3 +71,26 @@ export async function getLastOrders(session: Session) {
   const data = ManyShortOrdersScheme.parse(response.data);
   return data;
 }
+
+const PaymentCardScheme = z.object({
+  id: z.number(),
+  cart: z.string()
+})
+const ManyPaymentCardsScheme = z.object({
+  list: PaymentCardScheme.array(),
+  total: z.number()
+})
+export async function getCards(session: Session) {
+  const api = createPrivateApiAxios(session)
+
+  const response = await api.get('/user/carts', {
+    params: {
+      offset: 0,
+      limit: 99999999
+    }
+  })
+  
+  const data = ManyPaymentCardsScheme.parse(response.data)
+
+  return data
+}
