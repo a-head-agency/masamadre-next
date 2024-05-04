@@ -1,4 +1,6 @@
 import { createPublicApiAxios } from "@/axios";
+import { getSession } from "@/session";
+import { cookies } from "next/headers";
 import { z } from "zod";
 
 export const CategoryScheme = z.object({
@@ -23,7 +25,10 @@ export const CategoryScheme = z.object({
     }),
 });
 
-export async function getCategories() {
+export async function getCategories(tableOrder?: {
+  table: number | string,
+  sit: number | string
+}) {
   const schema = z.object({
     list: CategoryScheme.array()
       .nullable()
@@ -37,8 +42,12 @@ export async function getCategories() {
     params: {
       offset: 0,
       limit: 999999999,
+      table: tableOrder ? tableOrder.table : undefined,
+      sit: tableOrder ? tableOrder.sit : undefined,
     },
   });
+
+  console.log("CATEGORY", response.data)
 
   const data = schema.parse(response.data);
 
@@ -52,12 +61,22 @@ export const ShortDishSchema = z.object({
   alt: z.string(),
   link: z.string(),
   short_description: z.string(),
+  maker: z.string(),
+  flag: z.string(),
+  make_date: z.string(),
   category: z.number(),
   price: z.number(),
   weight: z.number(),
+  is_vine: z.boolean().optional()
 });
 
-export async function getDishesOfCategory(link: string) {
+export async function getDishesOfCategory(
+  link: string,
+  tableOrder?: {
+    table: number | string;
+    sit: number | string;
+  }
+) {
   const schema = z.object({
     dishes: ShortDishSchema.array(),
     can_deliver: z.boolean(),
@@ -65,14 +84,28 @@ export async function getDishesOfCategory(link: string) {
 
   const api = createPublicApiAxios();
 
+
+  const params = {
+      category_link: link,
+      offset: 0,
+      limit: 99999999999,
+      table: tableOrder ? tableOrder.table : undefined,
+      sit: tableOrder ? tableOrder.sit : undefined,
+    }
+
   const response = await api.get("/api/dishes", {
     params: {
       category_link: link,
       offset: 0,
       limit: 99999999999,
+      table: tableOrder ? tableOrder.table : undefined,
+      sit: tableOrder ? tableOrder.sit : undefined,
     },
   });
   const data = schema.parse(response.data);
+  data.dishes.forEach(d => {
+    d.is_vine = !!d.make_date
+  })
   return data;
 }
 
@@ -83,10 +116,11 @@ export const CategoriesWithDishesScheme = z.object({
 });
 
 export async function getDishes() {
-  const categories = await getCategories();
+  const session = await getSession(cookies())
+  const categories = await getCategories(session.tableOrder);
 
   const dishesPromises = await Promise.all(
-    categories.list.map((c) => getDishesOfCategory(c.link))
+    categories.list.map((c) => getDishesOfCategory(c.link, session.tableOrder))
   );
 
   const result = dishesPromises
@@ -139,6 +173,10 @@ export async function getOneDish(id: number) {
     alerg: z.string(),
     date_contain: z.string(),
     maker: z.string(),
+    make_date: z.string(),
+    malbec: z.string(),
+    flag: z.string(),
+    is_vine: z.boolean().optional(),
     category: z.number(),
     price: z.number(),
     weight: z.number(),
@@ -161,6 +199,8 @@ export async function getOneDish(id: number) {
   });
 
   const data = schema.parse(response.data);
+
+  data.is_vine = !!data.make_date
 
   return data;
 }

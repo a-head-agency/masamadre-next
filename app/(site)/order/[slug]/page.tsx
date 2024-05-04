@@ -30,34 +30,52 @@ export default async function Product({ params }: Props) {
           <div className="basis-[31%] max-w-lg flex flex-col  py-8">
             <div className="grow-[3]"></div>
 
-            <h1 className="text-xs md:text-base">
-              <span className="font-bold text-sm md:text-2xl">{dish.name}</span>{" "}
-              {dish.short_description}
-            </h1>
+            {dish.is_vine ? (
+              <h1 className="text-xs md:text-base normal-case border-b border-black pb-6">
+                {dish.make_date} {dish.malbec} /{" "}
+                <span className="font-bold text-2xl">{dish.name}</span> /{" "}
+                {dish.maker} {dish.flag}
+              </h1>
+            ) : (
+              <h1 className="text-xs md:text-base">
+                <span className="font-bold text-sm md:text-2xl">
+                  {dish.name}
+                </span>{" "}
+                {dish.short_description}
+              </h1>
+            )}
 
             <div className="text-sm md:text-2xl my-6 flex justify-between items-center">
               <div>{dish.price} ₽</div>
               <Adder dish_id={dish.id} />
             </div>
 
-            <div className="border-t text-xs md:text-base border-black mb-[9vmin]">
-              <p>{dish.description}</p>
-            </div>
+            {!dish.is_vine && (
+              <>
+                <div className="border-t text-xs md:text-base border-black mb-[9vmin]">
+                  <p>{dish.description}</p>
+                </div>
 
-            <div className="border-t text-xs md:text-base border-black mb-[9vmin]">
-              <div className="flex gap-4 mb-4">
-                <p className="flex-1">
-                  <span className="font-bold">состав:</span> {dish.content}
-                </p>
-                <p className="flex-1">
-                  <span className="font-bold">аллергены:</span> {dish.alerg}
-                </p>
-              </div>
-              <p>
-                <span className="font-bold">срок хранения:</span>{" "}
-                {dish.date_contain}
-              </p>
-            </div>
+                <div className="border-t text-xs md:text-base border-black mb-[9vmin]">
+                  <div className="flex gap-4 mb-4">
+                    <p className="flex-1">
+                      <span className="font-bold">состав:</span> {dish.content}
+                    </p>
+                    <p className="flex-1">
+                      <span className="font-bold">аллергены:</span> {dish.alerg}
+                    </p>
+                  </div>
+                  <p>
+                    <span className="font-bold">срок хранения:</span>{" "}
+                    {dish.date_contain}
+                  </p>
+                </div>
+              </>
+            )}
+
+            {dish.is_vine && (
+              <div className="grow-[90] border-b border-black mb-6"></div>
+            )}
 
             <div className="flex justify-between flex-wrap gap-4 items-center">
               {session.isAuthenticated && (
