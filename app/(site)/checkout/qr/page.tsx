@@ -17,6 +17,8 @@ import { Controller, useForm } from "react-hook-form";
 import useSWR from "swr";
 import { z } from "zod";
 import { placeOrder } from "../_actions";
+import { optOutQROrder } from "./_actions";
+import { useRouter } from "next/navigation";
 
 const fetcher = (url: string) =>
   axios.get(url, { withCredentials: true }).then((res) => res.data);
@@ -43,6 +45,12 @@ const PaymentOption: FC<PaymentOptionProps> = ({ children, ...props }) => {
 
 export default function Page() {
   const { data } = useSWR<GetUserMeSchemeType>("/api/user/me", fetcher);
+
+  const router = useRouter();
+
+  const stopQr = async () => {
+    await optOutQROrder();
+  };
 
   const formScheme = useMemo(
     () =>
@@ -158,7 +166,7 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="flex justify-between flex-col md:flex-row md:items-end mb-32 gap-x-8 gap-y-8">
+        <div className="flex flex-col md:flex-row md:items-end mb-32 gap-x-4 gap-y-4">
           <Controller
             name="cart_id"
             control={control}
@@ -182,6 +190,11 @@ export default function Page() {
             )}
           />
 
+          <div className="grow"></div>
+
+          <Button type="button" isInverted onPress={stopQr}>
+            Отменить заказ на стол
+          </Button>
           <Button type="submit">Перейти к оплате</Button>
         </div>
       </form>
