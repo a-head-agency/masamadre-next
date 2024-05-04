@@ -1,5 +1,4 @@
 import NavLink from "@/components/navlink";
-import { getRests } from "@/data/rests";
 import { getSession } from "@/session";
 import { cookies } from "next/headers";
 import { PropsWithChildren } from "react";
