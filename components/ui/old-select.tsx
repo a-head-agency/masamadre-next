@@ -14,23 +14,25 @@ const SelectOld: FC<{
   options: { label: ReactNode; code: string }[];
   big?: boolean;
   onChange: (code: string) => void;
-}> = ({ label, options, big }) => {
-  const [selected, setSelected] = useState<any>(null);
+  value: string | null;
+}> = ({ label, options, big, onChange, value}) => {
 
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
+  const _onChange = (vals: any) => {
+    console.log(vals)
+    onChange(vals)
+  }
 
   return (
     <Select
-      selectedKey={selected}
-      onSelectionChange={setSelected}
+      selectedKey={value}
+      onSelectionChange={_onChange as any}
       placeholder="выберите"
       className="flex flex-col gap-2"
     >
       {label && <Label className="opacity-50 block lowercase">{label}</Label>}
 
       <Button
+        type="button"
         className={[
           "w-full border-b py-1 leading-tight text-start border-black outline-none",
           big && "text-xl",

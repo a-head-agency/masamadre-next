@@ -7,9 +7,10 @@ import { z } from "zod";
 const GetUserScheme = z.object({
   name: z.string(),
   status_pushes: z.boolean(),
-  get_pushes: z.boolean(),
+  get_tg: z.boolean(),
   email_pushes: z.boolean(),
-  sms_pushes: z.boolean(),
+  get_whatsapp: z.boolean(),
+  male: z.boolean().transform((m) => (m ? "male" : "female")),
   phone: z.string(),
   email: z.string(),
   birthday: z.string().transform((s) => {
@@ -69,4 +70,27 @@ export async function getLastOrders(session: Session) {
   });
   const data = ManyShortOrdersScheme.parse(response.data);
   return data;
+}
+
+const PaymentCardScheme = z.object({
+  id: z.number(),
+  cart: z.string()
+})
+const ManyPaymentCardsScheme = z.object({
+  list: PaymentCardScheme.array(),
+  total: z.number()
+})
+export async function getCards(session: Session) {
+  const api = createPrivateApiAxios(session)
+
+  const response = await api.get('/user/carts', {
+    params: {
+      offset: 0,
+      limit: 99999999
+    }
+  })
+  
+  const data = ManyPaymentCardsScheme.parse(response.data)
+
+  return data
 }

@@ -15,6 +15,82 @@ import { cookies } from "next/headers";
 //   return res.json();
 // }
 
+interface TableViewProps {
+  dishes: {
+    id: number;
+    name: string;
+    price: number;
+  }[];
+}
+function TableView(props: TableViewProps) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="text-lg w-full md:max-w-[66%]">
+        <thead>
+          <tr className="*:text-start *:pb-10 *:px-2 *:font-normal">
+            <th className="w-0: md:w-1/12 !p-0"></th>
+            <th className="">Название</th>
+            <th>Цена</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {props.dishes.map((d) => (
+            <tr className="*:pb-10 *:px-2 odd:bg-[#F5F5F5]" key={d.id}>
+              <td className="w-0 md:w-1/12 !p-0"></td>
+              <td>{d.name}</td>
+              <td className="whitespace-nowrap">{d.price} ₽</td>
+              <td className="text-end align-bottom !pb-3 pr-3">
+                <div className="inline-block">
+                  <AddToBasketButton dish_id={d.id} />
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+interface GridViewProps {
+  dishes: {
+    id: number;
+    img: string;
+    name: string;
+    short_description?: string;
+    price: number;
+  }[];
+}
+function GridView(props: GridViewProps) {
+  return (
+    <div className="grid gap-[2vmax] grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      {props.dishes.map((item) => (
+        <div className="leading-4 flex flex-col items-stretch" key={item.id}>
+          <Link href={`order/${item.id}`}>
+            <img
+              className="aspect-square mb-4 w-full border border-black/25 object-cover object-center"
+              src={item.img}
+              alt={item.name}
+            />
+          </Link>
+          <div className="flex flex-col grow md:flex-row gap-x-4 gap-y-2 items-stretch justify-between pr-2">
+            <Link className="block" href={`order/${item.id}`}>
+              <h3 className="font-bold lowercase">{item.name}</h3>
+              <p>{item.short_description}</p>
+            </Link>
+
+            <div className="flex justify-between md:flex-col items-end gap-2">
+              <p className="text-nowrap whitespace-nowrap">{item.price} ₽</p>
+              <AddToBasketButton dish_id={item.id} />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default async function Order() {
   const categoriesWithDishes = await getDishes();
 
@@ -35,41 +111,13 @@ export default async function Order() {
         <div className="mb-16 px-[2vmax]" key={i} id={dc.category.link}>
           {dc.category.name && dc.category.show_title && (
             <div className="flex items-center gap-4 lowercase mb-4">
-              <h2 className="text-3xl font-bold">{dc.category.name}</h2>
+              <h2 className="text-3xl font-display">{dc.category.name}</h2>
             </div>
           )}
-          <div
-            className="grid gap-[2vmax] grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-            key={i}
-          >
-            {dc.dishes.map((item) => (
-              <div
-                className="leading-4 flex flex-col items-stretch"
-                key={item.id}
-              >
-                <Link href={`order/${item.id}`}>
-                  <img
-                    className="aspect-square mb-4 w-full border border-black/25 object-cover object-center"
-                    src={item.img}
-                    alt={item.name}
-                  />
-                </Link>
-                <div className="flex flex-col grow md:flex-row gap-x-4 gap-y-2 items-stretch justify-between pr-2">
-                  <Link className="block" href={`order/${item.id}`}>
-                    <h3 className="font-bold lowercase">{item.name}</h3>
-                    <p>{item.short_description}</p>
-                  </Link>
-
-                  <div className="flex justify-between md:flex-col items-end gap-2">
-                    <p className="text-nowrap whitespace-nowrap">
-                      {item.price} ₽
-                    </p>
-                    <AddToBasketButton dish_id={item.id} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {dc.category.type === "column_list" && (
+            <TableView dishes={dc.dishes} />
+          )}
+          {dc.category.type === "grid" && <GridView dishes={dc.dishes} />}
         </div>
       ))}
 
