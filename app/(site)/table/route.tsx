@@ -1,3 +1,4 @@
+import { clearBasket } from "@/data/basket";
 import { getSession } from "@/session";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -21,6 +22,9 @@ export async function GET(request: NextRequest) {
     table: Number(table),
     sit: Number(sit),
   };
+
+  await clearBasket(session)
+
   await session.save();
   redirect(process.env.NEXT_PUBLIC_URL! + "/order");
 }
