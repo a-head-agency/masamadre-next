@@ -5,6 +5,10 @@ import AddToBasketButton from "./_widgets/add-to-basket-button";
 import SliderView from "./_widgets/slider-view";
 
 interface TableViewProps {
+  category: {
+    name: string;
+    show_title?: boolean;
+  };
   dishes: {
     id: number;
     name: string;
@@ -13,40 +17,47 @@ interface TableViewProps {
 }
 function TableView(props: TableViewProps) {
   return (
-    <div className="overflow-x-auto">
-      <table className="text-lg w-full md:max-w-[66%]">
-        <thead>
-          <tr className="*:text-start *:pb-10 *:px-2 *:font-normal">
-            <th className="w-0: md:w-1/12 !p-0"></th>
-            <th className="">Название</th>
-            <th>Цена</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {props.dishes.map((d) => (
-            <tr className="*:pb-10 *:px-2 odd:bg-[#F5F5F5]" key={d.id}>
-              <td className="w-0 md:w-1/12 !p-0"></td>
-              <td>{d.name}</td>
-              <td className="whitespace-nowrap">{d.price} ₽</td>
-              <td className="text-end align-bottom !pb-3 pr-3">
-                <div className="inline-block">
-                  <AddToBasketButton dish_id={d.id} />
-                </div>
-              </td>
+    <div>
+      {props.category.name && props.category.show_title && (
+        <div className="flex items-center gap-4 lowercase mb-4">
+          <h2 className="text-3xl font-display">{props.category.name}</h2>
+        </div>
+      )}
+      <div className="overflow-x-auto">
+        <table className="text-lg w-full md:max-w-[66%]">
+          <thead>
+            <tr className="*:text-start *:pb-10 *:px-2 *:font-normal">
+              <th className="w-0: md:w-1/12 !p-0"></th>
+              <th className="">Название</th>
+              <th>Цена</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {props.dishes.map((d) => (
+              <tr className="*:pb-10 *:px-2 odd:bg-[#F5F5F5]" key={d.id}>
+                <td className="w-0 md:w-1/12 !p-0"></td>
+                <td>{d.name}</td>
+                <td className="whitespace-nowrap">{d.price} ₽</td>
+                <td className="text-end align-bottom !pb-3 pr-3">
+                  <div className="inline-block">
+                    <AddToBasketButton dish_id={d.id} />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
 
 interface GridViewProps {
   category: {
-    name: string,
-    show_title?: boolean
-  }
+    name: string;
+    show_title?: boolean;
+  };
   dishes: {
     id: number;
     img: string;
@@ -91,7 +102,6 @@ function GridView(props: GridViewProps) {
   );
 }
 
-
 export default async function Order() {
   const categoriesWithDishes = await getDishes();
 
@@ -111,11 +121,13 @@ export default async function Order() {
       {categoriesWithDishes.map((dc, i) => (
         <div className="mb-16 px-[2vmax]" key={i} id={dc.category.link}>
           {dc.category.type === "column_list" && (
-            <TableView dishes={dc.dishes} />
+            <TableView category={dc.category} dishes={dc.dishes} />
           )}
-          {dc.category.type === "grid" && <GridView category={dc.category} dishes={dc.dishes} />}
-          {dc.category.type === 'slider' && (
-            <SliderView dishes={dc.dishes} category={dc.category}/>
+          {dc.category.type === "grid" && (
+            <GridView category={dc.category} dishes={dc.dishes} />
+          )}
+          {dc.category.type === "slider" && (
+            <SliderView dishes={dc.dishes} category={dc.category} />
           )}
         </div>
       ))}
