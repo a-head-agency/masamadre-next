@@ -41,6 +41,16 @@ export async function addToBasket(
   return data;
 }
 
+export async function clearBasket(session: Session) {
+  const basket = await getBasket(session);
+  await Promise.all(
+    basket.list.map((d) =>
+      addToBasket(session, { count: 0, dish_id: d.dish_id })
+    )
+  );
+  return { action: "success" };
+}
+
 export const GetBasketSchema = z.object({
   list: z
     .object({
