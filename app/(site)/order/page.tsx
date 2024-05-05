@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getDishes } from "@/data/products";
 import AddToBasketButton from "./_widgets/add-to-basket-button";
 import SliderView from "./_widgets/slider-view";
+import ScrollTopButton from "./_widgets/scroll-top-button";
 
 interface TableViewProps {
   category: {
@@ -107,6 +108,7 @@ export default async function Order() {
 
   return (
     <div className="min-h-full flex flex-col">
+      <ScrollTopButton />
       <div className="px-[2vmax] py-4 flex flex-col lowercase items-start">
         {categoriesWithDishes.map((dc) => (
           <Link
