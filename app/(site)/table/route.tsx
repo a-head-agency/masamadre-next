@@ -1,3 +1,4 @@
+import { clearBasket } from "@/data/basket";
 import { getSession } from "@/session";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -12,10 +13,12 @@ export async function GET(request: NextRequest) {
   revalidatePath("/order");
   revalidatePath("/checkout");
   revalidatePath("/checkout/self-receipt");
+  revalidatePath("/checkout/qr");
   if (!rest || !table) {
     redirect(process.env.NEXT_PUBLIC_URL!);
   }
   const session = await getSession(cookies());
+  await clearBasket(session);
   session.tableOrder = {
     rest: Number(rest),
     table: Number(table),
