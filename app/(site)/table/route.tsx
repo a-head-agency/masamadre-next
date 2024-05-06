@@ -13,10 +13,12 @@ export async function GET(request: NextRequest) {
   revalidatePath("/order");
   revalidatePath("/checkout");
   revalidatePath("/checkout/self-receipt");
+  revalidatePath("/checkout/qr");
   if (!rest || !table) {
     redirect(process.env.NEXT_PUBLIC_URL!);
   }
   const session = await getSession(cookies());
+  await clearBasket(session);
   session.tableOrder = {
     rest: Number(rest),
     table: Number(table),
