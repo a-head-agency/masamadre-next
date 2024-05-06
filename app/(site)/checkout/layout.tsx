@@ -19,7 +19,12 @@ export default async function CheckoutLayout({ children }: Props) {
     <div className="px-[2vmax] min-h-full flex flex-col">
       <div className="flex items-center gap-2 text-xl my-8">
         {session.tableOrder ? (
-          <span className="underline">Заказ на стол {session.tableOrder.table}</span>
+          <span className="underline">
+            Заказ на стол {session.tableOrder.table}
+            {session.tableOrder.sit
+              ? `, место ${session.tableOrder.sit}`
+              : null}
+          </span>
         ) : (
           <>
             {/* <NavLink href="/checkout" activeClassName="underline" exact>
