@@ -172,7 +172,7 @@ export function CartModal(
                   </div>
 
                   <div className="mt-6 sm:mt-12 *:w-full">
-                    <UIButton onPress={checkout}>оформить заказ</UIButton>
+                    <UIButton onPress={checkout} isDisabled={!basket.data?.list || !basket.data.list.length}>оформить заказ</UIButton>
                   </div>
                 </>
               )}

@@ -24,6 +24,9 @@ export async function GET(request: NextRequest) {
     table: Number(table),
     sit: Number(sit),
   };
+
+  await clearBasket(session)
+
   await session.save();
   redirect(process.env.NEXT_PUBLIC_URL! + "/order");
 }

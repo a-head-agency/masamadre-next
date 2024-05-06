@@ -62,7 +62,7 @@ export default async function Product({ params }: Props) {
                       <span className="font-bold">состав:</span> {dish.content}
                     </p>
                     <p className="flex-1">
-                      <span className="font-bold">аллергены:</span> {dish.alerg}
+                      <span className="font-bold">кбжу:</span> {dish.alerg}
                     </p>
                   </div>
                   <p>
