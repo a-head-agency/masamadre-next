@@ -27,7 +27,7 @@ export const CategoryScheme = z.object({
 
 export async function getCategories(tableOrder?: {
   table: number | string,
-  sit: number | string
+  sit?: number | string
 }) {
   const schema = z.object({
     list: CategoryScheme.array()
@@ -74,7 +74,7 @@ export async function getDishesOfCategory(
   link: string,
   tableOrder?: {
     table: number | string;
-    sit: number | string;
+    sit?: number | string;
   }
 ) {
   const schema = z.object({
