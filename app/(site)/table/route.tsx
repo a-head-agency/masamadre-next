@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   revalidatePath("/order");
   revalidatePath("/checkout");
   revalidatePath("/checkout/self-receipt");
-  if (!rest || !table || !sit) {
+  if (!rest || !table) {
     redirect(process.env.NEXT_PUBLIC_URL!);
   }
   const session = await getSession(cookies());

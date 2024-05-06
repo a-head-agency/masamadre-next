@@ -9,7 +9,7 @@ export interface SessionData {
   tableOrder?: {
     rest: number;
     table: number;
-    sit: number;
+    sit?: number;
   };
   lastOrders?: {
     id: number;
