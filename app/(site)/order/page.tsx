@@ -39,8 +39,8 @@ function TableView(props: TableViewProps) {
               <tr className="*:pb-10 *:px-2 odd:bg-[#F5F5F5]" key={d.id}>
                 <td className="w-0 md:w-1/12 !p-0"></td>
                 <td>{d.name}</td>
-                <td className="whitespace-nowrap">{d.price} ₽</td>
-                <td className="text-end align-bottom !pb-3 pr-3">
+                <td className="whitespace-nowrap w-28 align-top">{d.price} ₽</td>
+                <td className="text-end align-bottom !pb-3 pr-3 w-24">
                   <div className="inline-block">
                     <AddToBasketButton dish_id={d.id} />
                   </div>
