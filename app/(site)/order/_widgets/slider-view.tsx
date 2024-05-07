@@ -16,9 +16,9 @@ interface SliderViewProps {
     id: number;
     img: string;
     name: string;
-    make_date: string;
-    flag: string;
-    maker: string;
+    make_date?: string;
+    flag?: string;
+    maker?: string;
     price: number;
   }[];
 }
@@ -68,7 +68,7 @@ export default function SliderView({ category, dishes }: SliderViewProps) {
   return (
     <div>
       <div className="flex justify-between items-end gap-4 text-xl mb-4">
-          <h2 className="text-3xl font-display">{category.name}</h2>
+        <h2 className="text-3xl font-display">{category.name}</h2>
         <div className="flex items-center gap-2">
           <motion.button
             variants={{
