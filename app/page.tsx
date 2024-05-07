@@ -374,7 +374,6 @@ export default function Home() {
         {/* <Booking /> */}
         <Link href="/work">сотрудничество</Link>
         <div></div>
-
       </div>
 
       <div className="grow"></div>
@@ -387,11 +386,13 @@ export default function Home() {
         </div>
         <div id="footer--text-block" className="hidden lg:block">
           <p className="mb-4">
-            <span id="footer--first-row">La panadería de manera nueva</span>
+            <span id="footer--first-row">Panadería de una manera nueva</span>
             <br />
             <span id="footer--second-row">
-              En la cocina abierta puedes ver todos procesos del pan ¡Vamos!
+              En nuestra cocina abierta podrán apreciar
             </span>
+            <br />
+            <span>todos los procesos de la elaboración del pan. ¡Venga!</span>
           </p>
           <p className="normal-case">© All Rights Reserved.</p>
         </div>

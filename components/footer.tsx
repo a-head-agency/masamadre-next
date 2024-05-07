@@ -31,11 +31,11 @@ export default function Footer({ withTree, withPhone }: Props) {
       </div>
       <div className="hidden lg:block">
         <p className="mb-4">
-          <span>La panadería de manera nueva</span>
+          <span>Panadería de una manera nueva</span>
           <br />
-          <span>
-            En la cocina abierta puedes ver todos procesos del pan ¡Vamos!
-          </span>
+          <span>En nuestra cocina abierta podrán apreciar</span>
+          <br />
+          <span>todos los procesos de la elaboración del pan. ¡Venga!</span>
         </p>
         <p className="normal-case">© All Rights Reserved.</p>
       </div>
