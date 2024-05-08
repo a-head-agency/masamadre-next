@@ -26,8 +26,8 @@ export const CategoryScheme = z.object({
 });
 
 export async function getCategories(tableOrder?: {
-  table: number | string,
-  sit?: number | string
+  table: number | string;
+  sit?: number | string;
 }) {
   const schema = z.object({
     list: CategoryScheme.array()
@@ -47,8 +47,6 @@ export async function getCategories(tableOrder?: {
     },
   });
 
-  console.log("CATEGORY", response.data)
-
   const data = schema.parse(response.data);
 
   return data;
@@ -67,7 +65,7 @@ export const ShortDishSchema = z.object({
   category: z.number(),
   price: z.number(),
   weight: z.number(),
-  is_vine: z.boolean().optional()
+  is_vine: z.boolean().optional(),
 });
 
 export async function getDishesOfCategory(
@@ -84,28 +82,19 @@ export async function getDishesOfCategory(
 
   const api = createPublicApiAxios();
 
-
-  const params = {
-      category_link: link,
-      offset: 0,
-      limit: 99999999999,
-      table: tableOrder ? tableOrder.table : undefined,
-      sit: tableOrder ? tableOrder.sit : undefined,
-    }
-
   const response = await api.get("/api/dishes", {
     params: {
       category_link: link,
       offset: 0,
       limit: 99999999999,
-      table: tableOrder ? tableOrder.table : undefined,
+      table: tableOrder ? tableOrder.table : 1609,
       sit: tableOrder ? tableOrder.sit : undefined,
     },
   });
   const data = schema.parse(response.data);
-  data.dishes.forEach(d => {
-    d.is_vine = !!d.make_date
-  })
+  data.dishes.forEach((d) => {
+    d.is_vine = !!d.make_date;
+  });
   return data;
 }
 
@@ -116,7 +105,7 @@ export const CategoriesWithDishesScheme = z.object({
 });
 
 export async function getDishes() {
-  const session = await getSession(cookies())
+  const session = await getSession(cookies());
   const categories = await getCategories(session.tableOrder);
 
   const dishesPromises = await Promise.all(
@@ -200,7 +189,7 @@ export async function getOneDish(id: number) {
 
   const data = schema.parse(response.data);
 
-  data.is_vine = !!data.make_date
+  data.is_vine = !!data.make_date;
 
   return data;
 }
