@@ -49,7 +49,7 @@ export default function TextField({
         className={cx(
           "bg-transparent border-b border-black outline-none transition-colors py-1 placeholder:text-black/30",
           isInvalid &&
-            "!border-red text-red selection:bg-red selection:text-white !placeholder:text-red/50",
+            "!border-red text-red selection:bg-red selection:text-white placeholder:!text-red/50",
           size === "md" && "text-base",
           size === "lg" && "text-xl",
           capitalize && "capitalize"
