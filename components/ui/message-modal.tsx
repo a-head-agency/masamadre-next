@@ -1,5 +1,6 @@
 "use client";
 
+import { CrossIcon } from "@/icons";
 import { ReactNode, useCallback, useMemo, useState } from "react";
 import { mergeProps, useModalOverlay } from "react-aria";
 import {
@@ -51,9 +52,20 @@ export default function MessageModal({ message, ...props }: Props) {
       className="fixed inset-0 overflow-y-auto flex justify-center items-center p-4"
       {...props}
     >
-      <Modal className="p-4 bg-white border border-black" {...props}>
-        <Dialog className="outline-none">
-          <p className="text-xl">{message}</p>
+      <Modal {...props}>
+        <Dialog className="outline-none px-8 py-24 relative bg-white border border-black">
+          {({ close }) => (
+            <>
+              <button
+                type="button"
+                onClick={close}
+                className="absolute top-4 right-4"
+              >
+                <CrossIcon className="h-4" />
+              </button>
+              <p className="text-xl">{message}</p>
+            </>
+          )}
         </Dialog>
       </Modal>
     </ModalOverlay>
