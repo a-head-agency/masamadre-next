@@ -2,7 +2,7 @@
 
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import TimePickerModal from "./modal";
-import { motion, useDragControls, useMotionValue } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import {
   CalendarDate,
   CalendarDateTime,
@@ -10,21 +10,31 @@ import {
   today,
 } from "@internationalized/date";
 import Button from "../button";
+import { useNullableControllableState } from "@/hooks/utils/use-nullable-controllable-state";
+import { useControllableState } from "@chakra-ui/react";
 
 interface VerticalDragSelectorProps<T> {
   options?: T[];
   onValueChange?: (optionIndex: number) => void;
+  value?: number;
 }
 
 function VerticalDragSelector<T extends string>({
-  onValueChange = () => {},
+  onValueChange,
+  value,
   options = [],
 }: VerticalDragSelectorProps<T>) {
   const cellSize = 50;
   const cellMaxWidth = useMemo(() => {
     return Math.max(...options.map((o) => o.length));
   }, [options]);
-  const y = useMotionValue(0);
+
+  const [index, setIndex] = useControllableState({
+    onChange: onValueChange,
+    value,
+  });
+
+  const y = useMotionValue(-cellSize * index);
 
   return (
     <div
@@ -70,7 +80,7 @@ function VerticalDragSelector<T extends string>({
             );
             console.log({ v, snapped, consrtained: constrained });
             const index = Math.floor(Math.abs(constrained) / cellSize);
-            onValueChange(index);
+            setIndex(index);
             return constrained;
           },
         }}
@@ -100,18 +110,24 @@ function VerticalDragSelector<T extends string>({
 interface TimePickerProps {
   maxMinutes?: number;
   minMinutes?: number;
-  onValueChange?: (time: CalendarDateTime) => void;
+  onValueChange?: (time: CalendarDateTime | null) => void;
+  value?: CalendarDateTime | null;
 }
 
 export default function TimePicker({
   minMinutes = 0,
   maxMinutes = 24 * 60,
-  onValueChange = () => {},
+  onValueChange,
+  value,
 }: TimePickerProps) {
   const [hoursIndex, setHoursIndex] = useState<number>(0);
   const [minutesIndex, setMinutesIndex] = useState<number>(0);
   const [dayIndex, setDayIndex] = useState<number>(0);
-  const [dateTime, setDateTime] = useState<CalendarDateTime>();
+  const [dateTime, setDateTime] = useNullableControllableState({
+    onChange: onValueChange,
+    value,
+  });
+  const [isOpen, setIsOpen] = useState(false);
 
   const hoursOptions = useMemo(() => {
     const minHours = Math.floor(minMinutes / 60);
@@ -166,6 +182,12 @@ export default function TimePicker({
   }, [daysOptions]);
 
   const select = useCallback(() => {
+    console.log({
+      dayIndex,
+      hoursIndex,
+      minutesIndex,
+    });
+
     const v = daysOptions[dayIndex];
 
     const hour = Number(hoursOptions[hoursIndex]);
@@ -173,31 +195,34 @@ export default function TimePicker({
     const datetime = new CalendarDateTime(v.year, v.month, v.day, hour, minute);
 
     setDateTime(datetime);
-    onValueChange(datetime);
+    setIsOpen(false);
   }, [
     daysOptions,
     dayIndex,
     minutesIndex,
+    setDateTime,
     hoursIndex,
-    onValueChange,
     minutesOptions,
     hoursOptions,
   ]);
 
   return (
-    <TimePickerModal time={dateTime}>
+    <TimePickerModal time={dateTime} isOpen={isOpen} onOpenChange={setIsOpen}>
       <div className="flex flex-col items-stretch justify-evenly h-full">
         <div className="flex items-center justify-center text-2xl">
           <VerticalDragSelector
             options={daysOptionsSerialized}
+            value={dayIndex}
             onValueChange={setDayIndex}
           />
           <VerticalDragSelector
             options={hoursOptions}
+            value={hoursIndex}
             onValueChange={setHoursIndex}
           />
           <VerticalDragSelector
             options={minutesOptions}
+            value={minutesIndex}
             onValueChange={setMinutesIndex}
           />
         </div>

@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { DateTime } from "luxon";
 
 const PlaceOrderScheme = z.object({
   phone: z.string(),
@@ -18,6 +19,17 @@ const PlaceOrderScheme = z.object({
     })
     .array()
     .optional(),
+  time_deliver: z
+    .string()
+    .nullish()
+    .transform((s) => {
+      if (!s) {
+        return undefined;
+      }
+
+      const dt = DateTime.fromISO(s);
+      return dt.toFormat("yyyy-MM-dd HH:mm:ss ZZZ ZZZZ");
+    }),
 });
 
 export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {

@@ -17,6 +17,7 @@ import { Controller, useForm } from "react-hook-form";
 import useSWR from "swr";
 import { z } from "zod";
 import { placeOrder } from "../_actions";
+import DeliveryTimeSelector from "../_widgets/delivery-time-picker";
 
 const fetcher = (url: string) =>
   axios.get(url, { withCredentials: true }).then((res) => res.data);
@@ -60,6 +61,7 @@ export default function Page() {
         phone: z.string().length(11),
         comment: z.string(),
         cart_id: z.number(),
+        time_deliver: z.string().nullable(),
       }),
     []
   );
@@ -71,6 +73,7 @@ export default function Page() {
       phone: "",
       comment: "",
       cart_id: 0,
+      time_deliver: null,
     },
   });
 
@@ -152,10 +155,16 @@ export default function Page() {
             />
           </div>
 
-          <div className="col-span-full flex gap-4 flex-wrap">
-            <Button>как можно быстрее</Button>
-            <TimePicker minMinutes={8 * 60} maxMinutes={18 * 60} />
-          </div>
+          <Controller
+            name="time_deliver"
+            control={control}
+            render={({ field }) => (
+              <DeliveryTimeSelector
+                value={field.value}
+                onValueChange={field.onChange}
+              />
+            )}
+          />
         </div>
 
         <div className="flex justify-between flex-col md:flex-row md:items-end mb-32 gap-x-8 gap-y-8">

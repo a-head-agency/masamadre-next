@@ -15,6 +15,7 @@ import { Label, Radio, RadioGroup, RadioProps } from "react-aria-components";
 import { Controller, useForm } from "react-hook-form";
 import useSWR from "swr";
 import { z } from "zod";
+import DeliveryTimeSelector from "./_widgets/delivery-time-picker";
 
 const fetcher = (url: string) =>
   axios.get(url, { withCredentials: true }).then((res) => res.data);
@@ -59,6 +60,7 @@ export default function Page() {
         address_street_house: z.string(),
         address_podezd: z.string(),
         comment: z.string(),
+        time_deliver: z.string().nullable(),
       }),
     []
   );
@@ -76,6 +78,7 @@ export default function Page() {
       address_street_house: "",
       address_podezd: "",
       comment: "",
+      time_deliver: null,
     },
   });
 
@@ -169,10 +172,16 @@ export default function Page() {
           />
         </div>
 
-        <div className="col-span-full flex gap-4 flex-wrap">
-          <Button>как можно быстрее</Button>
-          <TimePicker />
-        </div>
+        <Controller
+          name="time_deliver"
+          control={control}
+          render={({ field }) => (
+            <DeliveryTimeSelector
+              value={field.value}
+              onValueChange={field.onChange}
+            />
+          )}
+        />
       </div>
 
       <div className="flex justify-between flex-col md:flex-row md:items-end mb-32 gap-x-8 gap-y-8">

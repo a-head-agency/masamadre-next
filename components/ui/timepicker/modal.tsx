@@ -1,7 +1,8 @@
 "use client";
 
-import Button from "@/components/ui/button";
+import { useControllableState } from "@chakra-ui/react";
 import { CalendarDateTime, getDayOfWeek } from "@internationalized/date";
+import clsx from "clsx";
 import {
   AnimatePresence,
   animate,
@@ -12,13 +13,9 @@ import {
 } from "framer-motion";
 import {
   PropsWithChildren,
-  useCallback,
-  useEffect,
   useMemo,
-  useRef,
 } from "react";
 import { Dialog, ModalOverlay, Modal } from "react-aria-components";
-import { useBoolean } from "usehooks-ts";
 
 const MotionModalOverlay = motion(ModalOverlay);
 const MotionModal = motion(Modal);
@@ -36,28 +33,21 @@ const staticTransition = {
 };
 
 interface Props extends PropsWithChildren {
-  time?: CalendarDateTime;
+  time?: CalendarDateTime | null;
+  isOpen?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
 }
 
 export default function TimePickerModal({
   children,
   time,
-  onOpenChange = () => {},
+  onOpenChange,
+  isOpen,
 }: Props) {
-  const {
+  const [_isOpen, _setIsOpen] = useControllableState({
     value: isOpen,
-    setFalse: close,
-    setValue: setIsOpen,
-  } = useBoolean(false);
-
-  const _onOpenChange = useCallback(
-    (isOpen: boolean) => {
-      setIsOpen(isOpen);
-      onOpenChange(isOpen);
-    },
-    [setIsOpen, onOpenChange]
-  );
+    onChange: onOpenChange,
+  });
 
   const serializedTime = useMemo(() => {
     if (time) {
@@ -97,16 +87,23 @@ export default function TimePickerModal({
 
   return (
     <>
-      <Button isInverted onPress={() => _onOpenChange(true)}>
+      <button
+        type="button"
+        className={clsx(
+          "outline-none rounded-full border border-black px-4 py-2 transition-all",
+          time ? "bg-black text-white" : "bg-none text-black"
+        )}
+        onClick={() => _setIsOpen(true)}
+      >
         <span className="lowercase">{serializedTime}</span>
-      </Button>
+      </button>
       <AnimatePresence>
         {isOpen && (
           <MotionModalOverlay
             // Force the modal to be open when AnimatePresence renders it.
             isOpen
             isDismissable
-            onOpenChange={_onOpenChange}
+            onOpenChange={_setIsOpen}
             className="fixed inset-0 z-50"
             style={{
               backgroundColor: bg as any,
