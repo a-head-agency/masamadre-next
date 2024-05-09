@@ -14,6 +14,8 @@ interface TableViewProps {
     id: number;
     name: string;
     price: number;
+    from_hour: string;
+    to_hour: string;
   }[];
 }
 function TableView(props: TableViewProps) {
@@ -39,10 +41,16 @@ function TableView(props: TableViewProps) {
               <tr className="*:pb-10 *:px-2 odd:bg-[#F5F5F5]" key={d.id}>
                 <td className="w-0 md:w-1/12 !p-0"></td>
                 <td>{d.name}</td>
-                <td className="whitespace-nowrap w-28 align-top">{d.price} ₽</td>
+                <td className="whitespace-nowrap w-28 align-top">
+                  {d.price} ₽
+                </td>
                 <td className="text-end align-bottom !pb-3 pr-3 w-24">
                   <div className="inline-block">
-                    <AddToBasketButton dish_id={d.id} />
+                    <AddToBasketButton
+                      dish_id={d.id}
+                      from_hour_iso={d.from_hour}
+                      to_hour_iso={d.to_hour}
+                    />
                   </div>
                 </td>
               </tr>
@@ -65,6 +73,8 @@ interface GridViewProps {
     name: string;
     short_description?: string;
     price: number;
+    from_hour: string;
+    to_hour: string;
   }[];
 }
 function GridView(props: GridViewProps) {
@@ -93,7 +103,11 @@ function GridView(props: GridViewProps) {
 
               <div className="flex justify-between md:flex-col items-end gap-2">
                 <p className="text-nowrap whitespace-nowrap">{item.price} ₽</p>
-                <AddToBasketButton dish_id={item.id} />
+                <AddToBasketButton
+                  dish_id={item.id}
+                  from_hour_iso={item.from_hour}
+                  to_hour_iso={item.to_hour}
+                />
               </div>
             </div>
           </div>

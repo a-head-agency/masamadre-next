@@ -1,5 +1,6 @@
 import { createPublicApiAxios } from "@/axios";
 import { getSession } from "@/session";
+import { DateTime } from "luxon";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
@@ -66,6 +67,18 @@ export const ShortDishSchema = z.object({
   price: z.number(),
   weight: z.number(),
   is_vine: z.boolean().optional(),
+  from_hour: z.number().transform((n) => {
+    const hour = Math.floor(n / 100);
+    const minute = n % 100;
+    const dt = DateTime.now().startOf("day").set({ hour, minute });
+    return dt.toISO();
+  }),
+  to_hour: z.number().transform((n) => {
+    const hour = Math.floor(n / 100);
+    const minute = n % 100;
+    const dt = DateTime.now().startOf("day").set({ hour, minute });
+    return dt.toISO();
+  }),
 });
 
 export async function getDishesOfCategory(
