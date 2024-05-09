@@ -70,14 +70,20 @@ export const ShortDishSchema = z.object({
   from_hour: z.number().transform((n) => {
     const hour = Math.floor(n / 100);
     const minute = n % 100;
-    const dt = DateTime.now().startOf("day").set({ hour, minute });
-    return dt.toISO();
+    const dt = DateTime.now()
+      .setZone("UTC+3")
+      .startOf("day")
+      .set({ hour, minute });
+    return dt.toISO()!;
   }),
   to_hour: z.number().transform((n) => {
     const hour = Math.floor(n / 100);
     const minute = n % 100;
-    const dt = DateTime.now().startOf("day").set({ hour, minute });
-    return dt.toISO();
+    const dt = DateTime.now()
+      .setZone("UTC+3")
+      .startOf("day")
+      .set({ hour, minute });
+    return dt.toISO()!;
   }),
 });
 
