@@ -9,6 +9,11 @@ const configure = () => {
           destination: "/checkout/self-receipt",
           permanent: false,
         },
+        {
+          source: "/profile/orders",
+          destination: "/profile/orders/take-away",
+          permanent: false,
+        },
       ];
     },
   };

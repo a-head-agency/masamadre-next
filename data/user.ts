@@ -72,25 +72,117 @@ export async function getLastOrders(session: Session) {
   return data;
 }
 
+const ORDER_STATUS_CONVERTER = (s: string) => {
+  switch (s) {
+    case "success":
+      return "Доставлен";
+    case "rejected":
+      return "Отменен";
+    case "process":
+      return "В процессе";
+    case "wait pay":
+      return "Ожидает оплаты";
+    default:
+      return "Нет информации";
+  }
+};
+
+const OrdersHistoryEntryScheme = z.object({
+  id: z.number(),
+  status: z.string().transform(ORDER_STATUS_CONVERTER),
+  price: z.number().optional(),
+  created_at: z.string(),
+});
+const OrdersHistoryScheme = z.object({
+  list: OrdersHistoryEntryScheme.array(),
+  total: z.number(),
+});
+export async function getOrdersHistory(
+  session: Session,
+  offset: number = 0,
+  limit: number = 9999999999
+) {
+  const api = createPrivateApiAxios(session);
+
+  const response = await api.get("/user/orders/stories", {
+    params: {
+      offset,
+      limit,
+    },
+  });
+
+  response.data.list = response.data.last_orders.concat(
+    response.data.active_orders
+  );
+
+  const data = OrdersHistoryScheme.parse(response.data);
+  return data;
+}
+
+const OrderDetailsScheme = z.object({
+  id: z.number(),
+  list: z
+    .object({
+      id: z.number(),
+      dish_id: z.number(),
+      gift_id: z.string(),
+      count: z.number(),
+      count_in: z.number(),
+      price: z.number(),
+      weight: z.number(),
+      short_description: z
+        .string()
+        .optional()
+        .transform((t) => t || ""),
+      img: z.string(),
+      name: z.string(),
+    })
+    .array(),
+  order: z.object({
+    count_items: z.number(),
+    created_at: z.string(),
+    id: z.number(),
+    phone: z.string(),
+    price: z.number(),
+    promo: z.string(),
+    status: z.string().transform(ORDER_STATUS_CONVERTER),
+    time_deliver: z.string(),
+    user_name: z.string(),
+    adres: z.string().optional(),
+  }),
+});
+export type OrderDetailsSchemeType = z.output<typeof OrderDetailsScheme>;
+export async function getOrderDetails(session: Session, id: number | string) {
+  const api = createPrivateApiAxios(session);
+
+  const response = await api.get("/user/order/story", {
+    params: {
+      id,
+    },
+  });
+  const data = OrderDetailsScheme.parse(response.data);
+  return data;
+}
+
 const PaymentCardScheme = z.object({
   id: z.number(),
-  cart: z.string()
-})
+  cart: z.string(),
+});
 const ManyPaymentCardsScheme = z.object({
   list: PaymentCardScheme.array(),
-  total: z.number()
-})
+  total: z.number(),
+});
 export async function getCards(session: Session) {
-  const api = createPrivateApiAxios(session)
+  const api = createPrivateApiAxios(session);
 
-  const response = await api.get('/user/carts', {
+  const response = await api.get("/user/carts", {
     params: {
       offset: 0,
-      limit: 99999999
-    }
-  })
-  
-  const data = ManyPaymentCardsScheme.parse(response.data)
+      limit: 99999999,
+    },
+  });
 
-  return data
+  const data = ManyPaymentCardsScheme.parse(response.data);
+
+  return data;
 }
