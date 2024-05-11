@@ -179,9 +179,9 @@ function OrderDetails({ orderID, onOpenChange, isOpen }: OrderDetailsProps) {
                   </button> */}
                 </div>
                 <div className="text-end xl:basis-0 xl:grow-[2.5] mt-2 xl:mt-0 flex justify-between xl:justify-start gap-2 xl:gap-12 xl:shrink-0">
-                  <a href="#" className="underline">
+                  {/* <a href="#" className="underline">
                     поддержка
-                  </a>
+                  </a> */}
                 </div>
               </div>
             </div>
