@@ -49,6 +49,12 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
       sit: session.tableOrder.sit,
     };
   }
+  else {
+    payload = {
+      ...payload,
+      table: 1609
+    }
+  }
 
   console.log("payload", payload);
 
