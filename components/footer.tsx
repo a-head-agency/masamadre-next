@@ -1,4 +1,3 @@
-import { getCommonData } from "@/data/main";
 import Link from "next/link";
 
 interface Props {
@@ -6,7 +5,7 @@ interface Props {
   withPhone?: boolean;
 }
 
-export default async function Footer({ withTree, withPhone }: Props) {
+export default function Footer({ withTree, withPhone }: Props) {
   return (
     <div className="flex justify-between items-end gap-4 relative">
       {withPhone && (
