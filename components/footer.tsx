@@ -7,41 +7,15 @@ interface Props {
 }
 
 export default async function Footer({ withTree, withPhone }: Props) {
-  const data = await getCommonData();
-
-  const p = [...data.phone];
-  let parts = [];
-  parts.push(p.splice(-2, 2));
-  parts.push(p.splice(-2, 2));
-  parts.push(p.splice(-3, 3));
-  parts.push(p.splice(-3, 3));
-  parts.push(p);
-  parts.reverse();
-  parts = parts.map((p) => p.join(""));
-
   return (
     <div className="flex justify-between items-end gap-4 relative">
       {withPhone && (
-        <a
-          href={"tel:" + data.phone}
-          className="text-xl sm:text-3xl md:text-4xl absolute bottom-full -translate-y-16 md:translate-y-0 left-1/2 -translate-x-1/2"
-        >
-          <span className="block">
-            <span className="mr-[3ch]">{parts[0]}</span>
-            <span className="mr-[3ch]">{parts[1]}</span>
-          </span>
-          <span className="block">
-            <span
-              style={{
-                marginLeft: parts[0].length + 4 + "ch",
-              }}
-            >
-              {parts[2]}
-            </span>
-            <span className="ml-[3ch]">{parts[3]}</span>
-            <span className="ml-[3ch]">{parts[4]}</span>
-          </span>
-        </a>
+        <img
+          className="absolute bottom-full select-none w-full max-w-xl left-1/2 -translate-x-1/2 -translate-y-8 md:translate-y-0"
+          src="/phone.svg"
+          alt="+79166714831"
+          draggable="false"
+        />
       )}
       <div className="flex flex-col relative">
         {withTree && (
