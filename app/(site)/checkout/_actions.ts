@@ -45,14 +45,14 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
     payload = {
       ...payload,
       rest: session.tableOrder.rest,
-      table: session.tableOrder.table,
+      tableCode: session.tableOrder.table,
       sit: session.tableOrder.sit,
     };
   }
   else {
     payload = {
       ...payload,
-      table: 1609
+      tableCode: 1609
     }
   }
 
