@@ -22,23 +22,26 @@ export default async function Footer({ withTree, withPhone }: Props) {
   return (
     <div className="flex justify-between items-end gap-4 relative">
       {withPhone && (
-        <div className="text-xl sm:text-3xl md:text-4xl absolute bottom-full -translate-y-16 md:translate-y-0 left-1/2 -translate-x-1/2">
-          <div>
+        <a
+          href={"tel:" + data.phone}
+          className="text-xl sm:text-3xl md:text-4xl absolute bottom-full -translate-y-16 md:translate-y-0 left-1/2 -translate-x-1/2"
+        >
+          <span className="block">
             <span className="mr-[3ch]">{parts[0]}</span>
             <span className="mr-[3ch]">{parts[1]}</span>
-          </div>
-          <div>
+          </span>
+          <span className="block">
             <span
               style={{
-                marginLeft: parts[0].length + 4 + 'ch',
+                marginLeft: parts[0].length + 4 + "ch",
               }}
             >
               {parts[2]}
             </span>
             <span className="ml-[3ch]">{parts[3]}</span>
             <span className="ml-[3ch]">{parts[4]}</span>
-          </div>
-        </div>
+          </span>
+        </a>
       )}
       <div className="flex flex-col relative">
         {withTree && (
