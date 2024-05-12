@@ -52,10 +52,12 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
   else {
     payload = {
       ...payload,
-      table: 1609
+      table: 1609,
+      rest: 1
     }
   }
 
+  
   const response = await api.post("user/order", payload);
 
   if (response.data.action === "success") {
