@@ -45,24 +45,18 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
     payload = {
       ...payload,
       rest: session.tableOrder.rest,
-      tableCode: session.tableOrder.table,
+      table: session.tableOrder.table,
       sit: session.tableOrder.sit,
     };
   }
   else {
     payload = {
       ...payload,
-      tableCode: 1609
+      table: 1609
     }
   }
 
-  console.log("payload", payload);
-
-  // return;
-
   const response = await api.post("user/order", payload);
-
-  console.log("place order", response.data);
 
   if (response.data.action === "success") {
     session.lastOrders = session.lastOrders || [];
