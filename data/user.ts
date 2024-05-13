@@ -14,9 +14,9 @@ const GetUserScheme = z.object({
   phone: z.string(),
   email: z.string(),
   birthday: z.string().transform((s) => {
-    console.log(s)
-    const dt = DateTime.fromFormat(s, 'yyyy-MM-dd HH:mm:ss ZZZ z')
-    return dt.toISO()
+    console.log(s);
+    const dt = DateTime.fromFormat(s, "yyyy-MM-dd HH:mm:ss ZZZ z");
+    return dt.toISO();
   }),
   adres_id: z.number(),
   rest_id: z.number(),
@@ -37,7 +37,7 @@ export async function getUser(session: Session) {
 
   const data = GetUserScheme.parse(response.data);
 
-  console.log(data)
+  console.log(data);
 
   return data;
 }
@@ -63,6 +63,15 @@ export async function getLastOrders(session: Session) {
   const api = createPublicApiAxios();
   const response = await api.post("/api/orders", {
     ids: lastOrders.map((o) => o.id).sort(),
+  });
+  const data = ManyShortOrdersScheme.parse(response.data);
+  return data;
+}
+
+export async function getOrdersByIds(ids: number[]) {
+  const api = createPublicApiAxios();
+  const response = await api.post("/api/orders", {
+    ids,
   });
   const data = ManyShortOrdersScheme.parse(response.data);
   return data;

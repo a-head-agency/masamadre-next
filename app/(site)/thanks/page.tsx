@@ -1,13 +1,29 @@
 import Footer from "@/components/footer";
-import { getLastOrders } from "@/data/user";
+import { getLastOrders, getOrdersByIds } from "@/data/user";
 import { getSession } from "@/session";
 import { DateTime } from "luxon";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
-export default async function Thanks() {
-  const session = await getSession(cookies());
-  const lastOrders = await getLastOrders(session);
+interface Props {
+  searchParams: {
+    id: string;
+    pay_id: string;
+  };
+}
+
+const SearchParamsScheme = z.object({
+  id: z.string().transform((s) => Number(s)),
+  pay_id: z.string(),
+});
+
+export default async function Thanks({ searchParams }: Props) {
+  const ids = SearchParamsScheme.safeParse(searchParams);
+  if (!ids.success) {
+    redirect(process.env.NEXT_PUBLIC_URL!);
+  }
+  const lastOrders = await getOrdersByIds([ids.data.id]);
   const lastOrder = lastOrders.length > 0 ? lastOrders[0] : null;
 
   if (!lastOrder) {
