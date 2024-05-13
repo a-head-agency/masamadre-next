@@ -47,8 +47,6 @@ const PaymentOption: FC<PaymentOptionProps> = ({ children, ...props }) => {
 export default function Page() {
   const { data } = useSWR<GetUserMeSchemeType>("/api/user/me", fetcher);
 
-  const router = useRouter();
-
   const stopQr = async () => {
     await optOutQROrder();
   };
@@ -162,17 +160,6 @@ export default function Page() {
               )}
             />
           </div>
-
-          <Controller
-            name="time_deliver"
-            control={control}
-            render={({ field }) => (
-              <DeliveryTimeSelector
-                value={field.value}
-                onValueChange={field.onChange}
-              />
-            )}
-          />
         </div>
 
         <div className="flex flex-col md:flex-row md:items-end mb-32 gap-x-4 gap-y-4">
