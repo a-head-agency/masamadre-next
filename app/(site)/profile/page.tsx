@@ -16,6 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import useSWR from "swr";
 import { z } from "zod";
 import {} from "@internationalized/date";
+import MessageModal, { useMessageModal } from "@/components/ui/message-modal";
 
 const fetcher = (url: string) =>
   axios.get(url, { withCredentials: true }).then((res) => res.data);
@@ -72,10 +73,15 @@ export default function Profile() {
 
   const router = useRouter();
 
+  const { showMessage, props } = useMessageModal({
+    isDismissable: true,
+  });
+
   const onSubmit = handleSubmit(async (vals) => {
     await setUser(vals);
     router.refresh();
     await mutate();
+    showMessage("Данные обновлены!");
   });
 
   return (
@@ -83,6 +89,7 @@ export default function Profile() {
       onSubmit={onSubmit}
       className="md:py-4 px-[2vmax] md:pt-16 flex flex-col lg:flex-row gap-4 lg:gap-16 max-w-4xl"
     >
+      <MessageModal {...props} />
       <div className="flex-1 flex flex-col gap-4 md:gap-8">
         <Controller
           name="name"
