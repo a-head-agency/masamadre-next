@@ -14,16 +14,9 @@ const GetUserScheme = z.object({
   phone: z.string(),
   email: z.string(),
   birthday: z.string().transform((s) => {
-    const parts = s.split("/");
-    if (parts.length === 3) {
-      const d = DateTime.fromObject({
-        year: Number(parts[0]),
-        month: Number(parts[1]),
-        day: Number(parts[2]),
-      });
-      return d.toISO() ?? null;
-    }
-    return null;
+    console.log(s)
+    const dt = DateTime.fromFormat(s, 'yyyy-MM-dd HH:mm:ss ZZZ z')
+    return dt.toISO()
   }),
   adres_id: z.number(),
   rest_id: z.number(),
@@ -41,7 +34,10 @@ export async function getUser(session: Session) {
   const api = createPrivateApiAxios(session);
 
   const response = await api.get("/user/me");
+
   const data = GetUserScheme.parse(response.data);
+
+  console.log(data)
 
   return data;
 }

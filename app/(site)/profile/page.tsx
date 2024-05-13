@@ -15,7 +15,6 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import useSWR from "swr";
 import { z } from "zod";
-import {} from "@internationalized/date";
 import MessageModal, { useMessageModal } from "@/components/ui/message-modal";
 
 const fetcher = (url: string) =>
@@ -65,6 +64,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (data) {
+      console.log(data)
       reset({
         ...data,
       });
