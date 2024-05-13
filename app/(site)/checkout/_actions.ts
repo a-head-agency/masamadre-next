@@ -66,6 +66,7 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
       id: response.data.id,
     });
     revalidatePath("/thanks");
+    await session.save()
     redirect(process.env.NEXT_PUBLIC_URL! + "/thanks");
   } else if (response.data.link) {
     session.lastOrders = session.lastOrders || [];
@@ -73,6 +74,7 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
       id: response.data.id,
     });
     revalidatePath("/thanks");
+    await session.save()
     redirect(response.data.link);
   }
 }
