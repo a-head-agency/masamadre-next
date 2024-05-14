@@ -30,9 +30,9 @@ export default async function Thanks({ searchParams }: Props) {
     redirect(process.env.NEXT_PUBLIC_URL!);
   }
 
-  lastOrder.time_deliver = DateTime.fromISO(lastOrder.time_deliver).toFormat(
-    "hh:mm"
-  );
+  lastOrder.time_deliver = lastOrder.time_deliver
+    ? DateTime.fromISO(lastOrder.time_deliver).toFormat("hh:mm")
+    : null;
 
   return (
     <div className="min-h-full flex flex-col">
@@ -43,7 +43,8 @@ export default async function Thanks({ searchParams }: Props) {
           </strong>
           <p className="normal-case text-lg">
             ваш номер заказа {lastOrder.id} будет ждать вас в Маса Мадре по
-            адресу солянка 1/2с1{" "}
+            адресу {lastOrder.adres}
+            {lastOrder.order?.table && `, стол ${lastOrder.order.table}`}
             {lastOrder.time_deliver && `в ${lastOrder.time_deliver}`}
           </p>
         </div>

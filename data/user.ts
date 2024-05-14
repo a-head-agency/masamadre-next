@@ -45,12 +45,22 @@ export async function getUser(session: Session) {
 const ShortOrderSchema = z.object({
   id: z.number(),
   status: z.string(),
-  time_deliver: z.string().transform((s) => {
-    const dt = DateTime.fromFormat(s, "yyyy-MM-dd HH:mm:ss", {
-      zone: "Europe/Moscow",
-    });
-    return dt.toISO()!;
-  }),
+  time_deliver: z
+    .string()
+    .nullish()
+    .transform((s) => {
+      if (!s) {
+        return null;
+      }
+      const dt = DateTime.fromFormat(s, "yyyy-MM-dd HH:mm:ss", {
+        zone: "Europe/Moscow",
+      });
+      return dt.toISO()!;
+    }),
+  order: z.object({
+    table: z.number().nullish(),
+  }).nullish(),
+  adres: z.string(),
   price: z.number(),
   created_at: z.string(),
 });
