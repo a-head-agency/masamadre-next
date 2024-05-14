@@ -27,7 +27,7 @@ function TableView(props: TableViewProps) {
         </div>
       )}
       <div className="overflow-x-auto">
-        <table className="text-xs md:text-lg w-full md:max-w-[66%]">
+        <table className="text-sm md:text-lg w-full md:max-w-[66%]">
           <thead>
             <tr className="*:text-start *:pb-10 *:px-2 *:font-normal">
               <th className="w-0: md:w-1/12 !p-0"></th>
