@@ -44,7 +44,7 @@ export default function Button({
       const fromFormatted = from.toFormat("HH:mm");
       const toFormatted = to.toFormat("HH:mm");
       return (
-        <span className="text-end opacity-50 text-sm">
+        <span className="text-end opacity-50 text-sm text-nowrap">
           с {fromFormatted}
           <br />
           до {toFormatted}

@@ -27,7 +27,7 @@ function TableView(props: TableViewProps) {
         </div>
       )}
       <div className="overflow-x-auto">
-        <table className="text-lg w-full md:max-w-[66%]">
+        <table className="text-xs md:text-lg w-full md:max-w-[66%]">
           <thead>
             <tr className="*:text-start *:pb-10 *:px-2 *:font-normal">
               <th className="w-0: md:w-1/12 !p-0"></th>
@@ -44,7 +44,7 @@ function TableView(props: TableViewProps) {
                 <td className="whitespace-nowrap w-28 align-top">
                   {d.price} ₽
                 </td>
-                <td className="text-end align-bottom !pb-3 pr-3 w-24">
+                <td className="text-end align-bottom !pb-3 pr-3 w-[7ch]">
                   <div className="inline-block">
                     <AddToBasketButton
                       dish_id={d.id}
