@@ -1,8 +1,6 @@
 import Footer from "@/components/footer";
-import { getLastOrders, getOrdersByIds } from "@/data/user";
-import { getSession } from "@/session";
+import { getOrdersById } from "@/data/user";
 import { DateTime } from "luxon";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -23,15 +21,16 @@ export default async function Thanks({ searchParams }: Props) {
   if (!ids.success) {
     redirect(process.env.NEXT_PUBLIC_URL!);
   }
-  const lastOrders = await getOrdersByIds([ids.data.id]);
-  const lastOrder = lastOrders.length > 0 ? lastOrders[0] : null;
+  const lastOrder = await getOrdersById(ids.data.id);
 
   if (!lastOrder) {
     redirect(process.env.NEXT_PUBLIC_URL!);
   }
 
-  lastOrder.time_deliver = lastOrder.time_deliver
-    ? DateTime.fromISO(lastOrder.time_deliver).toFormat("hh:mm")
+  console.log(lastOrder.order)
+
+  lastOrder.order.time_deliver = lastOrder.order.time_deliver
+    ? DateTime.fromISO(lastOrder.order.time_deliver).toFormat("HH:mm")
     : null;
 
   return (
@@ -44,8 +43,8 @@ export default async function Thanks({ searchParams }: Props) {
           <p className="normal-case text-lg">
             ваш номер заказа {lastOrder.id} будет ждать вас в Маса Мадре по
             адресу {lastOrder.adres}
-            {lastOrder.order?.table && `, стол ${lastOrder.order.table}`}
-            {lastOrder.time_deliver && `в ${lastOrder.time_deliver}`}
+            {lastOrder.order.table && `, стол ${lastOrder.order.table}`}
+            {lastOrder.order.time_deliver && ` в ${lastOrder.order.time_deliver}`}
           </p>
         </div>
       </div>
