@@ -57,9 +57,11 @@ const ShortOrderSchema = z.object({
       });
       return dt.toISO()!;
     }),
-  order: z.object({
-    table: z.number().nullish(),
-  }).nullish(),
+  order: z
+    .object({
+      table: z.number().nullish(),
+    })
+    .nullish(),
   adres: z.string(),
   price: z.number(),
   created_at: z.string(),
@@ -78,12 +80,30 @@ export async function getLastOrders(session: Session) {
   return data;
 }
 
-export async function getOrdersByIds(ids: number[]) {
+const OrderByIdScheme = z.object({
+  id: z.number(),
+  adres: z.string(),
+  order: z.object({
+    time_deliver: z.string().transform((s) => {
+      if (!s) {
+        return null;
+      }
+      const dt = DateTime.fromFormat(s, "yyyy-MM-dd HH:mm:ss ZZZ z");
+      return dt.toISO()!;
+    }),
+    table: z.number().transform((t) => {
+      return t === 1609 ? null : t;
+    }),
+  }),
+});
+export async function getOrdersById(id: number | string) {
   const api = createPublicApiAxios();
-  const response = await api.post("/api/orders", {
-    ids,
+  const response = await api.get("/api/order", {
+    params: {
+      id,
+    },
   });
-  const data = ManyShortOrdersScheme.parse(response.data);
+  const data = OrderByIdScheme.parse(response.data);
   return data;
 }
 
