@@ -1,5 +1,6 @@
 import { createPrivateApiAxios, createPublicApiAxios } from "@/axios";
 import { Session } from "@/session";
+import { inferCreditCardVendor } from "@/utils";
 import { DateTime } from "luxon";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -201,7 +202,16 @@ export async function getOrderDetails(session: Session, id: number | string) {
 
 const PaymentCardScheme = z.object({
   id: z.number(),
-  cart: z.string(),
+  cart: z.string().transform((s) => '**' + s.replace(/\D/g, "").slice(-4)),
+  main: z.boolean(),
+  type: z
+    .union([
+      z.literal("MIR"),
+      z.literal("VISA"),
+      z.literal("MASTERCARD"),
+      z.literal("MAESTRO"),
+    ])
+    .optional(),
 });
 const ManyPaymentCardsScheme = z.object({
   list: PaymentCardScheme.array(),
@@ -217,7 +227,26 @@ export async function getCards(session: Session) {
     },
   });
 
-  const data = ManyPaymentCardsScheme.parse(response.data);
+  const schema = z.object({
+    list: z
+      .object({
+        id: z.number(),
+        cart: z.string(),
+        main: z.boolean(),
+      })
+      .array(),
+    total: z.number(),
+  });
+
+  const raw = schema.parse(response.data);
+
+  const data = ManyPaymentCardsScheme.parse({
+    ...raw,
+    list: raw.list.map((v) => ({
+      ...v,
+      type: inferCreditCardVendor(v.cart),
+    })),
+  } satisfies z.input<typeof ManyPaymentCardsScheme>);
 
   return data;
 }
