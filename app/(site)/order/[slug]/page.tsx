@@ -6,6 +6,7 @@ import BackButton from "./_widgets/back-button";
 import { getSession } from "@/session";
 import { cookies } from "next/headers";
 import Slider from "./_widgets/slider";
+import clsx from "clsx";
 
 interface Params {
   slug: string;
@@ -57,11 +58,21 @@ export default async function Product({ params }: Props) {
                 </div>
 
                 <div className="border-t text-xs md:text-base border-black mb-[9vmin]">
-                  <div className="flex gap-4 mb-4">
-                    <p className="flex-1">
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <p
+                      className={clsx(
+                        dish.content.length > 100
+                          ? "col-span-full"
+                          : "col-span-1"
+                      )}
+                    >
                       <span className="font-bold">состав:</span> {dish.content}
                     </p>
-                    <p className="flex-1">
+                    <p
+                      className={clsx(
+                        dish.alerg.length > 100 ? "col-span-full" : "col-span-1"
+                      )}
+                    >
                       <span className="font-bold">кбжу:</span> {dish.alerg}
                     </p>
                   </div>
