@@ -18,8 +18,7 @@ import useSWR from "swr";
 import { z } from "zod";
 import { placeOrder } from "../_actions";
 import { optOutQROrder } from "./_actions";
-import { useRouter } from "next/navigation";
-import DeliveryTimeSelector from "../_widgets/delivery-time-picker";
+import { RouteApiUserCartsDataType } from "@/app/api/user/carts/route";
 
 const fetcher = (url: string) =>
   axios.get(url, { withCredentials: true }).then((res) => res.data);
@@ -45,7 +44,12 @@ const PaymentOption: FC<PaymentOptionProps> = ({ children, ...props }) => {
 };
 
 export default function Page() {
-  const { data } = useSWR<GetUserMeSchemeType>("/api/user/me", fetcher);
+  const cards = useSWR<RouteApiUserCartsDataType>("/api/user/carts", fetcher);
+  const me = useSWR<GetUserMeSchemeType>("/api/user/me", fetcher);
+
+  useEffect(() => {
+    console.log(cards);
+  }, [cards]);
 
   const stopQr = async () => {
     await optOutQROrder();
@@ -86,17 +90,20 @@ export default function Page() {
   const basket = useBasket();
 
   useEffect(() => {
-    if (data) {
+    if (me.data && cards.data) {
+      const forReset: any = { ...me.data };
+      forReset.cart_id = cards.data?.list.find((c) => c.main)?.id ?? 0;
+
       reset({
-        ...data,
+        ...forReset,
       });
     }
-  }, [data, reset]);
+  }, [me.data, cards.data, reset]);
 
   const onSubmit = handleSubmit(async (vals) => {
     const forSend = {
       ...vals,
-      dishes: !data
+      dishes: !me.data
         ? basket.data?.list.map((d) => ({
             id: d.dish_id,
             count: d.count,
@@ -166,6 +173,7 @@ export default function Page() {
           <Controller
             name="cart_id"
             control={control}
+            key={cards.data?.list.map((t) => t.id).join(",")}
             render={({ field }) => (
               <RadioGroup
                 className="flex flex-col"
@@ -182,6 +190,29 @@ export default function Page() {
                     Картой на сайте
                   </div>
                 </PaymentOption>
+
+                {cards.data?.list.map((c) => (
+                  <PaymentOption value={c.id.toString()} key={c.id}>
+                    <div className="flex items-center gap-x-2">
+                      <img
+                        className="h-6 w-12 object-contain object-left"
+                        src={
+                          c.type === "MAESTRO"
+                            ? "/icon-maestro.svg"
+                            : c.type === "MASTERCARD"
+                            ? "/icon-mastercard.svg"
+                            : c.type === "MIR"
+                            ? "/icon-mir.svg"
+                            : c.type === "VISA"
+                            ? "/icon-visa.svg"
+                            : "/credit-card.svg"
+                        }
+                        alt=""
+                      />
+                      {c.cart}
+                    </div>
+                  </PaymentOption>
+                ))}
               </RadioGroup>
             )}
           />

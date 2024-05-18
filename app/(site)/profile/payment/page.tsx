@@ -1,8 +1,8 @@
 import { getCards } from "@/data/user";
-import { CardIcon } from "@/icons";
 import { getSession } from "@/session";
 import { cookies } from "next/headers";
-import { useMemo } from "react";
+import { setCardAsMain } from "./_actions";
+import MainSetter from "./_widgets/main-setter";
 
 export default async function Payment() {
   const session = await getSession(cookies());
@@ -18,37 +18,30 @@ export default async function Payment() {
               className="flex md:gap-4 flex-col md:flex-row items-start md:items-center justify-start mb-4 md:mb-2"
             >
               <div className="flex border w-full md:max-w-xs border-black items-center p-3 gap-4">
-                <div className="grow-0 shrink-0">
-                  <img
-                    className="h-6 aspect-[2/1] object-contain object-left"
-                    src={''}
-                    alt=""
-                  />
-                </div>
-                <div className="flex-1 uppercase">
-                  {c.cart}
-                </div>
-                <button
-                  className="grow-0 shrink-0 size-4 md:size-6"
-                  type="button"
-                >
-                  {/* <Icon name="cross" className="h-full aspect-square text-black" /> */}
-                </button>
+                {c.type && (
+                  <div className="grow-0 shrink-0">
+                    <img
+                      className="h-6 aspect-[2/1] object-contain object-left"
+                      src={
+                        c.type === "MAESTRO"
+                          ? "/icon-maestro.svg"
+                          : c.type === "MASTERCARD"
+                          ? "/icon-mastercard.svg"
+                          : c.type === "MIR"
+                          ? "/icon-mir.svg"
+                          : c.type === "VISA"
+                          ? "/icon-visa.svg"
+                          : "/credit-card.svg"
+                      }
+                      alt=""
+                    />
+                  </div>
+                )}
+                {c.type && <div className="uppercase">{c.type}</div>}
+                <div className="flex-1 uppercase">{c.cart}</div>
               </div>
 
-              {/* {c.isMain && (
-                <span className="opacity-50 lowercase text-start">
-                  основная карта
-                </span>
-              )}
-              {!c.isMain && (
-                <button
-                  type="button"
-                  className="lowercase text-green-400 text-start"
-                >
-                  сделать основной
-                </button>
-              )} */}
+              <MainSetter cardId={c.id} isMain={c.main} />
             </div>
           ))}
 

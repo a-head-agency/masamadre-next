@@ -52,7 +52,12 @@ export default function Slider(props: Props) {
 
   return (
     <div className="relative w-full" ref={container}>
-      <div className="absolute top-2 right-2 z-10 flex">
+      <div
+        className={clsx(
+          "absolute top-2 right-2 z-10 flex",
+          images.length <= 1 && "hidden"
+        )}
+      >
         <button
           type="button"
           onClick={prev}

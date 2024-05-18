@@ -18,6 +18,7 @@ import useSWR from "swr";
 import { z } from "zod";
 import { placeOrder } from "../_actions";
 import DeliveryTimeSelector from "../_widgets/delivery-time-picker";
+import { RouteApiUserCartsDataType } from "@/app/api/user/carts/route";
 
 const fetcher = (url: string) =>
   axios.get(url, { withCredentials: true }).then((res) => res.data);
@@ -44,6 +45,10 @@ const PaymentOption: FC<PaymentOptionProps> = ({ children, ...props }) => {
 
 export default function Page() {
   const { data } = useSWR<GetUserMeSchemeType>("/api/user/me", fetcher);
+  const { data: cards } = useSWR<RouteApiUserCartsDataType>(
+    "/api/user/carts",
+    fetcher
+  );
 
   const formScheme = useMemo(
     () =>
@@ -80,12 +85,15 @@ export default function Page() {
   const basket = useBasket();
 
   useEffect(() => {
-    if (data) {
+    if (data && cards) {
+      const forReset: any = { ...data };
+      forReset.cart_id = cards.list.find((c) => c.main)?.id ?? 0;
+
       reset({
-        ...data,
+        ...forReset,
       });
     }
-  }, [data, reset]);
+  }, [data, cards, reset]);
 
   const onSubmit = handleSubmit(async (vals) => {
     const forSend = {
@@ -183,10 +191,35 @@ export default function Page() {
 
                 <PaymentOption value="0">
                   <div className="flex items-center gap-x-2">
-                    <CreditCard className="size-8" />
+                    <div className="w-12">
+                      <CreditCard className="h-8" />
+                    </div>
                     Картой на сайте
                   </div>
                 </PaymentOption>
+
+                {cards?.list.map((c) => (
+                  <PaymentOption value={c.id.toString()} key={c.id}>
+                    <div className="flex items-center gap-x-2">
+                      <img
+                        className="h-6 w-12 object-contain object-left"
+                        src={
+                          c.type === "MAESTRO"
+                            ? "/icon-maestro.svg"
+                            : c.type === "MASTERCARD"
+                            ? "/icon-mastercard.svg"
+                            : c.type === "MIR"
+                            ? "/icon-mir.svg"
+                            : c.type === "VISA"
+                            ? "/icon-visa.svg"
+                            : "/credit-card.svg"
+                        }
+                        alt=""
+                      />
+                      {c.cart}
+                    </div>
+                  </PaymentOption>
+                ))}
               </RadioGroup>
             )}
           />
