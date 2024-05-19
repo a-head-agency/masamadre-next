@@ -3,6 +3,20 @@ import { getSession } from "./session";
 import { cookies } from "next/headers";
 
 export async function middleware(request: NextRequest) {
+  console.log(process.env)
+  console.log('\n\n')
+  if (process.env.FEATURE_ORDER_PAGE === "off") {
+    if (request.nextUrl.pathname.startsWith("/order")) {
+      return NextResponse.redirect(
+        new URL("/not-available-order", request.url)
+      );
+    }
+  } else {
+    if (request.nextUrl.pathname.startsWith("/not-available-order")) {
+      return NextResponse.redirect(new URL("/order", request.url));
+    }
+  }
+
   if (request.nextUrl.pathname.startsWith("/profile")) {
     const session = await getSession(cookies());
     if (!session.isAuthenticated) {

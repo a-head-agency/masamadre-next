@@ -119,12 +119,6 @@ function GridView(props: GridViewProps) {
 }
 
 export default async function Order() {
-
-  if (process.env.FEATURE_ORDER_PAGE === 'off') {
-    redirect('/order-not-available')
-  }
-
-
   const categoriesWithDishes = await getDishes();
 
   return (
