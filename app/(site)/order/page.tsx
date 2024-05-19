@@ -4,6 +4,7 @@ import { getDishes } from "@/data/products";
 import AddToBasketButton from "./_widgets/add-to-basket-button";
 import SliderView from "./_widgets/slider-view";
 import ScrollTopButton from "./_widgets/scroll-top-button";
+import { redirect } from "next/navigation";
 
 interface TableViewProps {
   category: {
@@ -118,6 +119,12 @@ function GridView(props: GridViewProps) {
 }
 
 export default async function Order() {
+
+  if (process.env.FEATURE_ORDER_PAGE === 'off') {
+    redirect(process.env.NEXT_PUBLIC_URL! + '/order-not-available')
+  }
+
+
   const categoriesWithDishes = await getDishes();
 
   return (
