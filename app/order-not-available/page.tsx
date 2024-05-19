@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 export default function OrderNotAvailbale() {
   if (process.env.FEATURE_ORDER_PAGE !== "off") {
-    redirect(process.env.NEXT_PUBLIC_URL! + "/order");
+    redirect("/order");
   }
 
   return (

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 export default function TakeawaysNotAvailable() {
   if (process.env.FEATURE_TAKEAWAYS !== "off") {
-    redirect(process.env.NEXT_PUBLIC_URL!);
+    redirect('/');
   }
 
   return (

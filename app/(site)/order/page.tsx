@@ -121,7 +121,7 @@ function GridView(props: GridViewProps) {
 export default async function Order() {
 
   if (process.env.FEATURE_ORDER_PAGE === 'off') {
-    redirect(process.env.NEXT_PUBLIC_URL! + '/order-not-available')
+    redirect('/order-not-available')
   }
 
 
