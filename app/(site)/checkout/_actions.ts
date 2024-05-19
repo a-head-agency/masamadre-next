@@ -48,16 +48,17 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
       table: session.tableOrder.table,
       sit: session.tableOrder.sit,
     };
-  }
-  else {
+  } else {
+    if (process.env.FEATURE_TAKEAWAYS === "off") {
+      redirect(process.env.NEXT_PUBLIC_URL!);
+    }
     payload = {
       ...payload,
       table: 1609,
-      rest: 1
-    }
+      rest: 1,
+    };
   }
 
-  
   const response = await api.post("user/order", payload);
 
   if (response.data.action === "success") {
@@ -66,7 +67,7 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
       id: response.data.id,
     });
     revalidatePath("/thanks");
-    await session.save()
+    await session.save();
     redirect(process.env.NEXT_PUBLIC_URL! + "/thanks");
   } else if (response.data.link) {
     session.lastOrders = session.lastOrders || [];
@@ -74,7 +75,7 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
       id: response.data.id,
     });
     revalidatePath("/thanks");
-    await session.save()
+    await session.save();
     redirect(response.data.link);
   }
 }
