@@ -1,16 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "./session";
 import { cookies } from "next/headers";
+import { Session } from "inspector";
 
 export async function middleware(request: NextRequest) {
-  if (process.env.FEATURE_ORDER_PAGE === "off") {
+  if (process.env.FEATURE_TAKEAWAYS === "off") {
     if (request.nextUrl.pathname.startsWith("/order")) {
-      return NextResponse.redirect(
-        new URL("/not-available-order", request.url)
-      );
+      const session = await getSession(cookies());
+      if (!session.tableOrder) {
+        return NextResponse.redirect(
+          new URL("/not-available-takeaway", request.url)
+        );
+      }
+    }
+    if (request.nextUrl.pathname.startsWith("/not-available-takeaway")) {
+      const session = await getSession(cookies());
+      if (session.tableOrder) {
+        return NextResponse.redirect(new URL("/order", request.url));
+      }
     }
   } else {
-    if (request.nextUrl.pathname.startsWith("/not-available-order")) {
+    if (request.nextUrl.pathname.startsWith("/not-available-takeaway")) {
       return NextResponse.redirect(new URL("/order", request.url));
     }
   }

@@ -50,7 +50,7 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
     };
   } else {
     if (process.env.FEATURE_TAKEAWAYS === "off") {
-      redirect(process.env.NEXT_PUBLIC_URL! + '/takeaways-not-available');
+      redirect(process.env.NEXT_PUBLIC_URL! + '/not-available-takeaway');
     }
     payload = {
       ...payload,
