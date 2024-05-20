@@ -58,17 +58,14 @@ export default function Page() {
   const formScheme = useMemo(
     () =>
       z.object({
-        name: z
-          .string()
-          .min(1)
-          .transform((s) =>
-            s
-              .split(/\s+/)
-              .filter(Boolean)
-              .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())
-              .join(" ")
-          ),
-        phone: z.string().length(11),
+        name: z.string().transform((s) =>
+          s
+            .split(/\s+/)
+            .filter(Boolean)
+            .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())
+            .join(" ")
+        ),
+        phone: z.string().length(11).optional().or(z.literal("")),
         comment: z.string(),
         cart_id: z.number(),
         time_deliver: z.string().nullable(),
@@ -128,7 +125,6 @@ export default function Page() {
                 value={field.value}
                 onChange={field.onChange}
                 capitalize
-                isRequired
                 onBlur={field.onBlur}
                 isInvalid={invalid}
                 errorMessage={error?.message}
@@ -145,7 +141,6 @@ export default function Page() {
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 isInvalid={invalid}
-                isRequired
                 errorMessage={error?.message}
               />
             )}
