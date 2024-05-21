@@ -9,6 +9,7 @@ export const CategoryScheme = z.object({
   name: z.string(),
   link: z.string(),
   show_title: z.boolean(),
+  subtitle: z.string().optional(),
   type: z
     .union([z.literal(0), z.literal(1), z.literal(2)])
     .optional()

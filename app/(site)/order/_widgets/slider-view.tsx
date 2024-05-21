@@ -11,6 +11,7 @@ interface SliderViewProps {
   category: {
     name: string;
     show_title?: boolean;
+    subtitle?: string;
   };
   dishes: {
     id: number;
@@ -69,8 +70,9 @@ export default function SliderView({ category, dishes }: SliderViewProps) {
 
   return (
     <div>
+      <h2 className="text-3xl font-display mb-8">{category.name}</h2>
       <div className="flex justify-between items-end gap-4 text-xl mb-4">
-        <h2 className="text-3xl font-display">{category.name}</h2>
+        <h2 className="underline">{category.subtitle}</h2>
         <div className="flex items-center gap-2">
           <motion.button
             variants={{
@@ -127,7 +129,7 @@ export default function SliderView({ category, dishes }: SliderViewProps) {
       </div>
 
       <div
-        className="overflow-x-auto snap-x scroll-smooth flex items-stretch scrollbar-none"
+        className="overflow-x-auto px-px snap-x scroll-smooth flex items-stretch scrollbar-none"
         ref={scrollEl}
       >
         {dishes.map((v) => (

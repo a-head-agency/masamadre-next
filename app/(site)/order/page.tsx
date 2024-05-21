@@ -4,7 +4,7 @@ import { getDishes } from "@/data/products";
 import AddToBasketButton from "./_widgets/add-to-basket-button";
 import SliderView from "./_widgets/slider-view";
 import ScrollTopButton from "./_widgets/scroll-top-button";
-import { redirect } from "next/navigation";
+import clsx from "clsx";
 
 interface TableViewProps {
   category: {
@@ -135,19 +135,28 @@ export default async function Order() {
           </Link>
         ))}
       </div>
-      {categoriesWithDishes.map((dc, i) => (
-        <div className="mb-16 px-[2vmax]" key={i} id={dc.category.link}>
-          {dc.category.type === "column_list" && (
-            <TableView category={dc.category} dishes={dc.dishes} />
-          )}
-          {dc.category.type === "grid" && (
-            <GridView category={dc.category} dishes={dc.dishes} />
-          )}
-          {dc.category.type === "slider" && (
-            <SliderView dishes={dc.dishes} category={dc.category} />
-          )}
-        </div>
-      ))}
+      <div>
+        {categoriesWithDishes.map((dc, i) => (
+          <div
+            className={clsx(
+              "first:mt-0 px-[2vmax] last:mb-16",
+              dc.category.subtitle && !dc.category.show_title ? "mt-8" : "mt-16"
+            )}
+            key={i}
+            id={dc.category.link}
+          >
+            {dc.category.type === "column_list" && (
+              <TableView category={dc.category} dishes={dc.dishes} />
+            )}
+            {dc.category.type === "grid" && (
+              <GridView category={dc.category} dishes={dc.dishes} />
+            )}
+            {dc.category.type === "slider" && (
+              <SliderView dishes={dc.dishes} category={dc.category} />
+            )}
+          </div>
+        ))}
+      </div>
 
       {/* <div className="mb-16">
         <div className="flex items-center gap-4 lowercase mb-4 px-[2vmax]">
