@@ -72,3 +72,13 @@ export async function addToBasketAction(
   await session.save();
   return result;
 }
+
+
+export const optOutQROrder = async () => {
+  const session = await getSession(cookies())
+  session.tableOrder = undefined
+  revalidatePath('/order')
+  await basketService.clearBasket(session)
+  await session.save()
+  redirect('/order')
+}

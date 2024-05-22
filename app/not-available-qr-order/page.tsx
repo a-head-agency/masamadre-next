@@ -1,4 +1,5 @@
 import Link from "next/link";
+import QuitQrOrderButton from "./_widgets/quit-qr-order-button";
 
 export default function QrOrderNotAvailbale() {
   return (
@@ -7,7 +8,10 @@ export default function QrOrderNotAvailbale() {
         <img className="h-6" src="/logo.svg" alt="masa madre logo" />
       </Link>
       <div className="grow"></div>
-      <strong>Заказы по QR-коду временно не принимаются</strong>
+      <strong className="mb-4">
+        Заказы по QR-коду временно не принимаются
+      </strong>
+      <QuitQrOrderButton />
       <div className="grow"></div>
     </div>
   );
