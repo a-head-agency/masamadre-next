@@ -25,6 +25,27 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  if (process.env.FEATURE_QR_ORDERS === "off") {
+    if (request.nextUrl.pathname.startsWith("/order")) {
+      const session = await getSession(cookies());
+      if (session.tableOrder) {
+        return NextResponse.redirect(
+          new URL("/not-available-qr-order", request.url)
+        );
+      }
+    }
+    if (request.nextUrl.pathname.startsWith("/not-available-qr-order")) {
+      const session = await getSession(cookies());
+      if (!session.tableOrder) {
+        return NextResponse.redirect(new URL("/order", request.url));
+      }
+    }
+  } else {
+    if (request.nextUrl.pathname.startsWith("/not-available-qr-order")) {
+      return NextResponse.redirect(new URL("/order", request.url));
+    }
+  }
+
   if (request.nextUrl.pathname.startsWith("/profile")) {
     const session = await getSession(cookies());
     if (!session.isAuthenticated) {
