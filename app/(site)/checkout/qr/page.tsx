@@ -68,19 +68,17 @@ export default function Page() {
         phone: z.string().length(11).optional().or(z.literal("")),
         comment: z.string(),
         cart_id: z.number(),
-        time_deliver: z.string().nullable(),
       }),
     []
   );
 
-  const { control, reset, handleSubmit } = useForm<z.infer<typeof formScheme>>({
+  const { control, reset, handleSubmit, formState: {errors} } = useForm<z.infer<typeof formScheme>>({
     resolver: zodResolver(formScheme),
     defaultValues: {
       name: "",
       phone: "",
       comment: "",
       cart_id: 0,
-      time_deliver: null,
     },
   });
 
