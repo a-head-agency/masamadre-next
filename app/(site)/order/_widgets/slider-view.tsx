@@ -70,7 +70,10 @@ export default function SliderView({ category, dishes }: SliderViewProps) {
 
   return (
     <div>
-      <h2 className="text-3xl font-display mb-8">{category.name}</h2>
+      {category.show_title && (
+        <h2 className="text-3xl font-display mb-8">{category.name}</h2>
+      )}
+
       <div className="flex justify-between items-end gap-4 text-xl mb-4">
         <h2 className="underline">{category.subtitle}</h2>
         <div className="flex items-center gap-2">
