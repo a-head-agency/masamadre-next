@@ -9,8 +9,8 @@ import { revalidatePath } from "next/cache";
 import { DateTime } from "luxon";
 
 const PlaceOrderScheme = z.object({
-  phone: z.string().optional().default("74956362981"),
-  name: z.string().optional().default("masa madre"),
+  phone: z.string().optional().transform(s => s || "74956362981"),
+  name: z.string().optional().transform(s => s || "masa madre"),
   cart_id: z.number(),
   dishes: z
     .object({
