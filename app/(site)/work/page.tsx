@@ -52,7 +52,7 @@ export default function Work() {
   });
 
   return (
-    <div className="min-h-full flex flex-col">
+    <div className="min-h-full flex flex-col w-full">
       <MessageModal {...props} />
       <div className="grow flex items-center px-[2vmax] py-8">
         <div className="hidden sm:block grow-[3]"></div>

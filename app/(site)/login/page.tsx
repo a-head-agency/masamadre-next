@@ -229,7 +229,7 @@ export default function Login() {
 
   return (
     <>
-      <div className="min-h-full flex flex-col">
+      <div className="min-h-full flex flex-col w-full">
         <div className="grow grid grid-cols-2 py-10 px-[2vmax] content-center">
           <div className="col-start-1 md:col-start-2 col-span-full flex justify-center">
             <div className="max-w-sm w-full py-10">

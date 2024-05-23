@@ -4,7 +4,7 @@ import Footer from "@/components/footer";
 
 export default function Contacts() {
   return (
-    <div className="flex flex-col items-stretch min-h-full">
+    <div className="flex flex-col items-stretch min-h-full w-full">
       <div className="flex gap-4 p-[2vmax] items-start lg:items-end flex-col lg:flex-row grow mb-24">
         <div className="self-stretch md:basis-3/5 max-md:aspect-[4/3]">
           <div className="relative overflow-hidden h-full w-full">

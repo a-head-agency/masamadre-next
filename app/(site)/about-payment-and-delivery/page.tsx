@@ -1,6 +1,6 @@
 export default function AboutPaymentAndDeliveryPage() {
   return (
-    <div className="p-[2vmax] document">
+    <div className="p-[2vmax] document w-full">
       <h2>Доставка</h2>
       <p>
         На нашем сайте вы можете заказать доставку или оформить самовывоз.

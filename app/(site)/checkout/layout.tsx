@@ -16,7 +16,7 @@ export default async function CheckoutLayout({ children }: Props) {
   }
 
   return (
-    <div className="px-[2vmax] min-h-full flex flex-col">
+    <div className="px-[2vmax] min-h-full flex flex-col w-full">
       <div className="flex items-center gap-2 text-xl my-8">
         {session.tableOrder ? (
           <span className="underline">

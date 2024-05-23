@@ -51,7 +51,7 @@ export default async function SiteLayout({
       </div>
 
       <div className="min-h-dvh flex flex-col pt-32 md:pt-24">
-        <div className="grow shrink-0 basis-0">{children}</div>
+        <div className="grow shrink-0 basis-0 flex items-stretch">{children}</div>
       </div>
     </main>
   );

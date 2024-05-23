@@ -1,6 +1,6 @@
 export default function AboutPaymentAndDeliveryPage() {
     return (
-      <div className="p-[2vmax] document">
+      <div className="p-[2vmax] document w-full">
         <h2>Пользовательское соглашение  и правила обработки персональных данных</h2>
         <ol className="list-decimal">
             <li>

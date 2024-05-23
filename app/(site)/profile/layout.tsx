@@ -50,7 +50,7 @@ export default async function ProfileLayout({ children }: Props) {
   //#endregion Nav Links
 
   return (
-    <main className="min-h-full flex flex-col">
+    <main className="min-h-full flex flex-col w-full">
       <div className="flex flex-col md:flex-row gap-4 md:gap-[2vmax] items-stretch md:items-start grow">
         <aside className="hidden md:flex sticky p-[2vmax] shrink-0 flex-col gap-8  h-[calc(100dvh-6rem-4rem-4vmax-3rem)] top-24">
           <div>
