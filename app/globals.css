@@ -10,7 +10,8 @@
   @apply my-4;
 }
 
-.document ul, .document ol {
+.document ul,
+.document ol {
   @apply pl-[2vmax];
 }
 
@@ -18,4 +19,7 @@
   @apply pl-4;
 }
 
-
+input,
+select {
+  @apply rounded-none;
+}
