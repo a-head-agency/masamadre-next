@@ -9,6 +9,7 @@ interface Props extends AriaTextFieldProps {
   isRequired?: boolean;
   size?: "md" | "lg";
   capitalize?: boolean;
+  help?: string;
 }
 export type TextFieldProps = Props;
 
@@ -16,6 +17,7 @@ export default function TextField({
   isRequired,
   size = "md",
   capitalize = false,
+  help,
   ...props
 }: Props) {
   let { label } = props;
@@ -56,6 +58,7 @@ export default function TextField({
         )}
         ref={ref}
       />
+      {help && <div className="opacity-50 text-xs">{help}</div>}
     </div>
   );
 }

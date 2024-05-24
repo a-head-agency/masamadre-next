@@ -72,7 +72,12 @@ export default function Page() {
     []
   );
 
-  const { control, reset, handleSubmit, formState: {errors} } = useForm<z.infer<typeof formScheme>>({
+  const {
+    control,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof formScheme>>({
     resolver: zodResolver(formScheme),
     defaultValues: {
       name: "",
@@ -120,6 +125,7 @@ export default function Page() {
             render={({ field, fieldState: { invalid, error } }) => (
               <TextField
                 label="фио"
+                help="Заполните, если хотите зарегистрироваться"
                 value={field.value}
                 onChange={field.onChange}
                 capitalize
@@ -135,6 +141,7 @@ export default function Page() {
             render={({ field, fieldState: { invalid, error } }) => (
               <PhoneField
                 label="телефон"
+                help="Заполните, если хотите зарегистрироваться"
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}

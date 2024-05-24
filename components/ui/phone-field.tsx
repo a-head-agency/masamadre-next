@@ -9,12 +9,14 @@ import { NumberFormatBase } from "react-number-format";
 interface Props extends AriaTextFieldProps {
   isRequired?: boolean;
   size?: "md" | "lg";
+  help?: string;
 }
 export type PhoneFieldProps = Props;
 
 export default function PhoneField({
   isRequired,
   size = "md",
+  help,
   ...props
 }: Props) {
   let { label } = props;
@@ -71,6 +73,7 @@ export default function PhoneField({
         format={formatPhone}
         inputMode="tel"
       />
+      {help && <div className="opacity-50 text-xs">{help}</div>}
     </div>
   );
 }
