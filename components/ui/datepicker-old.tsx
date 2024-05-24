@@ -76,11 +76,16 @@ const InputDatepicker: FC<
     (value?: CalendarDate) => {
       if (value) {
         const iso =
-          DateTime.fromObject({
-            year: value.year,
-            month: value.month,
-            day: value.day,
-          }).toISO() ?? "";
+          DateTime.fromObject(
+            {
+              year: value.year,
+              month: value.month,
+              day: value.day,
+            },
+            {
+              zone: "UTC",
+            }
+          ).toISO() ?? "";
         onChange(iso);
       }
     },

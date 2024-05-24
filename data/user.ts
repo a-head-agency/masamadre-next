@@ -16,7 +16,8 @@ const GetUserScheme = z.object({
   email: z.string(),
   birthday: z.string().transform((s) => {
     console.log(s);
-    const dt = DateTime.fromFormat(s, "yyyy-MM-dd HH:mm:ss ZZZ z");
+    const dt = DateTime.fromFormat(s, "yyyy-MM-dd HH:mm:ss ZZZ z", { zone: 'UTC' });
+    console.log(dt.toISO())
     return dt.toISO();
   }),
   adres_id: z.number(),
