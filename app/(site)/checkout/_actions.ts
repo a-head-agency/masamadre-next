@@ -38,9 +38,7 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
   const api = session.isAuthenticated
     ? createPrivateApiAxios(session)
     : createPublicApiAxios();
-  let payload: Record<string, any> = {
-    ...vals,
-  };
+  let payload: Record<string, any> = PlaceOrderScheme.parse(vals)
   if (session.tableOrder) {
     payload = {
       ...payload,
