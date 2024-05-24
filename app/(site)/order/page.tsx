@@ -125,7 +125,7 @@ export default async function Order() {
     <div className="min-h-full flex flex-col w-full">
       <ScrollTopButton />
       <div className="px-[2vmax] py-4 flex flex-col lowercase items-start">
-        {categoriesWithDishes.map((dc) => (
+        {categoriesWithDishes.filter(t => t.category.show_title).map((dc) => (
           <Link
             key={dc.category.id}
             className="w-fit lowercase"
