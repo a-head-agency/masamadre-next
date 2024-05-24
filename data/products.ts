@@ -182,6 +182,11 @@ export async function getOneDish(id: number) {
     alerg: z.string(),
     date_contain: z.string(),
     maker: z.string().optional(),
+    cert: z
+      .union([z.literal("eco"), z.literal("org"), z.literal("bio")])
+      .or(z.literal(""))
+      .nullish()
+      .transform((s) => s || null),
     make_date: z.string().optional(),
     malbec: z.string().optional(),
     flag: z.string().optional(),

@@ -85,7 +85,29 @@ export default async function Product({ params }: Props) {
             )}
 
             {dish.is_vine && (
-              <div className="grow-[90] border-b border-black mb-6"></div>
+              <>
+                <div className="grow-[90]"></div>
+                <div className="border-b border-black mb-6 pb-2">
+                  {dish.cert === "org" && (
+                    <div className="flex items-center gap-2">
+                      <img src="/org.svg" className="h-5" alt="" />
+                      органическое
+                    </div>
+                  )}
+                  {dish.cert === "bio" && (
+                    <div className="flex items-center gap-2">
+                      <img src="/bio.svg" className="h-5" alt="" />
+                      биодинамическое
+                    </div>
+                  )}
+                  {dish.cert === "eco" && (
+                    <div className="flex items-center gap-2">
+                      <img src="/eco.svg" className="h-5" alt="" />
+                      натуральное
+                    </div>
+                  )}
+                </div>
+              </>
             )}
 
             <div className="flex justify-between flex-wrap gap-4 items-center">
