@@ -91,19 +91,19 @@ export default async function Product({ params }: Props) {
                   {dish.cert === "org" && (
                     <div className="flex items-center gap-2">
                       <img src="/org.svg" className="h-5" alt="" />
-                      органическое
+                      org
                     </div>
                   )}
                   {dish.cert === "bio" && (
                     <div className="flex items-center gap-2">
                       <img src="/bio.svg" className="h-5" alt="" />
-                      биодинамическое
+                      bio
                     </div>
                   )}
                   {dish.cert === "eco" && (
                     <div className="flex items-center gap-2">
                       <img src="/eco.svg" className="h-5" alt="" />
-                      натуральное
+                      eco
                     </div>
                   )}
                 </div>
