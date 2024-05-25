@@ -58,10 +58,6 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
     };
   }
 
-  console.log(payload)
-
-  return 
-
   const response = await api.post("user/order", payload);
 
   if (response.data.action === "success") {
