@@ -3,6 +3,7 @@ import { getSession } from "@/session";
 import { cookies } from "next/headers";
 import { setCardAsMain } from "./_actions";
 import MainSetter from "./_widgets/main-setter";
+import DeleteCard from "./_widgets/delete-card";
 
 export default async function Payment() {
   const session = await getSession(cookies());
@@ -39,18 +40,21 @@ export default async function Payment() {
                 )}
                 {c.type && <div className="uppercase">{c.type}</div>}
                 <div className="flex-1 uppercase">{c.cart}</div>
+                <div>
+                  <DeleteCard cardId={c.id}/>
+                </div>
               </div>
 
               <MainSetter cardId={c.id} isMain={c.main} />
             </div>
           ))}
 
-          <button
+          {/* <button
             type="button"
             className="bg-black text-white px-8 mt-8 py-1.5 rounded-full w-full md:w-max text-sm lowercase"
           >
             Сохранить
-          </button>
+          </button> */}
         </>
       ) : (
         <div>
