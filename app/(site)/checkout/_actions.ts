@@ -30,6 +30,7 @@ const PlaceOrderScheme = z.object({
       const dt = DateTime.fromISO(s);
       return dt.toFormat("yyyy-MM-dd HH:mm:ss ZZZ ZZZZ");
     }),
+  comment: z.string().nullish().transform(s => s || "")
 });
 
 export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
@@ -56,6 +57,10 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
       rest: 1,
     };
   }
+
+  console.log(payload)
+
+  return 
 
   const response = await api.post("user/order", payload);
 
