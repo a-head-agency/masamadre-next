@@ -2,13 +2,19 @@
 
 import { ArrowIcon } from "@/icons";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { useCallback, useRef, useState } from "react";
+import {
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 import AddToBasketButton from "./add-to-basket-button";
 import Link from "next/link";
 
 interface SliderViewProps {
   category: {
+    id: number;
     name: string;
     show_title?: boolean;
     subtitle?: string;
@@ -29,9 +35,10 @@ interface SliderViewProps {
 export default function SliderView({ category, dishes }: SliderViewProps) {
   const scrollEl = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState<"start" | "end" | "middle">("start");
-  const { scrollXProgress } = useScroll({
+  const { scrollXProgress, scrollX } = useScroll({
     container: scrollEl,
   });
+  const localStorageKey = `scroll-view-${category.id}-scroll-offset`;
 
   useMotionValueEvent(scrollXProgress, "change", (latest) => {
     if (latest >= 1) {
@@ -45,6 +52,19 @@ export default function SliderView({ category, dishes }: SliderViewProps) {
 
     setPosition("middle");
   });
+
+  useMotionValueEvent(scrollX, "change", (latest) => {
+    localStorage.setItem(localStorageKey, latest.toString());
+  });
+
+  useLayoutEffect(() => {
+    if (scrollEl.current) {
+      const savedPosition = Number(
+        localStorage.getItem(localStorageKey) || "0"
+      );
+      scrollEl.current.scrollLeft = savedPosition;
+    }
+  }, []);
 
   const onScrollRequest = useCallback(
     (direction: "forward" | "backward") => {
