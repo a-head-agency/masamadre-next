@@ -4,10 +4,9 @@ import Footer from "@/components/footer";
 import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/button";
 import PhoneField from "@/components/ui/phone-field";
-import TimePicker from "@/components/ui/timepicker";
 import { GetUserMeSchemeType } from "@/data/user";
 import { useBasket } from "@/hooks/basket";
-import { CreditCard, WalletIcon } from "@/icons";
+import { ChevronDown, CreditCard } from "@/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import clsx from "clsx";
@@ -19,6 +18,7 @@ import { z } from "zod";
 import { placeOrder } from "../_actions";
 import { optOutQROrder } from "./_actions";
 import { RouteApiUserCartsDataType } from "@/app/api/user/carts/route";
+import { useBoolean } from "usehooks-ts";
 
 const fetcher = (url: string) =>
   axios.get(url, { withCredentials: true }).then((res) => res.data);
@@ -47,9 +47,8 @@ export default function Page() {
   const cards = useSWR<RouteApiUserCartsDataType>("/api/user/carts", fetcher);
   const me = useSWR<GetUserMeSchemeType>("/api/user/me", fetcher);
 
-  useEffect(() => {
-    console.log(cards);
-  }, [cards]);
+  const { toggle: toggleShowSignUpFields, value: showSignUpFields } =
+    useBoolean(false);
 
   const stopQr = async () => {
     await optOutQROrder();
@@ -118,46 +117,72 @@ export default function Page() {
   return (
     <div className="grow flex flex-col">
       <form onSubmit={onSubmit}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl w-full mb-16">
-          <Controller
-            name="name"
-            control={control}
-            render={({ field, fieldState: { invalid, error } }) => (
-              <TextField
-                label="фио"
-                help="Заполните, если хотите зарегистрироваться"
-                value={field.value}
-                onChange={field.onChange}
-                capitalize
-                onBlur={field.onBlur}
-                isInvalid={invalid}
-                errorMessage={error?.message}
-              />
-            )}
-          />
-          <Controller
-            name="phone"
-            control={control}
-            render={({ field, fieldState: { invalid, error } }) => (
-              <PhoneField
-                label="телефон"
-                help="Заполните, если хотите зарегистрироваться"
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                isInvalid={invalid}
-                errorMessage={error?.message}
-              />
-            )}
-          />
-
-          <div className="col-span-full">
+        <div
+          className={clsx(
+            "grid transition-all *:overflow-hidden origin-top",
+            !me.data && !me.isLoading
+              ? "grid-rows-[1fr] opacity-100 scale-y-100"
+              : "grid-rows-[0fr] opacity-0 scale-y-0"
+          )}
+        >
+          {!me.data && !me.isLoading && (
+            <div className="max-w-5xl mb-4">
+              <button
+                type="button"
+                className="flex items-center gap-4 leading-none outline-none"
+                onClick={toggleShowSignUpFields}
+              >
+                зарегистрироваться
+                <ChevronDown
+                  className={clsx(
+                    "h-[0.8em] transition-transform",
+                    showSignUpFields ? "-scale-y-100" : "scale-y-100"
+                  )}
+                />
+              </button>
+            </div>
+          )}
+        </div>
+        <div
+          className={clsx(
+            "grid transition-all *:overflow-hidden origin-top",
+            showSignUpFields || me.data
+              ? "grid-rows-[1fr] opacity-100 scale-y-100"
+              : "grid-rows-[0fr] opacity-0 scale-y-0"
+          )}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl w-full mb-8">
             <Controller
-              name="comment"
+              name="name"
               control={control}
               render={({ field, fieldState: { invalid, error } }) => (
                 <TextField
-                  label="комментарий к заказу"
+                  label="фио"
+                  help={
+                    !me.data
+                      ? "Заполните, если хотите зарегистрироваться"
+                      : undefined
+                  }
+                  value={field.value}
+                  onChange={field.onChange}
+                  capitalize
+                  onBlur={field.onBlur}
+                  isInvalid={invalid}
+                  errorMessage={error?.message}
+                />
+              )}
+            />
+            <Controller
+              name="phone"
+              control={control}
+              render={({ field, fieldState: { invalid, error } }) => (
+                <PhoneField
+                  label="телефон"
+                  help={
+                    !me.data
+                      ? "Заполните, если хотите зарегистрироваться"
+                      : undefined
+                  }
                   value={field.value}
                   onChange={field.onChange}
                   onBlur={field.onBlur}
@@ -167,6 +192,23 @@ export default function Page() {
               )}
             />
           </div>
+        </div>
+
+        <div className="max-w-5xl mb-16">
+          <Controller
+            name="comment"
+            control={control}
+            render={({ field, fieldState: { invalid, error } }) => (
+              <TextField
+                label="комментарий к заказу"
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                isInvalid={invalid}
+                errorMessage={error?.message}
+              />
+            )}
+          />
         </div>
 
         <div className="flex flex-col md:flex-row md:items-end mb-32 gap-x-4 gap-y-4">
