@@ -1,14 +1,8 @@
 import { getOneDish } from "@/data/products";
-import TotalPrice from "./_widgets/total-price";
-import AddToCartButtonAuth from "./_widgets/add-to-cart-button-auth";
-import Adder from "@/components/functional/adder";
 import BackButton from "./_widgets/back-button";
 import { getSession } from "@/session";
 import { cookies } from "next/headers";
 import Slider from "./_widgets/slider";
-import clsx from "clsx";
-import ModificatorSelector from "@/components/functional/modificators-selector";
-import Modificators from "./_widgets/modificators";
 import Details from "./_widgets/details";
 
 interface Params {
