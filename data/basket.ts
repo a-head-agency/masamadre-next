@@ -4,12 +4,22 @@ import { z } from "zod";
 import { getDishesByIds } from "./products";
 
 export const AddToBasketInputSchema = z.object({
+  id: z.number().optional(),
   count: z.number(),
   dish_id: z.number(),
+  mods: z
+    .number()
+    .transform((m) => ({
+      id: m,
+      count: 1,
+    }))
+    .array()
+    .optional()
+    .default([]),
 });
 export async function addToBasket(
   session: Session,
-  input: z.infer<typeof AddToBasketInputSchema>
+  input: z.input<typeof AddToBasketInputSchema>
 ) {
   const _input = AddToBasketInputSchema.parse(input);
 
@@ -67,6 +77,16 @@ export const GetBasketSchema = z.object({
         .transform((t) => t || ""),
       img: z.string(),
       name: z.string(),
+      mods: z
+        .object({
+          id: z.number(),
+          count: z.number(),
+          name: z.string(),
+          price: z.number(),
+        })
+        .array()
+        .optional()
+        .default([]),
     })
     .array()
     .nullish()
@@ -112,6 +132,7 @@ export async function getBasket(
         price: d.price,
         short_description: d.short_description,
         weight: d.weight,
+        mods: []
       })),
       total,
       total_count: session.basket.length,

@@ -105,7 +105,7 @@ export function CartModal(
                   </button>
                   <div className="pr-12 grow pb-6 sm:pb-12">
                     {basket.data?.list.map((item, index) => (
-                      <div className="mb-4 flex gap-4 items-center" key={index}>
+                      <div className="mb-4 flex gap-4 items-start" key={index}>
                         <img
                           className="size-24 object-contain"
                           src={item.img}
@@ -114,9 +114,19 @@ export function CartModal(
                         <div className="flex flex-col justify-between self-stretch items-stretch grow">
                           <div className="leading-tight">
                             <div className="font-bold">{item.name}</div>
-                            <div>{item.short_description}</div>
+                            {item.mods.length ? (
+                              <div>
+                                {item.mods.map((m) => (
+                                  <span key={m.id} className="leading-none">
+                                    + {m.name}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : (
+                              <div>{item.short_description}</div>
+                            )}
                           </div>
-                          <div className="flex justify-between items-center">
+                          <div className="flex justify-between items-center mt-2">
                             <div className="text-lg">
                               <span className="font-bold">{item.price}</span> ₽
                             </div>
@@ -125,10 +135,11 @@ export function CartModal(
                                 type="button"
                                 onClick={() =>
                                   basket.addDish({
+                                    id: item.id,
                                     dish_id: item.dish_id,
                                     count:
                                       (basket.data?.list.find(
-                                        (d) => d.dish_id === item.dish_id
+                                        (d) => d.id === item.id
                                       )?.count || 0) + 1,
                                   })
                                 }
@@ -140,10 +151,11 @@ export function CartModal(
                                 type="button"
                                 onClick={() =>
                                   basket.addDish({
+                                    id: item.id,
                                     dish_id: item.dish_id,
                                     count:
                                       (basket.data?.list.find(
-                                        (d) => d.dish_id === item.dish_id
+                                        (d) => d.id === item.id
                                       )?.count || 1) - 1,
                                   })
                                 }
@@ -172,7 +184,14 @@ export function CartModal(
                   </div>
 
                   <div className="mt-6 sm:mt-12 *:w-full">
-                    <UIButton onPress={checkout} isDisabled={!basket.data?.list || !basket.data.list.length}>оформить заказ</UIButton>
+                    <UIButton
+                      onPress={checkout}
+                      isDisabled={
+                        !basket.data?.list || !basket.data.list.length
+                      }
+                    >
+                      оформить заказ
+                    </UIButton>
                   </div>
                 </>
               )}

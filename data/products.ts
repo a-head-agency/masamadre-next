@@ -169,42 +169,49 @@ export async function getDishesByIds(dishes: number[]) {
   return data;
 }
 
+export const GetOneDishScheme = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string(),
+  img: z.string(),
+  short_description: z.string(),
+  content: z.string(),
+  alerg: z.string(),
+  date_contain: z.string(),
+  maker: z.string().optional(),
+  cert: z
+    .union([z.literal("eco"), z.literal("org"), z.literal("bio")])
+    .or(z.literal(""))
+    .nullish()
+    .transform((s) => s || null),
+  make_date: z.string().optional(),
+  malbec: z.string().optional(),
+  flag: z.string().optional(),
+  is_vine: z.boolean().optional(),
+  category: z.number(),
+  price: z.number(),
+  weight: z.number(),
+  title: z.string(),
+  description_seo: z.string(),
+  keywords: z.string(),
+  link: z.string(),
+  alt: z.string(),
+  images: z
+    .string()
+    .array()
+    .nullable()
+    .transform((a) => a || []),
+  mods: z
+    .object({
+      id: z.number(),
+      name: z.string(),
+      price: z.number(),
+    })
+    .array(),
+});
+
 export async function getOneDish(id: number) {
   const api = createPublicApiAxios();
-
-  const schema = z.object({
-    id: z.number(),
-    name: z.string(),
-    description: z.string(),
-    img: z.string(),
-    short_description: z.string(),
-    content: z.string(),
-    alerg: z.string(),
-    date_contain: z.string(),
-    maker: z.string().optional(),
-    cert: z
-      .union([z.literal("eco"), z.literal("org"), z.literal("bio")])
-      .or(z.literal(""))
-      .nullish()
-      .transform((s) => s || null),
-    make_date: z.string().optional(),
-    malbec: z.string().optional(),
-    flag: z.string().optional(),
-    is_vine: z.boolean().optional(),
-    category: z.number(),
-    price: z.number(),
-    weight: z.number(),
-    title: z.string(),
-    description_seo: z.string(),
-    keywords: z.string(),
-    link: z.string(),
-    alt: z.string(),
-    images: z
-      .string()
-      .array()
-      .nullable()
-      .transform((a) => a || []),
-  });
 
   const response = await api.get("/api/dish", {
     params: {
@@ -212,7 +219,7 @@ export async function getOneDish(id: number) {
     },
   });
 
-  const data = schema.parse(response.data);
+  const data = GetOneDishScheme.parse(response.data);
 
   data.is_vine = !!data.make_date;
 

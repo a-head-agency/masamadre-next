@@ -66,19 +66,17 @@ export async function setUser(inputs: z.input<typeof SetUserMeScheme>) {
 export async function addToBasketAction(
   data: z.input<typeof basketService.AddToBasketInputSchema>
 ) {
-  const _data = basketService.AddToBasketInputSchema.parse(data);
   const session = await getSession(cookies());
-  const result = basketService.addToBasket(session, _data);
+  const result = basketService.addToBasket(session, data);
   await session.save();
   return result;
 }
 
-
 export const optOutQROrder = async () => {
-  const session = await getSession(cookies())
-  session.tableOrder = undefined
-  revalidatePath('/order')
-  await basketService.clearBasket(session)
-  await session.save()
-  redirect('/order')
-}
+  const session = await getSession(cookies());
+  session.tableOrder = undefined;
+  revalidatePath("/order");
+  await basketService.clearBasket(session);
+  await session.save();
+  redirect("/order");
+};

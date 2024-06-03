@@ -5,16 +5,21 @@ import { MinusIcon, PlusIcon } from "@/icons";
 import { useMemo } from "react";
 
 interface Props {
+  basket_id?: number;
   dish_id: number;
+  mods?: number[];
 }
 
-export default function Adder({ dish_id }: Props) {
+export default function Adder({ dish_id, mods, basket_id }: Props) {
   const basket = useBasket();
 
-  const count = useMemo(
-    () => basket.data?.list.find((d) => d.dish_id === dish_id)?.count || 0,
-    [basket.data, dish_id]
+  const item = useMemo(
+    () => basket.data?.list.find((d) => d.id === basket_id),
+    [basket.data, basket_id]
   );
+
+  const count = item?.count || 0;
+  const id = item?.id;
 
   return (
     <div className="flex gap-[0.5em]">
@@ -23,8 +28,10 @@ export default function Adder({ dish_id }: Props) {
         disabled={basket.isLoading}
         onClick={() =>
           basket.addDish({
+            id: id,
             dish_id: dish_id,
             count: count + 1,
+            mods,
           })
         }
       >
@@ -37,6 +44,7 @@ export default function Adder({ dish_id }: Props) {
         className="disabled:opacity-50 transition-opacity"
         onClick={() =>
           basket.addDish({
+            id: id,
             dish_id: dish_id,
             count: Math.max(0, count - 1),
           })

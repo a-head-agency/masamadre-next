@@ -6,6 +6,8 @@ import { useMemo } from "react";
 
 interface Props {
   dish_id: number;
+  basket_id?: number;
+  mods?: number[];
 }
 
 export default function AddToCartButtonAuth(props: Props) {
@@ -22,6 +24,8 @@ export default function AddToCartButtonAuth(props: Props) {
       isInverted
       onPress={() =>
         basket.addDish({
+          id: props.basket_id,
+          mods: props.mods,
           dish_id: props.dish_id,
           count: count + 1,
         })
