@@ -30,10 +30,11 @@ export default function Button({
   let { focusProps, isFocusVisible } = useFocusRing();
 
   const { addDish, isLoading, data } = useBasket();
-  const count = useMemo(
-    () => (data?.list.find((d) => d.dish_id === dish_id)?.count || -1) + 1,
-    [data, dish_id]
+  const item = useMemo(
+    () => data?.list.find((d) => d.dish_id == dish_id && d.mods.length === 0),
+    [dish_id, data]
   );
+  const count = item?.count || 0;
 
   const unavailable = useMemo(() => {
     const now = DateTime.now();
@@ -81,7 +82,7 @@ export default function Button({
           </button>
 
           <div className={cx(count == 0 && "hidden")}>
-            <Adder dish_id={dish_id} />
+            <Adder dish_id={dish_id} basket_id={item?.id} />
           </div>
         </>
       )}
