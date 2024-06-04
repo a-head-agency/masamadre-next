@@ -116,7 +116,7 @@ export function CartModal(
                             <div className="font-bold">{item.name}</div>
                             {item.mods.length ? (
                               <div>
-                                {item.mods.map(m => `+ ${m.name}`).join(', ')}
+                                {item.mods.map((m) => `+ ${m.name}`).join(", ")}
                               </div>
                             ) : (
                               <div>{item.short_description}</div>
@@ -133,6 +133,7 @@ export function CartModal(
                                   basket.addDish({
                                     id: item.id,
                                     dish_id: item.dish_id,
+                                    mods: item.mods.map((v) => v.id),
                                     count:
                                       (basket.data?.list.find(
                                         (d) => d.id === item.id
@@ -149,6 +150,7 @@ export function CartModal(
                                   basket.addDish({
                                     id: item.id,
                                     dish_id: item.dish_id,
+                                    mods: item.mods.map((v) => v.id),
                                     count:
                                       (basket.data?.list.find(
                                         (d) => d.id === item.id
