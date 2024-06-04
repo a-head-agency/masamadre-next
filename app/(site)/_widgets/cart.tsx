@@ -116,11 +116,7 @@ export function CartModal(
                             <div className="font-bold">{item.name}</div>
                             {item.mods.length ? (
                               <div>
-                                {item.mods.map((m) => (
-                                  <span key={m.id} className="leading-none">
-                                    + {m.name}
-                                  </span>
-                                ))}
+                                {item.mods.map(m => `+ ${m.name}`).join(', ')}
                               </div>
                             ) : (
                               <div>{item.short_description}</div>

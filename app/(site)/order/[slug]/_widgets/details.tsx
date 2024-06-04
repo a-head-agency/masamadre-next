@@ -6,9 +6,10 @@ import clsx from "clsx";
 import TotalPrice from "./total-price";
 import AddToCartButtonAuth from "./add-to-cart-button-auth";
 import ModificatorSelector from "@/components/functional/modificators-selector";
-import { Item, Key } from "react-stately";
+import { Item } from "react-stately";
 import { useEffect, useMemo, useState } from "react";
 import { useBasket } from "@/hooks/basket";
+import { areSetsEqual } from "@/utils";
 
 interface Props {
   isAuthenticated: boolean;
@@ -35,7 +36,7 @@ export default function Details({ isAuthenticated, dish }: Props) {
 
   const basket = useBasket();
   const item = useMemo(
-    () => basket.data?.list.find((d) => d.dish_id === dish.id),
+    () => basket.data?.list.findLast((d) => d.dish_id === dish.id),
     [dish.id, basket.data]
   );
   useEffect(() => {
@@ -43,6 +44,13 @@ export default function Details({ isAuthenticated, dish }: Props) {
       setSelectedKeys(new Set(item.mods.map((v) => v.id.toString())));
     }
   }, [item?.mods]);
+  const isModsSelectorDirty = useMemo(() => {
+    const modsForCurrentBasketId = new Set(
+      item?.mods.map((v) => v.id.toString())
+    );
+    const currentMods = selectedKeys;
+    return !areSetsEqual(modsForCurrentBasketId, currentMods);
+  }, [item?.mods, selectedKeys]);
 
   const selectedMods = useMemo(() => {
     return arraySelectedKeys.map((k) => indexedMods[k]);
@@ -74,7 +82,7 @@ export default function Details({ isAuthenticated, dish }: Props) {
         <div>{displayPrice} ₽</div>
         <Adder
           dish_id={dish.id}
-          basket_id={item?.id}
+          basket_id={isModsSelectorDirty ? undefined : item?.id}
           mods={arraySelectedKeys}
         />
       </div>
@@ -166,7 +174,7 @@ export default function Details({ isAuthenticated, dish }: Props) {
         )}
         <AddToCartButtonAuth
           dish_id={dish.id}
-          basket_id={item?.id}
+          basket_id={isModsSelectorDirty ? undefined : item?.id}
           mods={arraySelectedKeys}
         />
       </div>

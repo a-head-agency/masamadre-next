@@ -4,7 +4,6 @@ import { cookies } from "next/headers";
 
 export type RouteApiUserCartsDataType = Awaited<ReturnType<typeof getCards>>;
 export async function GET() {
-  console.log('pidor')
   const session = await getSession(cookies())
   if (session.isAuthenticated) {
     const cards = await getCards(session);

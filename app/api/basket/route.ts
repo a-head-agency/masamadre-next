@@ -6,5 +6,6 @@ export type GetBasketHandlerResult = GetBasketServiceResult;
 export async function GET() {
   const session = await getSession(cookies());
   const basket = await getBasket(session);
+  await session.save()
   return Response.json(basket);
 }

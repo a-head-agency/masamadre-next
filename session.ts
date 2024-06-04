@@ -1,7 +1,8 @@
-import { getIronSession } from "iron-session";
+import { IronSession, getIronSession } from "iron-session";
 import { cookies as _cookies } from "next/headers";
 
-export interface SessionData {
+export interface SessionDataV1 {
+  version?: "v1";
   isAuthenticated: boolean;
   accessToken: string;
   refreshToken: string;
@@ -16,6 +17,35 @@ export interface SessionData {
     time?: string;
   }[];
 }
+
+interface SessionDataV2 {
+  version?: "v2";
+  isAuthenticated: boolean;
+  accessToken: string;
+  refreshToken: string;
+  basket?: {
+    id: number;
+    dish_id: number;
+    count: number;
+    mods: {
+      id: number;
+      name: string;
+      price: number;
+      count: number;
+    }[];
+  }[];
+  tableOrder?: {
+    rest: number;
+    table: number;
+    sit?: number;
+  };
+  lastOrders?: {
+    id: number;
+    time?: string;
+  }[];
+}
+
+export type SessionData = SessionDataV1 | SessionDataV2;
 
 export async function getSession(cookies: ReturnType<typeof _cookies>) {
   if (

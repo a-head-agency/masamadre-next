@@ -4,7 +4,7 @@ import { createPrivateApiAxios, createPublicApiAxios } from "@/axios";
 import { getSession } from "@/session";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { z } from "zod";
+import { number, z } from "zod";
 import { revalidatePath } from "next/cache";
 import { DateTime } from "luxon";
 
@@ -16,6 +16,10 @@ const PlaceOrderScheme = z.object({
     .object({
       id: z.number(),
       count: z.number(),
+      mods: z.object({
+        id: z.number(),
+        count: z.number(),
+      }).array()
     })
     .array()
     .optional(),

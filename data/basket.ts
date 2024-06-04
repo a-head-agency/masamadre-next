@@ -1,7 +1,8 @@
 import { createPrivateApiAxios } from "@/axios";
-import { Session } from "@/session";
+import { Session, SessionDataV1 } from "@/session";
 import { z } from "zod";
-import { getDishesByIds } from "./products";
+import { getDishesByIds, getOneDish } from "./products";
+import { IronSession } from "iron-session";
 
 export const AddToBasketInputSchema = z.object({
   id: z.number().optional(),
@@ -14,8 +15,8 @@ export const AddToBasketInputSchema = z.object({
       count: 1,
     }))
     .array()
-    .optional()
-    .default([]),
+    .nullish()
+    .transform((a) => a || []),
 });
 export async function addToBasket(
   session: Session,
@@ -36,12 +37,79 @@ export async function addToBasket(
   });
 
   if (!session.isAuthenticated) {
-    session.basket = session.basket || [];
-    session.basket = session.basket.filter((id) => id !== _input.dish_id);
-    session.basket = session.basket.concat(
-      ...Array(_input.count).fill(_input.dish_id)
-    );
-    return { action: "success" } satisfies z.output<typeof schema>;
+    // migrate session to new version
+    if (!session.version || session.version === "v1") {
+      // there is no session.version property - it's v1 session
+      const sessionv1 = session as IronSession<SessionDataV1>;
+      sessionv1.basket = sessionv1.basket || [];
+
+      session.version = "v2";
+      if (session.version === "v2") {
+        // "if" is there only for TS type inference
+        const counts = sessionv1.basket.reduce(
+          (acc, curr) => ({
+            ...acc,
+            [curr]: (acc[curr] || 0) + 1,
+          }),
+          {} as { [key: number]: number }
+        );
+
+        session.basket = sessionv1.basket.map((dish_id, index) => ({
+          id: index,
+          count: counts[dish_id],
+          dish_id: dish_id,
+          mods: [],
+        }));
+      }
+    }
+    if (session.version === "v2") {
+      const dish = await getOneDish(_input.dish_id);
+      const indexedMods = dish.mods.reduce(
+        (acc, cur) => ({
+          ...acc,
+          [cur.id]: cur,
+        }),
+        {} as Record<number, (typeof dish.mods)[0]>
+      );
+
+      if (_input.id != undefined) {
+        // mutating already existing basket item
+        session.basket = session.basket || [];
+        const item = session.basket.find((v) => v.id === _input.id);
+        if (!item) {
+          return { action: "not found" } satisfies z.output<typeof schema>;
+        }
+
+        item.count = _input.count;
+        item.mods = _input.mods.map((t) => ({
+          id: t.id,
+          count: t.count,
+          name: indexedMods[t.id].name,
+          price: indexedMods[t.id].price,
+        }));
+      } else {
+        session.basket = session.basket || [];
+        const nextID = session.basket.length
+          ? Math.max(...session.basket.map((b) => b.id)) + 1
+          : 1;
+        session.basket.push({
+          id: nextID,
+          count: _input.count,
+          dish_id: _input.dish_id,
+          mods: _input.mods.map((t) => ({
+            id: t.id,
+            count: t.count,
+            name: indexedMods[t.id].name,
+            price: indexedMods[t.id].price,
+          })),
+        });
+      }
+
+      session.basket = session.basket.filter((v) => v.count > 0);
+
+      return { action: "success" } satisfies z.output<typeof schema>;
+    }
+    return { action: "not found" } satisfies z.output<typeof schema>;
   }
 
   const api = createPrivateApiAxios(session);
@@ -103,41 +171,71 @@ export async function getBasket(
   if (!session.isAuthenticated) {
     session.basket = session.basket || [];
 
-    const counts = session.basket.reduce(
-      (acc, curr) => ({
-        ...acc,
-        [curr]: (acc[curr] || 0) + 1,
-      }),
-      {} as { [key: number]: number }
-    );
+    // migrate session to new version
+    if (!session.version || session.version === "v1") {
+      // there is no session.version property - it's v1 session
+      const sessionv1 = session as IronSession<SessionDataV1>;
+      sessionv1.basket = sessionv1.basket || [];
 
-    const withoutDupsBasket = Array.from(new Set(session.basket));
-    const dishes = await getDishesByIds(withoutDupsBasket);
+      session.version = "v2";
+      if (session.version === "v2") {
+        // "if" is there only for TS type inference
+        const counts = sessionv1.basket.reduce(
+          (acc, curr) => ({
+            ...acc,
+            [curr]: (acc[curr] || 0) + 1,
+          }),
+          {} as { [key: number]: number }
+        );
 
-    const total = Object.keys(counts).length;
-    const total_price = dishes.reduce(
-      (prev, curr) => prev + curr.price * counts[curr.id],
-      0
-    );
+        session.basket = sessionv1.basket.map((dish_id, index) => ({
+          id: index,
+          count: counts[dish_id],
+          dish_id: dish_id,
+          mods: [],
+        }));
+      }
+    }
 
-    return {
-      list: dishes.map((d, idx) => ({
-        id: idx,
-        dish_id: d.id,
-        gift_id: "-1",
-        count: counts[d.id],
-        count_in: 0,
-        img: d.img,
-        name: d.name,
-        price: d.price,
-        short_description: d.short_description,
-        weight: d.weight,
-        mods: []
-      })),
-      total,
-      total_count: session.basket.length,
-      total_price: total_price,
-    };
+    if (session.version === "v2") {
+      session.basket = session.basket || [];
+      const dishes = await getDishesByIds(
+        session.basket?.map((b) => b.dish_id)
+      );
+      const indexedDishes = dishes.reduce(
+        (acc, cur) => ({
+          ...acc,
+          [cur.id]: cur,
+        }),
+        {} as Record<number, (typeof dishes)[0]>
+      );
+      const total = dishes.length;
+      const total_price = session.basket.reduce(
+        (acc, cur) => acc + indexedDishes[cur.dish_id].price * cur.count,
+        0
+      );
+
+      return {
+        list: session.basket.map((d) => ({
+          id: d.id,
+          dish_id: d.dish_id,
+          gift_id: "-1",
+          count: d.count,
+          count_in: 0,
+          img: indexedDishes[d.dish_id].img,
+          name: indexedDishes[d.dish_id].name,
+          price:
+            indexedDishes[d.dish_id].price +
+            d.mods.reduce((acc, cur) => acc + cur.price * cur.count, 0),
+          short_description: indexedDishes[d.dish_id].short_description,
+          weight: indexedDishes[d.dish_id].weight,
+          mods: d.mods,
+        })),
+        total,
+        total_count: session.basket.length,
+        total_price: total_price,
+      };
+    }
   }
 
   const api = createPrivateApiAxios(session);

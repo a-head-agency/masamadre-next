@@ -106,10 +106,10 @@ export default function Page() {
         ? basket.data?.list.map((d) => ({
             id: d.dish_id,
             count: d.count,
+            mods: d.mods,
           }))
         : undefined,
     };
-    console.log(forSend);
 
     await placeOrder(forSend);
   });
