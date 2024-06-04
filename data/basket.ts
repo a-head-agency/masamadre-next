@@ -55,7 +55,7 @@ export async function addToBasket(
         );
 
         session.basket = sessionv1.basket.map((dish_id, index) => ({
-          id: index,
+          id: index + 1,
           count: counts[dish_id],
           dish_id: dish_id,
           mods: [],
@@ -81,12 +81,6 @@ export async function addToBasket(
         }
 
         item.count = _input.count;
-        item.mods = _input.mods.map((t) => ({
-          id: t.id,
-          count: t.count,
-          name: indexedMods[t.id].name,
-          price: indexedMods[t.id].price,
-        }));
       } else {
         session.basket = session.basket || [];
         const nextID = session.basket.length
@@ -189,7 +183,7 @@ export async function getBasket(
         );
 
         session.basket = sessionv1.basket.map((dish_id, index) => ({
-          id: index,
+          id: index + 1,
           count: counts[dish_id],
           dish_id: dish_id,
           mods: [],
