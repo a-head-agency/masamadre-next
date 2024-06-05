@@ -205,7 +205,11 @@ export async function getBasket(
       );
       const total = dishes.length;
       const total_price = session.basket.reduce(
-        (acc, cur) => acc + indexedDishes[cur.dish_id].price * cur.count,
+        (acc, cur) =>
+          acc +
+          (indexedDishes[cur.dish_id].price +
+            cur.mods.reduce((a, c) => a + c.price * c.count, 0)) *
+            cur.count,
         0
       );
 
