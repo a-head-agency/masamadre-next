@@ -3,6 +3,7 @@ import { Session, SessionDataV1 } from "@/session";
 import { z } from "zod";
 import { getDishesByIds, getOneDish } from "./products";
 import { IronSession } from "iron-session";
+import { arrayIncludes } from "@/utils";
 
 export const AddToBasketInputSchema = z.object({
   id: z.number().optional(),
@@ -193,9 +194,8 @@ export async function getBasket(
 
     if (session.version === "v2") {
       session.basket = session.basket || [];
-      const dishes = await getDishesByIds(
-        session.basket?.map((b) => b.dish_id)
-      );
+      let dishes = await getDishesByIds(session.basket?.map((b) => b.dish_id));
+
       const indexedDishes = dishes.reduce(
         (acc, cur) => ({
           ...acc,
@@ -203,6 +203,14 @@ export async function getBasket(
         }),
         {} as Record<number, (typeof dishes)[0]>
       );
+
+      session.basket = session.basket.filter((b) =>
+        arrayIncludes(
+          indexedDishes[b.dish_id].mods.map((m) => m.id),
+          b.mods.map((m) => m.id)
+        )
+      );
+
       const total = dishes.length;
       const total_price = session.basket.reduce(
         (acc, cur) =>

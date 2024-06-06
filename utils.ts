@@ -25,3 +25,7 @@ export function inferCreditCardVendor(cardNumber: string) {
 export function areSetsEqual<T>(a: Set<T>, b: Set<T>) {
   return a.size === b.size && [...a].every((value) => b.has(value));
 }
+
+export function arrayIncludes<A>(a: A[], b: A[]) {
+  return b.every((v) => a.includes(v));
+}

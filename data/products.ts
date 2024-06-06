@@ -156,6 +156,11 @@ export const GetDishesByIdsScheme = z
     category: z.number(),
     price: z.number(),
     weight: z.number(),
+    mods: z.object({
+      id: z.number(),
+      name: z.string(),
+      price: z.number(),
+    }).array(),
   })
   .array();
 export async function getDishesByIds(dishes: number[]) {
