@@ -94,6 +94,7 @@ export default function Details({ isAuthenticated, dish }: Props) {
             {dish.mods.length > 0 && (
               <div className="mt-4">
                 <ModificatorSelector
+                  maxModes={dish.max_modes}
                   mods={dish.mods}
                   items={dish.mods}
                   selectionMode="multiple"

@@ -10,6 +10,7 @@ import {
 import {
   AriaListBoxProps,
   DismissButton,
+  Key,
   Overlay,
   mergeProps,
   useFocusRing,
@@ -19,14 +20,15 @@ import {
 } from "react-aria";
 
 // Reuse the ListBox, Popover, and Button from your component library. See below for details.
-import { Button, Dialog } from "react-aria-components";
-import { useCallback, useMemo, useRef } from "react";
+import { Dialog } from "react-aria-components";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MinusIcon, PlusIcon } from "@/icons";
 import { default as UIButton } from "@/components/ui/button";
 import clsx from "clsx";
 
 interface Props<T> extends AriaListBoxProps<T>, OverlayTriggerProps {
   onApply?: (selection: Selection) => unknown;
+  maxModes: number;
   mods: {
     id: number;
     name: string;
@@ -36,10 +38,18 @@ interface Props<T> extends AriaListBoxProps<T>, OverlayTriggerProps {
 
 export default function ModificatorSelector<T extends object>({
   mods,
+  maxModes,
   ...props
 }: Props<T>) {
   // Create state based on the incoming props
   let state = useListState(props);
+  useEffect(() => {
+    const now = state.selectionManager.selectedKeys;
+    if (now.size > maxModes && now.size > 0) {
+      const [first] = now;
+      state.selectionManager.toggleSelection(first);
+    }
+  }, [maxModes, state.selectionManager.selectedKeys]);
 
   // Get props for child elements from useSelect
   let triggerRef = useRef<HTMLButtonElement>(null);
@@ -149,7 +159,9 @@ export default function ModificatorSelector<T extends object>({
           <button
             className="lowercase leading-none flex items-center gap-2"
             key={v.id}
-            onClick={() => state.selectionManager.toggleSelection(v.id.toString())}
+            onClick={() =>
+              state.selectionManager.toggleSelection(v.id.toString())
+            }
           >
             <span className="underline">{v.name}</span>
             <img src="/cross-mods.svg" className="h-[0.9em]" alt="" />

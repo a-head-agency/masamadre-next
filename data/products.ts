@@ -208,6 +208,7 @@ export const GetOneDishScheme = z.object({
       price: z.number(),
     })
     .array(),
+  max_modes: z.number(),
 });
 
 export async function getOneDish(id: number) {
