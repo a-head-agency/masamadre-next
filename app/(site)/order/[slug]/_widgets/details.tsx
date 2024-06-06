@@ -53,7 +53,7 @@ export default function Details({ isAuthenticated, dish }: Props) {
   }, [item?.mods, selectedKeys]);
 
   const selectedMods = useMemo(() => {
-    return arraySelectedKeys.map((k) => indexedMods[k]);
+    return arraySelectedKeys.map((k) => indexedMods[k]).filter(Boolean);
   }, [indexedMods, arraySelectedKeys]);
 
   const displayPrice = useMemo(
