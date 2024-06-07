@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "./session";
 import { cookies } from "next/headers";
-import { Session } from "inspector";
 
 export async function middleware(request: NextRequest) {
   if (process.env.FEATURE_TAKEAWAYS === "off") {
