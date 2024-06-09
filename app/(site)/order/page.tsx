@@ -5,6 +5,7 @@ import AddToBasketButton from "./_widgets/add-to-basket-button";
 import SliderView from "./_widgets/slider-view";
 import ScrollTopButton from "./_widgets/scroll-top-button";
 import clsx from "clsx";
+import CustomImage from "@/components/ui/custom-image";
 
 interface TableViewProps {
   category: {
@@ -90,11 +91,15 @@ function GridView(props: GridViewProps) {
         {props.dishes.map((item) => (
           <div className="leading-4 flex flex-col items-stretch" key={item.id}>
             <Link href={`order/${item.id}`}>
-              <img
-                className="aspect-square mb-4 w-full border border-black/25 object-cover object-center"
-                src={item.img}
-                alt={item.name}
-              />
+              <div className="relative aspect-square w-full mb-4 border border-black/25">
+                <CustomImage
+                  fill
+                  className="object-cover object-center"
+                  src={item.img}
+                  alt={item.name}
+                  placeholderSrc="/placeholder-dish.svg"
+                />
+              </div>
             </Link>
             <div className="flex flex-col grow md:flex-row gap-x-4 gap-y-2 items-stretch justify-between pr-2">
               <Link className="block" href={`order/${item.id}`}>
