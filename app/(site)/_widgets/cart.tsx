@@ -105,8 +105,9 @@ export function CartModal(
                   <div className="pr-12 grow pb-6 sm:pb-12">
                     {basket.data?.list.map((item, index) => (
                       <div className="mb-4 flex gap-4 items-start" key={index}>
-                        <div className="relative size-24 object-contain">
+                        <div className="relative size-24 shrink-0">
                           <CustomImage
+                            className="object-contain object-center"
                             fill
                             src={item.img}
                             alt={item.name}
