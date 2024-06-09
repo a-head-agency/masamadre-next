@@ -49,9 +49,7 @@ function TableView(props: TableViewProps) {
                 <td className="text-end align-bottom !pb-3 pr-3 w-[7ch]">
                   <div className="inline-block">
                     <AddToBasketButton
-                      dish_id={d.id}
-                      from_hour_iso={d.from_hour}
-                      to_hour_iso={d.to_hour}
+                      dish={d}
                     />
                   </div>
                 </td>
@@ -110,9 +108,7 @@ function GridView(props: GridViewProps) {
               <div className="flex justify-between md:flex-col items-end gap-2">
                 <p className="text-nowrap whitespace-nowrap">{item.price} ₽</p>
                 <AddToBasketButton
-                  dish_id={item.id}
-                  from_hour_iso={item.from_hour}
-                  to_hour_iso={item.to_hour}
+                  dish={item}
                 />
               </div>
             </div>

@@ -12,17 +12,15 @@ import { useBasket } from "@/hooks/basket";
 import { BasketIcon } from "@/icons";
 import Adder from "@/components/functional/adder";
 import { DateTime } from "luxon";
+import { ShortDishSchema } from "@/data/products";
+import { z } from "zod";
 
 interface Props extends Omit<AriaButtonProps, "className" | "style"> {
-  dish_id: number;
-  from_hour_iso: string;
-  to_hour_iso: string;
+  dish: Pick<z.infer<typeof ShortDishSchema>, 'id' | 'to_hour' | 'from_hour' | 'disabledWhy'>
 }
 
 export default function Button({
-  dish_id,
-  from_hour_iso,
-  to_hour_iso,
+  dish,
   ...props
 }: Props) {
   let ref = useRef<HTMLButtonElement>(null);
@@ -31,28 +29,29 @@ export default function Button({
 
   const { addDish, isLoading, data } = useBasket();
   const item = useMemo(
-    () => data?.list.find((d) => d.dish_id == dish_id && d.mods.length === 0),
-    [dish_id, data]
+    () => data?.list.find((d) => d.dish_id == dish.id && d.mods.length === 0),
+    [dish.id, data]
   );
   const count = item?.count || 0;
 
   const unavailable = useMemo(() => {
-    const now = DateTime.now();
-    const from = DateTime.fromISO(from_hour_iso);
-    const to = DateTime.fromISO(to_hour_iso);
+    const from = DateTime.fromISO(dish.from_hour);
+    const to = DateTime.fromISO(dish.to_hour);
 
-    if (now < from || to <= now) {
-      const fromFormatted = from.toFormat("HH:mm");
-      const toFormatted = to.toFormat("HH:mm");
-      return (
-        <span className="text-end opacity-50 text-sm text-nowrap">
-          с {fromFormatted}
-          <br />
-          до {toFormatted}
-        </span>
-      );
+    if (dish.disabledWhy) {
+      if (dish.disabledWhy === 'time_is_out_of_allowed_range') {
+        const fromFormatted = from.toFormat("HH:mm");
+        const toFormatted = to.toFormat("HH:mm");
+        return (
+          <span className="text-end opacity-50 text-sm text-nowrap">
+            с {fromFormatted}
+            <br />
+            до {toFormatted}
+          </span>
+        );
+      }
     }
-  }, [from_hour_iso, to_hour_iso]);
+  }, [dish]);
 
   return (
     <>
@@ -73,7 +72,7 @@ export default function Button({
             ref={ref}
             onClick={() =>
               addDish({
-                dish_id,
+                dish_id: dish.id,
                 count: count + 1,
               })
             }
@@ -82,7 +81,7 @@ export default function Button({
           </button>
 
           <div className={cx(count == 0 && "hidden")}>
-            <Adder dish_id={dish_id} basket_id={item?.id} />
+            <Adder dish={dish} basket_id={item?.id} />
           </div>
         </>
       )}

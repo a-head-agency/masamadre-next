@@ -62,7 +62,7 @@ export default function Details({ isAuthenticated, dish }: Props) {
   );
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <div className="grow-[3]"></div>
 
       {dish.is_vine ? (
@@ -81,7 +81,7 @@ export default function Details({ isAuthenticated, dish }: Props) {
       <div className="text-sm md:text-2xl my-6 flex justify-between items-center">
         <div>{displayPrice} ₽</div>
         <Adder
-          dish_id={dish.id}
+          dish={dish}
           basket_id={isModsSelectorDirty ? undefined : item?.id}
           mods={arraySelectedKeys}
         />
@@ -174,7 +174,7 @@ export default function Details({ isAuthenticated, dish }: Props) {
           </p>
         )}
         <AddToCartButtonAuth
-          dish_id={dish.id}
+          dish={dish}
           basket_id={isModsSelectorDirty ? undefined : item?.id}
           mods={arraySelectedKeys}
         />

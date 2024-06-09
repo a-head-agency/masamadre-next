@@ -1,7 +1,7 @@
 import { createPrivateApiAxios } from "@/axios";
 import { Session, SessionDataV1 } from "@/session";
 import { z } from "zod";
-import { getDishesByIds, getOneDish } from "./products";
+import { checkIfDishDisabled, getDishesByIds, getOneDish } from "./products";
 import { IronSession } from "iron-session";
 import { arrayIncludes } from "@/utils";
 
@@ -65,6 +65,9 @@ export async function addToBasket(
     }
     if (session.version === "v2") {
       const dish = await getOneDish(_input.dish_id);
+      if (dish.disabledWhy) {
+        return { action: 'not found' } satisfies z.output<typeof schema>;
+      }
       const indexedMods = dish.mods.reduce(
         (acc, cur) => ({
           ...acc,
@@ -204,11 +207,13 @@ export async function getBasket(
         {} as Record<number, (typeof dishes)[0]>
       );
 
-      session.basket = session.basket.filter((b) =>
-        arrayIncludes(
-          indexedDishes[b.dish_id].mods.map((m) => m.id),
+      session.basket = session.basket.filter((b) => {
+        const dish = indexedDishes[b.dish_id]
+        return !dish.disabledWhy && arrayIncludes(
+          dish.mods.map((m) => m.id),
           b.mods.map((m) => m.id)
         )
+      }
       );
 
       const total = dishes.length;
@@ -217,7 +222,7 @@ export async function getBasket(
           acc +
           (indexedDishes[cur.dish_id].price +
             cur.mods.reduce((a, c) => a + c.price * c.count, 0)) *
-            cur.count,
+          cur.count,
         0
       );
 

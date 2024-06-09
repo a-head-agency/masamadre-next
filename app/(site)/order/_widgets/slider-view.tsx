@@ -188,9 +188,7 @@ export default function SliderView({ category, dishes }: SliderViewProps) {
             <div className="flex justify-between items-end gap-4 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity pt-8">
               <span>{v.price} ₽</span>
               <AddToBasketButton
-                dish_id={v.id}
-                from_hour_iso={v.from_hour}
-                to_hour_iso={v.to_hour}
+                dish={v}
               />
             </div>
           </div>

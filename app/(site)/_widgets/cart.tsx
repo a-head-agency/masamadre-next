@@ -1,5 +1,4 @@
 "use client";
-import Switch from "@/components/ui/switch";
 import { useBasket } from "@/hooks/basket";
 import { BasketIcon, CrossIcon, MinusIcon, PlusIcon } from "@/icons";
 import {
@@ -17,9 +16,9 @@ import {
   ModalOverlay,
   ModalOverlayProps,
 } from "react-aria-components";
+import CustomImage from "@/components/ui/custom-image";
 
 import UIButton from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 
 const MotionModal = motion(Modal);
 const MotionModalOverlay = motion(ModalOverlay);
@@ -106,11 +105,14 @@ export function CartModal(
                   <div className="pr-12 grow pb-6 sm:pb-12">
                     {basket.data?.list.map((item, index) => (
                       <div className="mb-4 flex gap-4 items-start" key={index}>
-                        <img
-                          className="size-24 object-contain"
-                          src={item.img}
-                          alt=""
-                        />
+                        <div className="relative size-24 object-contain">
+                          <CustomImage
+                            fill
+                            src={item.img}
+                            alt={item.name}
+                            placeholderSrc='/placeholder-dish.svg'
+                          />
+                        </div>
                         <div className="flex flex-col justify-between self-stretch items-stretch grow">
                           <div className="leading-tight">
                             <div className="font-bold">{item.name}</div>

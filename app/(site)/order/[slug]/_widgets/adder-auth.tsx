@@ -1,30 +1,34 @@
 "use client";
 
+import { GetOneDishScheme } from "@/data/products";
 import { useBasket } from "@/hooks/basket";
 import { MinusIcon, PlusIcon } from "@/icons";
 import { useMemo } from "react";
+import { z } from "zod";
 
 interface Props {
-  dish_id: number;
+  dish: Pick<z.infer<typeof GetOneDishScheme>, 'id' | 'from_hour' | 'to_hour' | 'disabledWhy'>
 }
 
-export default function AdderAuth(props: Props) {
+export default function AdderAuth({ dish }: Props) {
   const basket = useBasket();
 
   const count = useMemo(
     () =>
-      basket.data?.list.find((d) => d.dish_id === props.dish_id)?.count || 0,
-    [basket.data, props.dish_id]
+      basket.data?.list.find((d) => d.dish_id === dish.id)?.count || 0,
+    [basket.data, dish]
   );
+
+  const isFullyDisabled = basket.isLoading || !!dish.disabledWhy
 
   return (
     <div className="flex gap-4">
       <button
         type="button"
-        disabled={basket.isLoading}
+        disabled={isFullyDisabled}
         onClick={() =>
           basket.addDish({
-            dish_id: props.dish_id,
+            dish_id: dish.id,
             count: count + 1,
           })
         }
@@ -34,11 +38,11 @@ export default function AdderAuth(props: Props) {
       <span>{count}шт</span>
       <button
         type="button"
-        disabled={count === 0 || basket.isLoading}
+        disabled={isFullyDisabled || count === 0}
         className="disabled:opacity-50 transition-opacity"
         onClick={() =>
           basket.addDish({
-            dish_id: props.dish_id,
+            dish_id: dish.id,
             count: Math.max(0, count - 1),
           })
         }
