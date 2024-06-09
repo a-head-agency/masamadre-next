@@ -16,6 +16,14 @@ const configure = () => {
         },
       ];
     },
+    images: {
+      unoptimized: true,
+      remotePatterns: [
+        {
+          hostname: 'api.masamadre.ru'
+        }
+      ]
+    }
   };
 
   return nextConfig;

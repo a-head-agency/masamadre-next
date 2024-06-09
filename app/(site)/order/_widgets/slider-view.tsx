@@ -11,6 +11,7 @@ import {
 
 import AddToBasketButton from "./add-to-basket-button";
 import Link from "next/link";
+import CustomImage from "@/components/ui/custom-image";
 
 interface SliderViewProps {
   category: {
@@ -161,11 +162,16 @@ export default function SliderView({ category, dishes }: SliderViewProps) {
             className="group w-52 p-4 shrink-0 flex flex-col border border-transparent -mx-[0.5px] hover:border-black focus-within:border-black transition-colors"
           >
             <Link href={`order/${v.id}`}>
-              <img
-                className="w-full px-8 object-contain object-bottom mb-8"
-                src={v.img}
-                alt={v.name}
-              />
+              <div className="px-8 mb-8">
+                <div className="w-full relative aspect-[142/540]">
+                  <CustomImage
+                    className="object-contain object-bottom"
+                    fill
+                    src={v.img}
+                    alt={v.name}
+                  />
+                </div>
+              </div>
             </Link>
 
             <div className="text-balance leading-[1.1] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
