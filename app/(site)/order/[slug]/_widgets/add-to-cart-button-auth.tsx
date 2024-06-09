@@ -25,14 +25,16 @@ export default function AddToCartButtonAuth(props: Props) {
 
   const disabledMessage = useMemo(() => {
     const dish = props.dish;
-    switch (dish.disabledWhy) {
-      case 'time_is_out_of_allowed_range': {
-        const from = DateTime.fromISO(dish.from_hour).toFormat('HH:mm');
-        const to = DateTime.fromISO(dish.to_hour).toFormat('HH:mm');
-        return `С ${from} до ${to}`
-      }
-      default: {
-        return 'Не доступно'
+    if (dish.disabledWhy) {
+      switch (dish.disabledWhy) {
+        case 'time_is_out_of_allowed_range': {
+          const from = DateTime.fromISO(dish.from_hour).toFormat('HH:mm');
+          const to = DateTime.fromISO(dish.to_hour).toFormat('HH:mm');
+          return `С ${from} до ${to}`
+        }
+        default: {
+          return 'Не доступно'
+        }
       }
     }
 

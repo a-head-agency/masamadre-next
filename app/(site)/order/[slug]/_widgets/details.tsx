@@ -168,11 +168,9 @@ export default function Details({ isAuthenticated, dish }: Props) {
       )}
 
       <div className="flex justify-between flex-wrap gap-4 items-center">
-        {isAuthenticated && (
-          <p className="text-sm md:text-xl">
-            <TotalPrice dish_id={dish.id} />
-          </p>
-        )}
+        <p className="text-sm md:text-xl">
+          <TotalPrice dish_id={dish.id} />
+        </p>
         <AddToCartButtonAuth
           dish={dish}
           basket_id={isModsSelectorDirty ? undefined : item?.id}

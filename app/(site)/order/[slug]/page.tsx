@@ -24,8 +24,10 @@ export default async function Product({ params }: Props) {
           <div className="absolute z-10 max-md:left-6 md:right-4 top-6 md:top-4">
             <BackButton />
           </div>
-          <Slider autoplay fallback={dish.img} images={dish.images} />
-          <div className="basis-[31%] max-w-lg py-8">
+          <div className="grow">
+            <Slider autoplay fallback={dish.img} images={dish.images} />
+          </div>
+          <div className="w-full md:max-w-sm lg:max-w-md py-8">
             <Details isAuthenticated={session.isAuthenticated} dish={dish} />
           </div>
         </div>
