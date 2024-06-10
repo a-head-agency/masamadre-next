@@ -92,10 +92,10 @@ function GridView(props: GridViewProps) {
               <div className="relative aspect-square w-full mb-4 border border-black/25">
                 <CustomImage
                   fill
-                  className="object-cover object-center"
+                  className="object-cover object-center bg-[#F6F6F6]"
                   src={item.img}
                   alt={item.name}
-                  placeholderSrc="/placeholder-dish.svg"
+                  placeholderSrc="/fallback.png"
                 />
               </div>
             </Link>

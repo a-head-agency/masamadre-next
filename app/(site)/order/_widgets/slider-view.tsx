@@ -169,7 +169,7 @@ export default function SliderView({ category, dishes }: SliderViewProps) {
                     fill
                     src={v.img}
                     alt={v.name}
-                    placeholderSrc="/placeholder-bottle.svg"
+                    placeholderSrc="/fallback.png"
                   />
                 </div>
               </div>

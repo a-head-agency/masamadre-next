@@ -107,11 +107,11 @@ export function CartModal(
                       <div className="mb-4 flex gap-4 items-start" key={index}>
                         <div className="relative size-24 shrink-0">
                           <CustomImage
-                            className="object-contain object-center"
+                            className="object-contain object-center bg-[#F6F6F6]"
                             fill
                             src={item.img}
                             alt={item.name}
-                            placeholderSrc='/placeholder-dish.svg'
+                            placeholderSrc='/fallback.png'
                           />
                         </div>
                         <div className="flex flex-col justify-between self-stretch items-stretch grow">
