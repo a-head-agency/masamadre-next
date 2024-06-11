@@ -192,7 +192,7 @@ function Option<T extends object>({ item, state }: OptionProps<T>) {
       ref={ref}
       data-focus-visible={isFocusVisible}
     >
-      <button className="px-3 w-full py-1 flex items-center gap-2 outline-none disabled:opacity-50" disabled={isDisabled}>
+      <button className="px-3 text-start w-full py-1 flex items-center gap-2 outline-none disabled:opacity-50" disabled={isDisabled}>
         <div className="size-4 border relative border-[#B2B2B2] rounded-full">
           {state.selectionManager.isSelected(item.key) && (
             <img
