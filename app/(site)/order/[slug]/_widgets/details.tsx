@@ -16,7 +16,7 @@ interface Props {
   dish: z.infer<typeof GetOneDishScheme>;
 }
 
-export default function Details({ isAuthenticated, dish }: Props) {
+export default function Details({ dish }: Props) {
   const [selectedKeys, setSelectedKeys] = useState(new Set<string>([]));
 
   const indexedMods = useMemo(() => {
@@ -33,6 +33,11 @@ export default function Details({ isAuthenticated, dish }: Props) {
     () => Array.from(selectedKeys).map((v) => Number(v)),
     [selectedKeys]
   );
+
+  const disabledKeys = useMemo(() => dish.mods.filter(v => !v.active).map(v => v.id.toString()), [dish])
+  useEffect(() => {
+    console.log(disabledKeys)
+  }, [disabledKeys])
 
   const basket = useBasket();
   const item = useMemo(
@@ -100,6 +105,7 @@ export default function Details({ isAuthenticated, dish }: Props) {
                   selectionMode="multiple"
                   selectedKeys={selectedKeys}
                   onSelectionChange={setSelectedKeys as any}
+                  disabledKeys={disabledKeys}
                 >
                   {(item) => (
                     <Item key={item.id} textValue={item.name}>

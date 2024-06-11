@@ -179,6 +179,7 @@ export const GetDishesByIdsScheme = z
       id: z.number(),
       name: z.string(),
       price: z.number(),
+      active: z.boolean(),
     }).array(),
     from_hour: z.number().transform((n) => {
       const hour = Math.floor(n / 100);
@@ -253,6 +254,7 @@ export const GetOneDishScheme = z.object({
       id: z.number(),
       name: z.string(),
       price: z.number(),
+      active: z.boolean()
     })
     .array(),
   max_modes: z.number(),

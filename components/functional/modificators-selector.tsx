@@ -180,7 +180,7 @@ interface OptionProps<T> {
 function Option<T extends object>({ item, state }: OptionProps<T>) {
   // Get props for the option element
   let ref = useRef(null);
-  let { optionProps } = useOption({ key: item.key }, state, ref);
+  let { optionProps, isDisabled } = useOption({ key: item.key }, state, ref);
 
   // Determine whether we should show a keyboard
   // focus ring for accessibility
@@ -191,21 +191,20 @@ function Option<T extends object>({ item, state }: OptionProps<T>) {
       {...mergeProps(optionProps, focusProps)}
       ref={ref}
       data-focus-visible={isFocusVisible}
-      className={clsx(
-        "px-3 py-1 flex items-center gap-2 outline-none cursor-pointer"
-      )}
     >
-      <div className="size-4 border relative border-[#B2B2B2] rounded-full">
-        {state.selectionManager.isSelected(item.key) && (
-          <img
-            className="absolute top-1/2 left-1/2 -translate-y-2/3 -translate-x-1/3 w-4"
-            src="/checkmark.svg"
-            alt=""
-          />
-        )}
-      </div>
+      <button className="px-3 w-full py-1 flex items-center gap-2 outline-none disabled:opacity-50" disabled={isDisabled}>
+        <div className="size-4 border relative border-[#B2B2B2] rounded-full">
+          {state.selectionManager.isSelected(item.key) && (
+            <img
+              className="absolute top-1/2 left-1/2 -translate-y-2/3 -translate-x-1/3 w-4"
+              src="/checkmark.svg"
+              alt=""
+            />
+          )}
+        </div>
 
-      <span className="grow">{item.rendered}</span>
+        <span className="grow">{item.rendered}</span>
+      </button>
     </li>
   );
 }
