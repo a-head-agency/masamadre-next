@@ -28,7 +28,9 @@ export function CartModal(
 ) {
   const basket = useBasket();
 
-  const x = useMotionValue("100%");
+  const w = window.innerWidth;
+
+  const x = useMotionValue(w);
 
   const checkout = () => {
     location.pathname = "/checkout";
@@ -59,13 +61,13 @@ export function CartModal(
               ease: [0.4, 0, 0.2, 1],
             }}
             initial={{
-              x: "100%",
+              x: w,
             }}
             animate={{
               x: 0,
             }}
             exit={{
-              x: "100%",
+              x: w,
             }}
             drag="x"
             dragElastic={{
@@ -75,10 +77,10 @@ export function CartModal(
               left: 0,
             }}
             onDragEnd={(e, { offset, velocity }) => {
-              if (offset.x > 200 || velocity.x > 10) {
+              if (offset.x > 200 || velocity.x > 20) {
                 props.onOpenChange(false);
               } else {
-                animate(x, "0%", {
+                animate(x, 0, {
                   type: "inertia" as const,
                   bounceStiffness: 300,
                   bounceDamping: 40,
@@ -107,8 +109,9 @@ export function CartModal(
                       <div className="mb-4 flex gap-4 items-start" key={index}>
                         <div className="relative size-24 shrink-0">
                           <CustomImage
-                            className="object-contain object-center bg-[#F6F6F6]"
+                            className="object-contain select-none object-center bg-[#F6F6F6]"
                             fill
+                            draggable="false"
                             src={item.img}
                             alt={item.name}
                             placeholderSrc='/fallback.png'
@@ -209,14 +212,14 @@ export function Cart() {
   const { data, isLoading } = useBasket();
 
   return (
-    <DialogTrigger onOpenChange={(v) => setIsCartOpen(v)}>
-      <Button isDisabled={isLoading}>
+    <>
+      <button disabled={isLoading} onClick={() => setIsCartOpen(!isCartOpen)}>
         <BasketIcon
           count={data?.total_count}
           className="text-black h-6 md:h-7"
         />
-      </Button>
+      </button>
       <CartModal isOpen={isCartOpen} onOpenChange={setIsCartOpen} />
-    </DialogTrigger>
+    </>
   );
 }
