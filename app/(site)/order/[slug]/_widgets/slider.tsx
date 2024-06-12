@@ -51,7 +51,7 @@ export default function Slider(props: Props) {
   const hasPrev = useMemo(() => 0 <= slide - 1, [slide]);
 
   return (
-    <div className="relative w-full" ref={container}>
+    <div className="relative w-full h-full" ref={container}>
       <div
         className={clsx(
           "absolute top-2 right-2 z-10 flex",
