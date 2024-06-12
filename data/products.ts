@@ -4,19 +4,27 @@ import { DateTime } from "luxon";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
-export const DisabledDishReason = z.union([z.literal('time_is_out_of_allowed_range'), z.literal("disabled_by_api")]).optional()
+export const DisabledDishReason = z
+  .union([
+    z.literal("time_is_out_of_allowed_range"),
+    z.literal("disabled_by_api"),
+  ])
+  .optional();
 export async function checkIfDishDisabled(dish: {
   id: number;
   from_hour: string;
   to_hour: string;
   active: boolean;
 }): Promise<z.output<typeof DisabledDishReason>> {
-  const now = DateTime.now()
+  const now = DateTime.now();
   if (!dish.active) {
-    return 'disabled_by_api'
+    return "disabled_by_api";
   }
-  if (now < DateTime.fromISO(dish.from_hour) || DateTime.fromISO(dish.to_hour) < now) {
-    return 'time_is_out_of_allowed_range'
+  if (
+    now < DateTime.fromISO(dish.from_hour) ||
+    DateTime.fromISO(dish.to_hour) < now
+  ) {
+    return "time_is_out_of_allowed_range";
   }
 }
 
@@ -103,7 +111,7 @@ export const ShortDishSchema = z.object({
     return dt.toISO()!;
   }),
   disabledWhy: DisabledDishReason,
-  active: z.boolean().optional().default(true)
+  active: z.boolean().optional().default(true),
 });
 
 export async function getDishesOfCategory(
@@ -175,12 +183,21 @@ export const GetDishesByIdsScheme = z
     category: z.number(),
     price: z.number(),
     weight: z.number(),
-    mods: z.object({
+    mod_group: z
+    .object({
       id: z.number(),
       name: z.string(),
-      price: z.number(),
-      active: z.boolean(),
-    }).array(),
+      type: z.union([z.literal("options"), z.literal("additions")]),
+      modificators: z
+        .object({
+          id: z.number(),
+          name: z.string(),
+          price: z.number(),
+          active: z.boolean(),
+        })
+        .array(),
+    })
+    .array(),
     from_hour: z.number().transform((n) => {
       const hour = Math.floor(n / 100);
       const minute = n % 100;
@@ -200,7 +217,7 @@ export const GetDishesByIdsScheme = z
       return dt.toISO()!;
     }),
     active: z.boolean(),
-    disabledWhy: DisabledDishReason
+    disabledWhy: DisabledDishReason,
   })
   .array();
 export async function getDishesByIds(dishes: number[]) {
@@ -210,8 +227,8 @@ export async function getDishesByIds(dishes: number[]) {
   });
 
   const data = GetDishesByIdsScheme.parse(response.data);
-  data.forEach(async d => {
-    d.disabledWhy = await checkIfDishDisabled(d)
+  data.forEach(async (d) => {
+    d.disabledWhy = await checkIfDishDisabled(d);
   });
 
   return data;
@@ -249,15 +266,21 @@ export const GetOneDishScheme = z.object({
     .array()
     .nullable()
     .transform((a) => a || []),
-  mods: z
+  mod_group: z
     .object({
       id: z.number(),
       name: z.string(),
-      price: z.number(),
-      active: z.boolean()
+      type: z.union([z.literal("options"), z.literal("additions")]),
+      modificators: z
+        .object({
+          id: z.number(),
+          name: z.string(),
+          price: z.number(),
+          active: z.boolean(),
+        })
+        .array(),
     })
     .array(),
-  max_modes: z.number(),
   from_hour: z.number().transform((n) => {
     const hour = Math.floor(n / 100);
     const minute = n % 100;
@@ -277,7 +300,7 @@ export const GetOneDishScheme = z.object({
     return dt.toISO()!;
   }),
   disabledWhy: DisabledDishReason,
-  active: z.boolean()
+  active: z.boolean(),
 });
 
 export async function getOneDish(id: number) {
@@ -292,7 +315,7 @@ export async function getOneDish(id: number) {
   const data = GetOneDishScheme.parse(response.data);
 
   data.is_vine = !!data.make_date;
-  data.disabledWhy = await checkIfDishDisabled(data)
+  data.disabledWhy = await checkIfDishDisabled(data);
 
   return data;
 }

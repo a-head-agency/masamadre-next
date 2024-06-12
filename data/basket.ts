@@ -66,15 +66,17 @@ export async function addToBasket(
     if (session.version === "v2") {
       const dish = await getOneDish(_input.dish_id);
       if (dish.disabledWhy) {
-        return { action: 'not found' } satisfies z.output<typeof schema>;
+        return { action: "not found" } satisfies z.output<typeof schema>;
       }
-      const indexedMods = dish.mods.reduce(
-        (acc, cur) => ({
-          ...acc,
-          [cur.id]: cur,
-        }),
-        {} as Record<number, (typeof dish.mods)[0]>
-      );
+      const indexedMods = dish.mod_group
+        .flatMap((v) => v.modificators)
+        .reduce(
+          (acc, cur) => ({
+            ...acc,
+            [cur.id]: cur,
+          }),
+          {} as Record<number, (typeof dish.mod_group)[0]["modificators"][0]>
+        );
 
       if (_input.id != undefined) {
         // mutating already existing basket item
@@ -208,13 +210,15 @@ export async function getBasket(
       );
 
       session.basket = session.basket.filter((b) => {
-        const dish = indexedDishes[b.dish_id]
-        return !dish.disabledWhy && arrayIncludes(
-          dish.mods.map((m) => m.id),
-          b.mods.map((m) => m.id)
-        )
-      }
-      );
+        const dish = indexedDishes[b.dish_id];
+        return (
+          !dish.disabledWhy &&
+          arrayIncludes(
+            dish.mod_group.flatMap((v) => v.modificators).map((m) => m.id),
+            b.mods.map((m) => m.id)
+          )
+        );
+      });
 
       const total = dishes.length;
       const total_price = session.basket.reduce(
@@ -222,7 +226,7 @@ export async function getBasket(
           acc +
           (indexedDishes[cur.dish_id].price +
             cur.mods.reduce((a, c) => a + c.price * c.count, 0)) *
-          cur.count,
+            cur.count,
         0
       );
 

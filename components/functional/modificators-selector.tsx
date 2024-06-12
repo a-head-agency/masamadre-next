@@ -15,6 +15,7 @@ import {
   mergeProps,
   useFocusRing,
   useListBox,
+  useListBoxSection,
   useOption,
   usePopover,
 } from "react-aria";
@@ -24,32 +25,28 @@ import { Dialog } from "react-aria-components";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MinusIcon, PlusIcon } from "@/icons";
 import { default as UIButton } from "@/components/ui/button";
-import clsx from "clsx";
 
 interface Props<T> extends AriaListBoxProps<T>, OverlayTriggerProps {
   onApply?: (selection: Selection) => unknown;
-  maxModes: number;
   mods: {
     id: number;
     name: string;
-    price: number;
+    type: "options" | "additions";
+    modificators: {
+      id: number;
+      name: string;
+      price: number;
+      active: boolean;
+    }[];
   }[];
 }
 
 export default function ModificatorSelector<T extends object>({
   mods,
-  maxModes,
   ...props
 }: Props<T>) {
   // Create state based on the incoming props
   let state = useListState(props);
-  useEffect(() => {
-    const now = state.selectionManager.selectedKeys;
-    if (now.size > maxModes && now.size > 0) {
-      const [first] = now;
-      state.selectionManager.toggleSelection(first);
-    }
-  }, [maxModes, state.selectionManager.selectedKeys]);
 
   // Get props for child elements from useSelect
   let triggerRef = useRef<HTMLButtonElement>(null);
@@ -91,13 +88,15 @@ export default function ModificatorSelector<T extends object>({
   }, [props, state.selectionManager.selectedKeys, overlayTriggerState]);
 
   const indexedMods = useMemo(() => {
-    return mods.reduce(
-      (acc, curr) => ({
-        ...acc,
-        [curr.id]: curr,
-      }),
-      {} as Record<number, (typeof mods)[0]>
-    );
+    return mods
+      .flatMap((v) => v.modificators)
+      .reduce(
+        (acc, curr) => ({
+          ...acc,
+          [curr.id]: curr,
+        }),
+        {} as Record<number, (typeof mods)[0]["modificators"][0]>
+      );
   }, [mods]);
 
   const selectedItems = useMemo(() => {
@@ -142,11 +141,19 @@ export default function ModificatorSelector<T extends object>({
                     <MinusIcon className="h-3" />
                   </button>
                 </li>
-                {[...state.collection].map((item) => (
-                  <Option key={item.key} item={item} state={state} />
-                ))}
+                {[...state.collection].map((item) =>
+                  item.type === "section" ? (
+                    <ListBoxSection
+                      key={item.key}
+                      section={item}
+                      state={state}
+                    />
+                  ) : (
+                    <Option key={item.key} item={item} state={state} />
+                  )
+                )}
 
-                <li className="px-3 flex flex-col items-stretch pt-8 pb-3">
+                <li className="px-3 flex flex-col items-stretch pt-4 pb-3">
                   <UIButton onPress={onApply}>применить</UIButton>
                 </li>
               </ul>
@@ -157,7 +164,7 @@ export default function ModificatorSelector<T extends object>({
       <div className="flex flex-wrap gap-2 mt-2">
         {selectedItems.map((v) => (
           <button
-            className="lowercase leading-none flex items-center gap-2"
+            className="lowercase text-start leading-none flex items-center gap-2"
             key={v.id}
             onClick={() =>
               state.selectionManager.toggleSelection(v.id.toString())
@@ -169,6 +176,47 @@ export default function ModificatorSelector<T extends object>({
         ))}
       </div>
     </div>
+  );
+}
+
+interface ListBoxSectionProps<T> {
+  section: Node<T>;
+  state: ListState<T>;
+}
+
+function ListBoxSection<T extends object>({
+  section,
+  state,
+}: ListBoxSectionProps<T>) {
+  let { itemProps, headingProps, groupProps } = useListBoxSection({
+    heading: section.rendered,
+    "aria-label": section["aria-label"],
+  });
+
+  // If the section is not the first, add a separator element to provide visual separation.
+  // The heading is rendered inside an <li> element, which contains
+  // a <ul> with the child items.
+  return (
+    <>
+      <li {...itemProps} className="mb-4">
+        {section.rendered && (
+          <span {...headingProps} className="px-3 text-lg normal-case">
+            {section.rendered}
+          </span>
+        )}
+        <ul
+          {...groupProps}
+          style={{
+            padding: 0,
+            listStyle: "none",
+          }}
+        >
+          {[...state.collection.getChildren!(section.key)].map((node) => (
+            <Option key={node.key} item={node} state={state} />
+          ))}
+        </ul>
+      </li>
+    </>
   );
 }
 
@@ -192,8 +240,11 @@ function Option<T extends object>({ item, state }: OptionProps<T>) {
       ref={ref}
       data-focus-visible={isFocusVisible}
     >
-      <button className="px-3 text-start w-full py-1 flex items-center gap-2 outline-none disabled:opacity-50" disabled={isDisabled}>
-        <div className="size-4 border relative border-[#B2B2B2] rounded-full">
+      <button
+        className="px-3 text-start w-full py-1 flex items-center gap-2 outline-none disabled:opacity-50"
+        disabled={isDisabled}
+      >
+        <div className="size-4 border relative border-[#B2B2B2] rounded-full shrink-0">
           {state.selectionManager.isSelected(item.key) && (
             <img
               className="absolute top-1/2 left-1/2 -translate-y-2/3 -translate-x-1/3 w-4"

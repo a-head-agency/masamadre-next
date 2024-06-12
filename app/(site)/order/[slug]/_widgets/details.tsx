@@ -6,8 +6,8 @@ import clsx from "clsx";
 import TotalPrice from "./total-price";
 import AddToCartButtonAuth from "./add-to-cart-button-auth";
 import ModificatorSelector from "@/components/functional/modificators-selector";
-import { Item } from "react-stately";
-import { useEffect, useMemo, useState } from "react";
+import { Item, Section, Selection } from "react-stately";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useBasket } from "@/hooks/basket";
 import { areSetsEqual } from "@/utils";
 
@@ -20,13 +20,17 @@ export default function Details({ dish }: Props) {
   const [selectedKeys, setSelectedKeys] = useState(new Set<string>([]));
 
   const indexedMods = useMemo(() => {
-    return dish.mods.reduce(
-      (acc, curr) => ({
-        ...acc,
-        [curr.id]: curr,
-      }),
-      {} as Record<number, (typeof dish.mods)[0]>
-    );
+    return dish.mod_group
+      .flat()
+      .map((v) => v.modificators)
+      .flat()
+      .reduce(
+        (acc, curr) => ({
+          ...acc,
+          [curr.id]: curr,
+        }),
+        {} as Record<number, (typeof dish.mod_group)[0]["modificators"][0]>
+      );
   }, [dish]);
 
   const arraySelectedKeys = useMemo(
@@ -34,10 +38,14 @@ export default function Details({ dish }: Props) {
     [selectedKeys]
   );
 
-  const disabledKeys = useMemo(() => dish.mods.filter(v => !v.active).map(v => v.id.toString()), [dish])
-  useEffect(() => {
-    console.log(disabledKeys)
-  }, [disabledKeys])
+  const disabledKeys = useMemo(
+    () =>
+      dish.mod_group
+        .flatMap((v) => v.modificators)
+        .filter((v) => !v.active)
+        .map((v) => v.id.toString()),
+    [dish]
+  );
 
   const basket = useBasket();
   const item = useMemo(
@@ -65,6 +73,36 @@ export default function Details({ dish }: Props) {
     () => dish.price + selectedMods.reduce((acc, cur) => acc + cur.price, 0),
     [dish.price, selectedMods]
   );
+
+  const onSelectionChange = (_keys: Selection) => {
+    if (_keys === "all") {
+      return;
+    }
+
+    const keys = Array.from(_keys).map((v) => v.toString());
+    const lastKey = keys.at(-1);
+    const nextSet = new Set(keys);
+
+    // check if last selected key is from "options"
+    if (lastKey) {
+      const optionsGroup = dish.mod_group
+        .filter((v) => v.type === "options")
+        .find((v) =>
+          v.modificators.map((v) => v.id.toString()).includes(lastKey)
+        );
+
+      // if last key from "options" group we need
+      // to remove all other keys from the group and leave only last selected one
+      if (optionsGroup) {
+        optionsGroup.modificators.forEach((v) =>
+          nextSet.delete(v.id.toString())
+        );
+        nextSet.add(lastKey);
+      }
+    }
+
+    setSelectedKeys(nextSet);
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -96,26 +134,33 @@ export default function Details({ dish }: Props) {
         <>
           <div className="border-t text-xs md:text-base border-black mb-[9vmin]">
             <p>{dish.description}</p>
-            {dish.mods.length > 0 && (
+            {Object.keys(indexedMods).length > 0 && (
               <div className="mt-4">
                 <ModificatorSelector
-                  maxModes={dish.max_modes}
-                  mods={dish.mods}
-                  items={dish.mods}
+                  mods={dish.mod_group}
+                  items={dish.mod_group}
                   selectionMode="multiple"
                   selectedKeys={selectedKeys}
-                  onSelectionChange={setSelectedKeys as any}
+                  onSelectionChange={onSelectionChange}
                   disabledKeys={disabledKeys}
                 >
-                  {(item) => (
-                    <Item key={item.id} textValue={item.name}>
-                      <span className="flex items-center justify-between">
-                        <span>{item.name}</span>
-                        <span className="font-bold shrink-0">
-                          {item.price} ₽
-                        </span>
-                      </span>
-                    </Item>
+                  {(section) => (
+                    <Section
+                      key={section.id}
+                      items={section.modificators}
+                      title={section.name}
+                    >
+                      {(item) => (
+                        <Item key={item.id} textValue={item.name}>
+                          <span className="flex items-start justify-between text-sm">
+                            <span>{item.name}</span>
+                            <span className="font-bold shrink-0">
+                              {item.price} ₽
+                            </span>
+                          </span>
+                        </Item>
+                      )}
+                    </Section>
                   )}
                 </ModificatorSelector>
               </div>
