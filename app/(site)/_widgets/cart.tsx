@@ -94,7 +94,7 @@ export function CartModal(
               x,
             }}
           >
-            <Dialog className="min-h-full relative p-6 py-10 sm:p-12 bg-white flex flex-col outline-none">
+            <Dialog className="min-h-full relative p-6 py-10 sm:p-12 bg-white flex flex-col outline-none" aria-label="Корзина">
               {({ close }) => (
                 <>
                   <button
