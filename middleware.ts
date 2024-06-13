@@ -4,7 +4,10 @@ import { cookies } from "next/headers";
 
 export async function middleware(request: NextRequest) {
   if (process.env.FEATURE_TAKEAWAYS === "off") {
-    if (request.nextUrl.pathname.startsWith("/order")) {
+    if (
+      request.nextUrl.pathname.startsWith("/order") ||
+      request.nextUrl.pathname.startsWith("/checkout/self-receipt")
+    ) {
       const session = await getSession(cookies());
       if (!session.tableOrder) {
         return NextResponse.redirect(
@@ -12,6 +15,7 @@ export async function middleware(request: NextRequest) {
         );
       }
     }
+
     if (request.nextUrl.pathname.startsWith("/not-available-takeaway")) {
       const session = await getSession(cookies());
       if (session.tableOrder) {
@@ -25,7 +29,10 @@ export async function middleware(request: NextRequest) {
   }
 
   if (process.env.FEATURE_QR_ORDERS === "off") {
-    if (request.nextUrl.pathname.startsWith("/order")) {
+    if (
+      request.nextUrl.pathname.startsWith("/order") ||
+      request.nextUrl.pathname.startsWith("/checkout/qr")
+    ) {
       const session = await getSession(cookies());
       if (session.tableOrder) {
         return NextResponse.redirect(
