@@ -1,8 +1,9 @@
-"use client";
-
 import Footer from "@/components/footer";
+import { getTimeWork } from "@/data/main";
 
-export default function Contacts() {
+export default async function Contacts() {
+  const work = await getTimeWork();
+
   return (
     <div className="flex flex-col items-stretch min-h-full w-full">
       <div className="flex gap-4 p-[2vmax] items-start lg:items-end flex-col lg:flex-row grow mb-24">
@@ -37,7 +38,10 @@ export default function Contacts() {
           </a>
 
           <p>график работы:</p>
-          <p className="underline">с 8:00 до 19:00 / ежедневно</p>
+          <div
+            className="*:underline"
+            dangerouslySetInnerHTML={{ __html: work }}
+          ></div>
         </div>
       </div>
 
