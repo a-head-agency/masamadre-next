@@ -129,7 +129,7 @@ export default function ModificatorSelector<T extends object>({
                 width: triggerWidth,
               }}
               aria-label="добавить по вкусу"
-              className="outline-none bg-white rounded-md outline outline-1 outline-offset-0 outline-black"
+              className="outline-none bg-white rounded-md outline outline-1 outline-offset-0 outline-black max-h-[40vh] overflow-y-auto"
             >
               <ul {...listBoxProps} ref={listboxRef} className="w-full">
                 <li className="mb-4">
