@@ -142,6 +142,8 @@ function Step2({ phone }: { phone: string }) {
     (props: Parameters<OTPInputProps["renderInput"]>[0]) => (
       <input
         {...props}
+        name="sms"
+        autoComplete="one-time-code"
         disabled={otp.length === 4}
         className={`rounded-xl ${
           error ? "!border-red-400" : ""
