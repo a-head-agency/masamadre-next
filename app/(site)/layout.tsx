@@ -5,6 +5,7 @@ import { Cart } from "./_widgets/cart";
 import { getSession } from "@/session";
 import { cookies } from "next/headers";
 import Booking from "@/app/_widgets/booking";
+import Script from "next/script";
 
 export default async function SiteLayout({
   children,
@@ -15,7 +16,23 @@ export default async function SiteLayout({
 
   return (
     <main>
-      <div className="px-[2vmax] flex pb-3 pt-9 gap-y-4 justify-between items-end flex-wrap top-0 fixed z-40 w-full bg-white/50 backdrop-blur-md">
+      <Script id="client-width-watcher" strategy="afterInteractive">
+        {`
+          function updateClientWidthVariable() {
+            document.body.style.setProperty(
+              "--clientWidth",
+              document.body.clientWidth + "px"
+            );
+          };
+          updateClientWidthVariable();
+          const resizeObserver = new ResizeObserver(updateClientWidthVariable);
+          
+          // start observing a DOM node
+          resizeObserver.observe(document.body)
+        `}
+      </Script>
+
+      <div className="max-w-full-client-width px-[2vmax] flex pb-3 pt-9 gap-y-4 justify-between items-end flex-wrap top-0 fixed z-40 w-full bg-white/50 backdrop-blur-md">
         <div className="hidden md:block grow-[2]"></div>
 
         <Link href="/">
@@ -51,7 +68,9 @@ export default async function SiteLayout({
       </div>
 
       <div className="min-h-dvh flex flex-col pt-32 md:pt-24">
-        <div className="grow shrink-0 basis-0 flex items-stretch">{children}</div>
+        <div className="grow shrink-0 basis-0 flex items-stretch">
+          {children}
+        </div>
       </div>
     </main>
   );

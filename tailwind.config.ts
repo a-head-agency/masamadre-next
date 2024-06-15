@@ -34,6 +34,9 @@ const config: Config = {
         white: "#FCFAFC",
         red: "#FF0000",
       },
+      maxWidth: {
+        "full-client-width": "var(--clientWidth, 100%)",
+      },
     },
   },
   plugins: [
