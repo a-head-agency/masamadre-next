@@ -29,6 +29,9 @@ COPY . .
 ARG SENTRY_AUTH_TOKEN
 ENV SENTRY_AUTH_TOKEN ${SENTRY_AUTH_TOKEN}
 
+ARG SENTRY_RELEASE
+ENV SENTRY_RELEASE ${SENTRY_RELEASE}
+
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
@@ -42,6 +45,9 @@ WORKDIR /app
 
 ARG SENTRY_AUTH_TOKEN
 ENV SENTRY_AUTH_TOKEN ${SENTRY_AUTH_TOKEN}
+
+ARG SENTRY_RELEASE
+ENV SENTRY_RELEASE ${SENTRY_RELEASE}
 
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.

@@ -23,6 +23,7 @@ jobs:
           tags: theayarayarovich/masamadre-next:latest,theayarayarovich/masamadre-next:${{ github.ref_name }}
           build-args: |
             "SENTRY_AUTH_TOKEN=${{secrets.SENTRY_AUTH_TOKEN}}"
+            "SENTRY_RELEASE=${{github.ref_name}}"
 
   deploy:
     runs-on: ubuntu-latest
