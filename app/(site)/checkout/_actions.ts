@@ -4,22 +4,31 @@ import { createPrivateApiAxios, createPublicApiAxios } from "@/axios";
 import { getSession } from "@/session";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { number, z } from "zod";
+import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { DateTime } from "luxon";
+import { clearBasket } from "@/data/basket";
 
 const PlaceOrderScheme = z.object({
-  phone: z.string().optional().transform(s => s || "74956362981"),
-  name: z.string().optional().transform(s => s || "masa madre"),
+  phone: z
+    .string()
+    .optional()
+    .transform((s) => s || "74956362981"),
+  name: z
+    .string()
+    .optional()
+    .transform((s) => s || "masa madre"),
   cart_id: z.number(),
   dishes: z
     .object({
       id: z.number(),
       count: z.number(),
-      mods: z.object({
-        id: z.number(),
-        count: z.number(),
-      }).array()
+      mods: z
+        .object({
+          id: z.number(),
+          count: z.number(),
+        })
+        .array(),
     })
     .array()
     .optional(),
@@ -34,7 +43,10 @@ const PlaceOrderScheme = z.object({
       const dt = DateTime.fromISO(s);
       return dt.toFormat("yyyy-MM-dd HH:mm:ss ZZZ ZZZZ");
     }),
-  comment: z.string().nullish().transform(s => s || "")
+  comment: z
+    .string()
+    .nullish()
+    .transform((s) => s || ""),
 });
 
 export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
@@ -43,7 +55,7 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
   const api = session.isAuthenticated
     ? createPrivateApiAxios(session)
     : createPublicApiAxios();
-  let payload: Record<string, any> = PlaceOrderScheme.parse(vals)
+  let payload: Record<string, any> = PlaceOrderScheme.parse(vals);
   if (session.tableOrder) {
     payload = {
       ...payload,
@@ -53,7 +65,7 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
     };
   } else {
     if (process.env.FEATURE_TAKEAWAYS === "off") {
-      redirect(process.env.NEXT_PUBLIC_URL! + '/not-available-takeaway');
+      redirect(process.env.NEXT_PUBLIC_URL! + "/not-available-takeaway");
     }
     payload = {
       ...payload,
@@ -69,16 +81,18 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
     session.lastOrders.push({
       id: response.data.id,
     });
-    revalidatePath("/thanks");
+    await clearBasket(session);
     await session.save();
+    revalidatePath("/thanks");
     redirect(process.env.NEXT_PUBLIC_URL! + "/thanks");
   } else if (response.data.link) {
     session.lastOrders = session.lastOrders || [];
     session.lastOrders.push({
       id: response.data.id,
     });
-    revalidatePath("/thanks");
+    await clearBasket(session);
     await session.save();
+    revalidatePath("/thanks");
     redirect(response.data.link);
   }
 }
