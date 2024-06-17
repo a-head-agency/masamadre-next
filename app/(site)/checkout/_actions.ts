@@ -57,6 +57,9 @@ export async function placeOrder(vals: z.input<typeof PlaceOrderScheme>) {
     : createPublicApiAxios();
   let payload: Record<string, any> = PlaceOrderScheme.parse(vals);
   if (session.tableOrder) {
+    if (process.env.FEATURE_QR_ORDERS === "off") {
+      redirect(process.env.NEXT_PUBLIC_URL! + "/not-available-qr-order");
+    }
     payload = {
       ...payload,
       rest: session.tableOrder.rest,
