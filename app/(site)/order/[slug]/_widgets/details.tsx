@@ -3,7 +3,6 @@ import Adder from "@/components/functional/adder";
 import { GetOneDishScheme } from "@/data/products";
 import { z } from "zod";
 import clsx from "clsx";
-import TotalPrice from "./total-price";
 import AddToCartButtonAuth from "./add-to-cart-button-auth";
 import ModificatorSelector from "@/components/functional/modificators-selector";
 import { Item, Section, Selection } from "react-stately";
@@ -38,6 +37,10 @@ export default function Details({ dish }: Props) {
     [selectedKeys]
   );
 
+  const selectedMods = useMemo(() => {
+    return arraySelectedKeys.map((k) => indexedMods[k]).filter(Boolean);
+  }, [indexedMods, arraySelectedKeys]);
+
   const disabledKeys = useMemo(
     () =>
       dish.mod_group
@@ -48,15 +51,35 @@ export default function Details({ dish }: Props) {
   );
 
   const basket = useBasket();
-  const item = useMemo(
-    () => basket.data?.list.findLast((d) => d.dish_id === dish.id),
-    [dish.id, basket.data]
-  );
+  const item = useMemo(() => {
+    const currentVariantHash = selectedMods
+      .map((v) => `${v.id}:1`)
+      .sort()
+      .join(",");
+
+    const exactMatch = basket.data?.list.find((d) => {
+      const variantInBasketHash = d.mods
+        .map((v) => `${v.id}:${v.count}`)
+        .sort()
+        .join(",");
+      console.log(JSON.stringify({
+        currentVariantHash,
+        variantInBasketHash,
+      }));
+      return (
+        d.dish_id === dish.id && variantInBasketHash === currentVariantHash
+      );
+    });
+
+    return exactMatch;
+  }, [basket.data?.list, dish.id, selectedMods]);
+
   useEffect(() => {
     if (item?.mods) {
       setSelectedKeys(new Set(item.mods.map((v) => v.id.toString())));
     }
   }, [item?.mods]);
+
   const isModsSelectorDirty = useMemo(() => {
     const modsForCurrentBasketId = new Set(
       item?.mods.map((v) => v.id.toString())
@@ -64,10 +87,6 @@ export default function Details({ dish }: Props) {
     const currentMods = selectedKeys;
     return !areSetsEqual(modsForCurrentBasketId, currentMods);
   }, [item?.mods, selectedKeys]);
-
-  const selectedMods = useMemo(() => {
-    return arraySelectedKeys.map((k) => indexedMods[k]).filter(Boolean);
-  }, [indexedMods, arraySelectedKeys]);
 
   const displayPrice = useMemo(
     () => dish.price + selectedMods.reduce((acc, cur) => acc + cur.price, 0),
@@ -220,7 +239,7 @@ export default function Details({ dish }: Props) {
 
       <div className="flex justify-between flex-wrap gap-4 items-center">
         <p className="text-sm md:text-xl">
-          <TotalPrice dish_id={dish.id} />
+          всего: {basket.data?.total_price || 0} ₽
         </p>
         <AddToCartButtonAuth
           dish={dish}
