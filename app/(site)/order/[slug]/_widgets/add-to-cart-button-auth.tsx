@@ -25,7 +25,7 @@ export default function AddToCartButtonAuth(props: Props) {
   );
 
   const count = item?.count || 0;
-  const id = item?.id || 0;
+  const id = item?.id;
 
   const disabledMessage = useMemo(() => {
     const dish = props.dish;
