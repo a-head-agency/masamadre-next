@@ -247,7 +247,7 @@ export async function getBasket(
           mods: d.mods,
         })),
         total,
-        total_count: session.basket.length,
+        total_count: session.basket.reduce((acc, cur) => acc + cur.count, 0),
         total_price: total_price,
       };
     }
