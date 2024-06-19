@@ -27,7 +27,7 @@ export default async function Product({ params }: Props) {
           <div className="grow">
             <Slider autoplay fallback={dish.img} images={dish.images} />
           </div>
-          <div className="w-full md:max-w-sm lg:max-w-md py-8">
+          <div className="w-full md:max-w-[32rem] py-8">
             <Details isAuthenticated={session.isAuthenticated} dish={dish} />
           </div>
         </div>

@@ -237,9 +237,9 @@ export default function Details({ dish }: Props) {
         </>
       )}
 
-      <div className="flex justify-between flex-wrap gap-4 items-center">
+      <div className="flex justify-between flex-wrap gap-2 items-center">
         <p className="text-sm md:text-xl">
-          всего: {basket.data?.total_price || 0} ₽
+          в корзине: {basket.data?.total_price || 0} ₽
         </p>
         <AddToCartButtonAuth
           dish={dish}
