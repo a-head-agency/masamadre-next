@@ -23,6 +23,10 @@ const configure = () => {
         {
           hostname: "api.masamadre.ru",
         },
+        {
+          hostname:
+            "55d39a98-a155ef55-dfa3-4c00-9f40-d51316c07232.s3.timeweb.cloud",
+        },
       ],
     },
   };
