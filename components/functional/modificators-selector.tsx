@@ -154,7 +154,13 @@ export default function ModificatorSelector<T extends object>({
                 )}
 
                 <li className="px-3 flex flex-col items-stretch pt-4 pb-3">
-                  <UIButton onPress={onApply}>применить</UIButton>
+                  <button
+                    onClick={onApply}
+                    className="outline-none rounded-full px-4 py-2 bg-black text-white"
+                    type="button"
+                  >
+                    применить
+                  </button>
                 </li>
               </ul>
             </Dialog>
