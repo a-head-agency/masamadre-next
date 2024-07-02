@@ -55,7 +55,7 @@ export default function ModificatorSelector<T extends object>({
   let { listBoxProps } = useListBox(
     {
       ...props,
-      "aria-label": "добавить по вкусу",
+      "aria-label": "добавки",
     },
     state,
     listboxRef
@@ -111,7 +111,7 @@ export default function ModificatorSelector<T extends object>({
         ref={triggerRef}
         onClick={overlayTriggerState.toggle}
       >
-        <span>Добавить по вкусу</span>
+        <span>Добавки</span>
         <PlusIcon className="h-3" />
       </button>
       {overlayTriggerState.isOpen && (
@@ -128,7 +128,7 @@ export default function ModificatorSelector<T extends object>({
               style={{
                 width: triggerWidth,
               }}
-              aria-label="добавить по вкусу"
+              aria-label="добавки"
               className="outline-none bg-white rounded-md outline outline-1 outline-offset-0 outline-black max-h-[40vh] overflow-y-auto"
             >
               <ul {...listBoxProps} ref={listboxRef} className="w-full">
@@ -137,7 +137,7 @@ export default function ModificatorSelector<T extends object>({
                     className="w-full rounded-md lowercase h-8 px-3 leading-none text-sm flex justify-between items-center gap-4"
                     onClick={overlayTriggerState.close}
                   >
-                    <span>Добавить по вкусу</span>
+                    <span>Добавки</span>
                     <MinusIcon className="h-3" />
                   </button>
                 </li>
