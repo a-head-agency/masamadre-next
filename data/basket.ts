@@ -123,7 +123,7 @@ export async function clearBasket(session: Session) {
   const basket = await getBasket(session);
   await Promise.all(
     basket.list.map((d) =>
-      addToBasket(session, { count: 0, dish_id: d.dish_id })
+      addToBasket(session, { count: 0, id: d.id, dish_id: d.dish_id })
     )
   );
   return { action: "success" };

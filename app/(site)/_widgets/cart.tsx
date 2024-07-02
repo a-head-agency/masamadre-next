@@ -94,7 +94,10 @@ export function CartModal(
               x,
             }}
           >
-            <Dialog className="min-h-full relative p-6 py-10 sm:p-12 bg-white flex flex-col outline-none" aria-label="Корзина">
+            <Dialog
+              className="min-h-full relative p-6 py-10 sm:p-12 bg-white flex flex-col outline-none"
+              aria-label="Корзина"
+            >
               {({ close }) => (
                 <>
                   <button
@@ -114,7 +117,7 @@ export function CartModal(
                             draggable="false"
                             src={item.img}
                             alt={item.name}
-                            placeholderSrc='/fallback.png'
+                            placeholderSrc="/fallback.png"
                           />
                         </div>
                         <div className="flex flex-col justify-between self-stretch items-stretch grow">
@@ -187,7 +190,7 @@ export function CartModal(
                     </div> */}
                   </div>
 
-                  <div className="mt-6 sm:mt-12 *:w-full">
+                  <div className="mt-6 sm:mt-12 flex flex-col items-stretch gap-4">
                     <UIButton
                       onPress={checkout}
                       isDisabled={
@@ -196,6 +199,11 @@ export function CartModal(
                     >
                       оформить заказ
                     </UIButton>
+                    {Boolean(basket.data?.list.length) && (
+                      <UIButton onPress={basket.clearBasket} isInverted>
+                        очистить корзину
+                      </UIButton>
+                    )}
                   </div>
                 </>
               )}

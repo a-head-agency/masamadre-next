@@ -3,7 +3,7 @@ import * as basketService from "@/data/basket";
 import axios from "axios";
 import useSWR from "swr";
 import { z } from "zod";
-import { addToBasketAction } from "@/app/_actions";
+import * as appWideActions from "@/app/_actions";
 
 export function useBasket() {
   const basket = useSWR("basket", () =>
@@ -15,10 +15,16 @@ export function useBasket() {
   const addDish = async (
     data: z.input<typeof basketService.AddToBasketInputSchema>
   ) => {
-    const result = await addToBasketAction(data);
+    const result = await appWideActions.addToBasketAction(data);
     basket.mutate();
     return result;
   };
 
-  return { ...basket, addDish };
+  const clearBasket = async () => {
+    const result = await appWideActions.clearBasket();
+    basket.mutate();
+    return result;
+  };
+
+  return { ...basket, addDish, clearBasket };
 }

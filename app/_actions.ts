@@ -72,6 +72,14 @@ export async function addToBasketAction(
   return result;
 }
 
+export async function clearBasket() {
+  console.log('clear basket action')
+  const session = await getSession(cookies());
+  const result = await basketService.clearBasket(session);
+  await session.save();
+  return result;
+}
+
 export const optOutQROrder = async () => {
   const session = await getSession(cookies());
   session.tableOrder = undefined;
